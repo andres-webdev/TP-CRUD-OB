@@ -1,0 +1,164 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script>
+
+  window.addEventListener('load', searchData)
+
+  function validarFormulario(){
+    const form = document.getElementById('createUser');
+    const id = form.userId.value;
+
+    console.log(id)
+
+   /*  google.script.run
+    .withSuccessHandler(result => {
+      form.reset();
+      const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+      createModal.hide();
+    })
+    .addUser(form); */
+
+    if(id === ''){
+      //Create
+      google.script.run
+      .withSuccessHandler(result => {
+        form.reset();
+        const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+        createModal.hide();
+      })
+      .addUser(form);
+    } else {
+      google.script.run
+      .withSuccessHandler(result => {
+        form.reset()
+        const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+        createModal.hide();
+        window.location.reload();
+      })
+      .editUser(form)
+    }
+  }
+
+  function searchData(){
+
+    let data
+
+    google.script.run
+    .withSuccessHandler(usersData => {
+      let tableBody = document.getElementById('tableBody-users');
+      let template = document.getElementById('rowTemplate')
+      let templateContent = template.content;
+      
+      data = [...usersData]
+
+        console.log("1", data)
+
+
+      usersData.forEach(user => {
+        const tr = templateContent.cloneNode(true)
+
+        const nameCol = tr.querySelector(".template-name");
+        const lastNameCol = tr.querySelector(".template-lastName");
+        const countryCol = tr.querySelector(".template-country");
+        const phoneCol = tr.querySelector(".template-phone");
+        const dniCol = tr.querySelector(".template-dni");
+        const codCol = tr.querySelector(".template-cod");
+        const referenteCol = tr.querySelector(".template-referent");
+        const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+        const statusWebCol = tr.querySelector(".template-statusWeb");
+        const productCol = tr.querySelector(".template-product");
+        const statusRiskCol = tr.querySelector(".template-statusRisk");
+
+        /*
+        <td class="template-name"></td>
+        <td class="template-lastName"></td>
+        <td class="template-phone"></td>
+        <td class="template-dni"></td>
+        <td class="template-cod"></td>
+        <td class="template-referente"></td>
+        <td class="template-dateOfFirstContact"></td>
+        <td class="template-statusWeb"></td>
+        <td class="template-product"></td>
+        <td class="template-statusRisk"></td>
+
+        */
+
+        const actionCol = tr.querySelector(".template-actions");
+        const editButton = tr.querySelector(".button-edit");
+        /* const deleteButton = tr.querySelector(".button-delete"); */
+
+       /*  nameCol.textContent = user[1]
+        lastNameCol.textContent = user[2]
+        sexCol.textContent = user[3]
+        emailCol.textContent = user[4]
+        birthCol.textContent = user[5]
+        phoneCol.textContent = user[6] */
+
+        countryCol.textContent = user[1]
+        nameCol.textContent = user[2]
+        lastNameCol.textContent = user[3]
+        phoneCol.textContent = user[4]
+        dniCol.textContent = user[5]
+        codCol.textContent = user[6]
+        referenteCol.textContent = user[7]
+        dateOfFirstContactCol.textContent = user[8]
+        statusWebCol.textContent = user[9]
+        productCol.textContent = user[10]
+        statusRiskCol.textContent = user[11]
+
+        editButton.dataset.usuarioId = user[0]
+        /* deleteButton.dataset.usuarioId = user[0] */
+
+        tableBody.appendChild(tr);
+      })
+    })
+    .readUsers()
+
+  }
+
+  function editUserModal(button) {
+    const tableRow = button.parentNode.parentNode;
+    
+    const id = button.dataset.usuarioId;
+
+/*     const name = tableRow.cells[0].innerHTML;
+    const lastName = tableRow.cells[1].innerHTML;
+    const birth = tableRow.cells[2].innerHTML;
+    const phone = tableRow.cells[3].innerHTML;
+    const sex = tableRow.cells[4].innerHTML;
+    const email = tableRow.cells[5].innerHTML; */
+
+    const country = tableRow.cells[0].innerHTML;
+    const name = tableRow.cells[1].innerHTML;
+    const lastName = tableRow.cells[2].innerHTML;
+    const phone = tableRow.cells[3].innerHTML;
+    const dni = tableRow.cells[4].innerHTML;
+    const cod = tableRow.cells[5].innerHTML;
+    const referent = tableRow.cells[6].innerHTML;
+    const dateOfFirstContact = tableRow.cells[7].innerHTML;
+    const statusWeb = tableRow.cells[8].innerHTML;
+    const product = tableRow.cells[9].innerHTML;
+    const statusRisk = tableRow.cells[10].innerHTML;
+
+    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+    createModal.show()
+
+    document.getElementById('userId').value = id;
+    document.getElementById('userName').value = name;
+    document.getElementById('userLastName').value = lastName;
+    document.getElementById('userPhone').value = phone;
+    document.getElementById('userDni').value = dni;
+    document.getElementById('userCod').value = cod;
+    document.getElementById('userReferent').value = referent;
+    document.getElementById('userDateOfFirstContact').value = dateOfFirstContact;
+    document.getElementById('userStatusWeb').value = statusWeb;
+    document.getElementById('userCountry').value = country;
+    document.getElementById('userProduct').value = product;
+    document.getElementById('userStatusRisk').value = statusRisk;
+    
+  }
+</script>
+
+
+
+
+

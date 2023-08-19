@@ -1,0 +1,20 @@
+{
+  "name": "tp-crud-ob",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "glogin": "clasp login",
+    "gcreate": "clasp create --title TP-CRUD --rootDir ./apps-script",
+    "glogout": "clasp logout",
+    "gpull": "clasp pull",
+    "gpush": "clasp push",
+    "gstart": "clasp push --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.67"
+  }
+}
