@@ -1,127 +1,134 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base target="_top">
-    <?!= include('CSS') ?>
-  </head>
-  <body>
-    <main class="container">
-      <h1 class="mb-5">CRUD - OB Fallidos</h1>
-      <div class="d-flex justify-content-between mb-3">
-        <div class="col">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="bi bi-plus-lg"></i> Agregar</button>
-        </div>
-        <div class="col-3">
-          <input type="text" class="form-control" id="buscarRegistro" placeholder="Buscar..." />
-        </div>
+
+<head>
+  <base target="_top">
+  <?!= include('CSS') ?>
+</head>
+
+<body>
+  <main class="container">
+    <h1 class="mb-5">CRUD - OB Fallidos</h1>
+    <div class="d-flex justify-content-between mb-3">
+      <div class="col">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
+          onclick="handleResetInputFields()"><i class="bi bi-plus-lg"></i> Agregar</button>
       </div>
-
-      <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <td>País</td>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Telefono</td>
-                <td>Nro doc</td>
-                <td>Codigo</td>
-                <td>Referente</td>
-                <td>Fecha</td>
-                <td>Estaus Web</td>
-                <td>Producto</td>
-                <td>Estatus Riesgo</td>
-                <td>Acciones</td>
-            </tr>
-            </thead>
-            <tbody id="tableBody-users">
-
-            </tbody>
-        </table>
+      <div class="col-3">
+        <input type="text" class="form-control" id="buscarRegistro" placeholder="Buscar..." />
       </div>
+    </div>
 
-    </main>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <td>País</td>
+            <td>Nombre</td>
+            <td>Apellido</td>
+            <td>Telefono</td>
+            <td>Nro doc</td>
+            <td>Codigo</td>
+            <td>Referente</td>
+            <td>Fecha</td>
+            <td>Estaus Web</td>
+            <td>Producto</td>
+            <td>Estatus Riesgo</td>
+            <td>Acciones</td>
+          </tr>
+        </thead>
+        <tbody id="tableBody-users">
 
-    <template id="rowTemplate">
-      <tr>
-        <td class="template-country"></td>
-        <td class="template-name"></td>
-        <td class="template-lastName"></td>
-        <td class="template-phone"></td>
-        <td class="template-dni"></td>
-        <td class="template-cod"></td>
-        <td class="template-referent"></td>
-        <td class="template-dateOfFirstContact"></td>
-        <td class="template-statusWeb"></td>
-        <td class="template-product"></td>
-        <td class="template-statusRisk"></td>
-        <td class="template-actions text-center">
-          <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="editUserModal(this)">
-          </i>
-        </td>
-      </tr>
-    </template>
+        </tbody>
+      </table>
+    </div>
 
-    <!-- Modal Create -->
-    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="createModalLabel">Crear Usuario</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form name="createUser" id="createUser">
-              <div class="row mb-3">
-                <div class="mb-3">
-                  <input type="text" class="form-control" aria-label="userId" name="userId" id="userId" placeholder="#" hidden />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userName" name="userName" placeholder="Nombre" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userLastName" name="userLastName" placeholder="Apellido" />
-                </div>
+  </main>
+
+  <template id="rowTemplate">
+    <tr>
+      <td class="template-country"></td>
+      <td class="template-name"></td>
+      <td class="template-lastName"></td>
+      <td class="template-phone"></td>
+      <td class="template-dni"></td>
+      <td class="template-cod"></td>
+      <td class="template-referent"></td>
+      <td class="template-dateOfFirstContact"></td>
+      <td class="template-statusWeb"></td>
+      <td class="template-product"></td>
+      <td class="template-statusRisk"></td>
+      <td class="template-actions text-center">
+        <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="editUserModal(this)">
+        </i>
+      </td>
+    </tr>
+  </template>
+
+  <!-- Modal Create -->
+  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createModalLabel">Crear Usuario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form name="createUser" id="createUser">
+            <div class="row mb-3">
+              <div class="mb-3">
+                <input type="text" class="form-control" aria-label="userId" name="userId" id="userId" placeholder="#"
+                  hidden />
               </div>
-              <div  class="row mb-3">
-                <div class="col">
-                  <input type="text" class="form-control" id="userPhone" name="userPhone" placeholder="Telefono" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userDni" name="userDni" placeholder="DNI" />
-                </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="Nombre" />
               </div>
-              <div  class="row mb-3">
-                <div class="col">
-                  <input type="text" class="form-control" id="userCod" name="userCod" placeholder="Codigo" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userReferent" name="userReferent" placeholder="Referente" />
-                </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userLastName" name="userLastName" placeholder="Apellido" />
               </div>
-              <div  class="row mb-3">
-                <div class="col">
-                  <input type="date" class="form-control" id="userDateOfFirstContact" name="userDateOfFirstContact" placeholder="Fecha" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userStatusWeb" name="userStatusWeb" placeholder="Estaus Web" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userCountry" name="userCountry" placeholder="Pais" />
-                </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <input type="text" class="form-control" id="userPhone" name="userPhone" placeholder="Telefono" />
               </div>
-              <div  class="row mb-3">
-                <div class="col">
-                  <input type="text" class="form-control" id="userProduct" name="userProduct" placeholder="Producto" />
-                </div>
-                <div class="col">
-                  <input type="text" class="form-control" id="userStatusRisk" name="userStatusRisk" placeholder="Estatus Riesgo" />
-                </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userDni" name="userDni" placeholder="DNI" />
               </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <input type="text" class="form-control" id="userCod" name="userCod" placeholder="Codigo" />
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userReferent" name="userReferent" placeholder="Referente" />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <input type="date" class="form-control" id="userDateOfFirstContact" name="userDateOfFirstContact"
+                  placeholder="Fecha" />
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userStatusWeb" name="userStatusWeb"
+                  placeholder="Estaus Web" />
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userCountry" name="userCountry" placeholder="Pais" />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <input type="text" class="form-control" id="userProduct" name="userProduct" placeholder="Producto" />
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="userStatusRisk" name="userStatusRisk"
+                  placeholder="Estatus Riesgo" />
+              </div>
+            </div>
 
 
 
-             <!--  <select class="form-select mb-3" aria-label="userSex" name="userSex" id="userSex">
+            <!--  <select class="form-select mb-3" aria-label="userSex" name="userSex" id="userSex">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -135,20 +142,21 @@
               <div class="mb-3">
                 <input type="number" class="form-control" id="userPhone" name="userPhone" placeholder="999999999" />
               </div> -->
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="validarFormulario()">Save changes</button>
-            <!-- <button class="btn btn-primary" type="button" disabled>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="handleSaveChanges()">Save changes</button>
+          <!-- <button class="btn btn-primary" type="button" disabled>
               <span class="spinner-border spinner-border-sm d-none btnLoading" id="loadingButton" aria-hidden="true"></span>
               <span role="status">Loading...</span>
             </button> -->
-          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <?!= include('JS') ?>
-  </body>
+  <?!= include('JS') ?>
+</body>
+
 </html>
