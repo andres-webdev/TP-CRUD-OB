@@ -5,26 +5,49 @@
   window.addEventListener('load', searchData)
 
   function validarFormulario() {
-    const form = document.getElementById('createUser');
-    const id = form.userId.value;
+    loadingOnOff()
 
-    console.log(form, id)
+    const formValues = document.getElementById('createUser');
+
+    const form = {
+      userId: document.getElementById('userId').value,
+      userName: document.getElementById('userName').value,
+      userLastName: document.getElementById('userLastName').value,
+      userPhone: document.getElementById('userPhone').value,
+      userDni: document.getElementById('userDni').value,
+      userCod: document.getElementById('userCod').value,
+      userReferent: document.getElementById('userReferent').value,
+      userDateOfFirstContact: document.getElementById('userDateOfFirstContact').value,
+      userStatusWeb: document.getElementById('userStatusWeb').value,
+      userCountry: document.getElementById('userCountry').value,
+      userProduct: document.getElementById('userProduct').value,
+      userStatusRisk: document.getElementById('userStatusRisk').value,
+    }
+
+    console.log(form)
+    const id = form.userId;
 
     if (id === '') {
       //Create
       google.script.run
         .withSuccessHandler(result => {
-          form.reset();
+          loadingOnOff()
+          searchData()
+          formValues.reset();
           const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
           createModal.hide();
+          handleSaveAlert()
         })
         .addUser(form);
     } else {
       google.script.run
         .withSuccessHandler(result => {
-          form.reset()
+          loadingOnOff()
+          searchData()
+          formValues.reset()
           const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
           createModal.hide();
+          handleSaveAlert()
         })
         .editUser(form)
     }
@@ -38,9 +61,7 @@
         let template = document.getElementById('rowTemplate')
         let templateContent = template.content;
 
-        while (tableBody.firstChild) {
-          tableBody.removeChild(tableBody.firstChild);
-        }
+        tableBody.innerHTML = ''
 
         usersData.reverse().forEach(user => {
           const tr = templateContent.cloneNode(true)
@@ -57,30 +78,8 @@
           const productCol = tr.querySelector(".template-product");
           const statusRiskCol = tr.querySelector(".template-statusRisk");
 
-          /*
-          <td class="template-name"></td>
-          <td class="template-lastName"></td>
-          <td class="template-phone"></td>
-          <td class="template-dni"></td>
-          <td class="template-cod"></td>
-          <td class="template-referente"></td>
-          <td class="template-dateOfFirstContact"></td>
-          <td class="template-statusWeb"></td>
-          <td class="template-product"></td>
-          <td class="template-statusRisk"></td>
-  
-          */
-
           const actionCol = tr.querySelector(".template-actions");
           const editButton = tr.querySelector(".button-edit");
-          /* const deleteButton = tr.querySelector(".button-delete"); */
-
-          /*  nameCol.textContent = user[1]
-           lastNameCol.textContent = user[2]
-           sexCol.textContent = user[3]
-           emailCol.textContent = user[4]
-           birthCol.textContent = user[5]
-           phoneCol.textContent = user[6] */
 
           countryCol.textContent = user[1]
           nameCol.textContent = user[2]
@@ -95,7 +94,6 @@
           statusRiskCol.textContent = user[11]
 
           editButton.dataset.usuarioId = user[0]
-          /* deleteButton.dataset.usuarioId = user[0] */
 
           tableBody.appendChild(tr);
         })
@@ -104,7 +102,7 @@
 
   }
 
-  function editUserModal(button) {
+  function handleUpdateUserInfo(button) {
     const tableRow = button.parentNode.parentNode;
 
     const id = button.dataset.usuarioId;
@@ -137,19 +135,23 @@
     document.getElementById('userProduct').value = product;
     document.getElementById('userStatusRisk').value = statusRisk;
 
+    getDataComentCalls(phone)
+
   }
 
   function handleSaveChanges() {
-    validarFormulario()
 
-    setTimeout(() => {
-      searchData()
-      console.log("listo")
-    }, 1500);
+    const phone = document.getElementById('userPhone')
+    const country = document.getElementById('userCountry')
 
+    let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
+
+    if (passInputValidation) {
+      validarFormulario()
+    }
   }
 
-  function handleResetInputFields() {
+  function handleShowModalUser() {
     document.getElementById('userId').value = '';
     document.getElementById('userName').value = '';
     document.getElementById('userLastName').value = '';
@@ -157,10 +159,66 @@
     document.getElementById('userDni').value = '';
     document.getElementById('userCod').value = '';
     document.getElementById('userReferent').value = '';
-    document.getElementById('userDateOfFirstContact').value = '';
     document.getElementById('userStatusWeb').value = '';
     document.getElementById('userCountry').value = '';
     document.getElementById('userProduct').value = '';
     document.getElementById('userStatusRisk').value = '';
+
   }
+
+  function validatePhoneNumber(phoneNumber) {
+
+    let phoneNumberTrim = phoneNumber.trim()
+
+    // Check if the phone number is nine digits long.
+    if (phoneNumberTrim.length < 9 || phoneNumberTrim.length > 10) {
+      return false;
+    }
+
+    // Check if the phone number only contains digits.
+    for (var i = 0; i < phoneNumberTrim.length; i++) {
+      if (phoneNumberTrim.charAt(i) !== "0" && phoneNumberTrim.charAt(i) !== "1" && phoneNumberTrim.charAt(i) !== "2" && phoneNumberTrim.charAt(i) !== "3" && phoneNumberTrim.charAt(i) !== "4" && phoneNumberTrim.charAt(i) !== "5" && phoneNumberTrim.charAt(i) !== "6" && phoneNumberTrim.charAt(i) !== "7" && phoneNumberTrim.charAt(i) !== "8" && phoneNumberTrim.charAt(i) !== "9") {
+        return false;
+      }
+    }
+    // The phone number is valid.
+    return true;
+  }
+
+  function loadingOnOff() {
+    document.querySelector('#createUserOBF').classList.toggle("d-none")
+    document.querySelector('#loadingButton').classList.toggle("d-none")
+  }
+
+  function handleSaveAlert() {
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const appendAlert = (message, type) => {
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+      ].join('')
+
+      alertPlaceholder.append(wrapper)
+    }
+
+    const alertTrigger = document.getElementById('createUserOBF')
+    if (alertTrigger) {
+      appendAlert('Usuario creado exitosamente!', 'success')
+
+    }
+  }
+
+  function getDataComentCalls(target) {
+    google.script.run
+      .withSuccessHandler(comentsCalls => {
+        let sortComentsCalls = comentsCalls
+          .filter(comentCall => comentCall[2] === target)
+        console.log(sortComentsCalls)
+      })
+      .readComentsCall()
+  }
+
 </script>

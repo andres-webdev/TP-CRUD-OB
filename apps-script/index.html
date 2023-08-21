@@ -9,10 +9,11 @@
 <body>
   <main class="container">
     <h1 class="mb-5">CRUD - OB Fallidos</h1>
+    <div id="liveAlertPlaceholder"></div>
     <div class="d-flex justify-content-between mb-3">
       <div class="col">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
-          onclick="handleResetInputFields()"><i class="bi bi-plus-lg"></i> Agregar</button>
+          onclick="handleShowModalUser()"><i class="bi bi-plus-lg"></i> Agregar</button>
       </div>
       <div class="col-3">
         <input type="text" class="form-control" id="buscarRegistro" placeholder="Buscar..." />
@@ -59,102 +60,249 @@
       <td class="template-product"></td>
       <td class="template-statusRisk"></td>
       <td class="template-actions text-center">
-        <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="editUserModal(this)">
+        <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="handleUpdateUserInfo(this)">
         </i>
       </td>
     </tr>
   </template>
 
   <!-- Modal Create -->
-  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade modal-lg modal-dialog-scrollable" id="createModal" tabindex="-1"
+    aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="createModalLabel">Crear Usuario</h1>
+          <h1 class="modal-title fs-5" id="createModalLabel">🪪 Crear Cliente</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form name="createUser" id="createUser">
+          <form name="createUser" id="createUser" class="needs-validation" novalidate>
             <div class="row mb-3">
               <div class="mb-3">
                 <input type="text" class="form-control" aria-label="userId" name="userId" id="userId" placeholder="#"
                   hidden />
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userName" name="userName" placeholder="Nombre" />
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="userName" name="userName" placeholder="Nombre">
+                  <label for="userName">Nombre</label>
+                </div>
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userLastName" name="userLastName" placeholder="Apellido" />
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="userLastName" name="userLastName"
+                    placeholder="Apellido" />
+                  <label for="userLastName">Apellido</label>
+                </div>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col">
-                <input type="text" class="form-control" id="userPhone" name="userPhone" placeholder="Telefono" />
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="userPhone" name="userPhone" required
+                    placeholder="Telefono" />
+                  <label for="userPhone">Telefono *</label>
+                  <div class="invalid-feedback">
+                    Por favor, ingresar un numero de telefono
+                  </div>
+                </div>
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userDni" name="userDni" placeholder="DNI" />
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="userDni" name="userDni" placeholder="DNI" />
+                  <label for="userDni">DNI</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="userCod" name="userCod" placeholder="Codigo" />
+                  <label for="userCod">Codigo</label>
+                </div>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col">
-                <input type="text" class="form-control" id="userCod" name="userCod" placeholder="Codigo" />
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="userStatusWeb" name="userStatusWeb"
+                    placeholder="Estaus Web" />
+                  <label for="userStatusWeb">Estaus Web</label>
+                </div>
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userReferent" name="userReferent" placeholder="Referente" />
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="userReferent" name="userReferent"
+                    placeholder="Referente" />
+                  <label for="userReferent">Referente</label>
+                </div>
+              </div>
+              <div id="userDateFirstContact">
+                <input type="date" id="userDateOfFirstContact" name="userDateOfFirstContact" />
               </div>
             </div>
             <div class="row mb-3">
               <div class="col">
-                <input type="date" class="form-control" id="userDateOfFirstContact" name="userDateOfFirstContact"
-                  placeholder="Fecha" />
+                <select class="form-select" aria-label="Default select example" id="userCountry" required
+                  name="userCountry">
+                  <option selected value="">Pais *</option>
+                  <option value="PE">PE</option>
+                  <option value="MX">MX</option>
+                </select>
+                <div class="invalid-feedback">
+                  Por favor, ingresar el pais
+                </div>
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userStatusWeb" name="userStatusWeb"
-                  placeholder="Estaus Web" />
+                <select class="form-select" aria-label="Default select example" id="userProduct" name="userProduct">
+                  <option selected value="">Producto</option>
+                  <option value="P7">P7</option>
+                  <option value="Prestamo Personal">Prestamo Personal</option>
+                  <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
+                  <option value="Servicios Digitales-PE">Servicios Digitales-PE</option>
+                </select>
               </div>
               <div class="col">
-                <input type="text" class="form-control" id="userCountry" name="userCountry" placeholder="Pais" />
+                <select class="form-select" aria-label="Default select example" id="userStatusRisk"
+                  name="userStatusRisk">
+                  <option selected value="">Estatus Riesgo</option>
+                  <option value="DNI y Docs">DNI y Docs</option>
+                  <option value="Califica">Califica</option>
+                  <option value="No califica">No califica</option>
+                  <option value="Por terminar OBWeb">Por terminar OBWeb</option>
+                  <option value="Cliente afiliado">Cliente afiliado</option>
+                  <option value="Cliente Prueba">Cliente Prueba</option>
+                  <option value="CURP Inválido">CURP Inválido</option>
+                  <option value="OB_web_cul">OB_web_cul</option>
+                </select>
               </div>
             </div>
-            <div class="row mb-3">
-              <div class="col">
-                <input type="text" class="form-control" id="userProduct" name="userProduct" placeholder="Producto" />
-              </div>
-              <div class="col">
-                <input type="text" class="form-control" id="userStatusRisk" name="userStatusRisk"
-                  placeholder="Estatus Riesgo" />
-              </div>
-            </div>
-
-
-
-            <!--  <select class="form-select mb-3" aria-label="userSex" name="userSex" id="userSex">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              <div class="mb-3">
-                <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="user@ejemplo.com" />
-              </div>
-              <div class="mb-3">
-                <input type="date" class="form-control" id="userDateOfBirth" name="userDateOfBirth" />
-              </div>
-              <div class="mb-3">
-                <input type="number" class="form-control" id="userPhone" name="userPhone" placeholder="999999999" />
-              </div> -->
           </form>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5">No hay tipificaciones
+            registradas</p>
+          <!-- <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseOne">
+                  Accordion Item #1
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                  <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse
+                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
+                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
+                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
+                  within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                  aria-controls="panelsStayOpen-collapseTwo">
+                  Accordion Item #2
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse
+                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
+                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
+                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
+                  within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                  aria-controls="panelsStayOpen-collapseThree">
+                  Accordion Item #3
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse
+                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
+                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
+                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
+                  within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+          </div> -->
+
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="handleSaveChanges()">Save changes</button>
-          <!-- <button class="btn btn-primary" type="button" disabled>
-              <span class="spinner-border spinner-border-sm d-none btnLoading" id="loadingButton" aria-hidden="true"></span>
-              <span role="status">Loading...</span>
-            </button> -->
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal"
+            data-bs-toggle="modal">Tipificar</button>
+          <button type="submit" class="btn btn-primary" id="createUserOBF"
+            onclick="handleSaveChanges()">Guardar</button>
+          <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal de Tipificaciones -->
+  <div class="modal fade" id="secondaryModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Tipificaciones</h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="createTipificacion" id="createTipificacion" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <select class="form-select" aria-label="Medios de contacto">
+                  <option selected value="">Medio de contacto</option>
+                  <option value="XCALLY">XCALLY</option>
+                  <option value="Dinamico">Dinamico</option>
+                  <option value="Corporativo">Corporativo</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                </select>
+              </div>
+              <div class="col">
+                <select class="form-select" aria-label="Resultado de la llamada">
+                  <option selected value="">Resultado</option>
+                  <option value="Contestada">Contestada</option>
+                  <option value="Buzon">Buzon</option>
+                  <option value="Corta llamada">Corta llamada</option>
+                  <option value="Numero equivocado">Numero equivocado</option>
+                  <option value="Tercero (Reagenda)">Tercero (Reagenda)</option>
+                  <option value="Reagenda">Reagenda</option>
+                  <option value="Timbra y no contesta">Timbra y no contesta</option>
+                  <option value="Sin respuesta">Sin respuesta</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Comentarios de la llamada" id="comentsOfCalling"
+                style="height: 200px"></textarea>
+              <label for="comentsOfCalling">Cometarios</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">Volver</button>
+          <button class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Guardar</button>
+          <button class="btn btn-primary d-none btnLoading" id="loadingButtonTipificacion" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <?!= include('JS') ?>
 </body>
