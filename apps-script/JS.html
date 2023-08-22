@@ -4,31 +4,123 @@
 
   window.addEventListener('load', searchData)
 
-  function validarFormulario() {
+  // OB - Fallido --> Clientes
+
+  const userId = document.getElementById('userId')
+  const userName = document.getElementById('userName')
+  const userLastName = document.getElementById('userLastName')
+  const userPhone = document.getElementById('userPhone')
+  const userDni = document.getElementById('userDni')
+  const userCod = document.getElementById('userCod')
+  const userReferent = document.getElementById('userReferent')
+  const userStatusWeb = document.getElementById('userStatusWeb')
+  const userCountry = document.getElementById('userCountry')
+  const userProduct = document.getElementById('userProduct')
+  const userStatusRisk = document.getElementById('userStatusRisk')
+  const userDateOfFirstContact = document.getElementById('userDateOfFirstContact')
+  const comentCallTitle = document.getElementById("comentCallTitle")
+  const comentCallBtn = document.getElementById("comentCallBtn")
+  const createUserOBF = document.getElementById("createUserOBF")
+  const noComentsCall = document.getElementById('noComentsCall')
+  const comentsCallsConatiner = document.getElementById("comentsCallsConatiner")
+
+  function handleShowModalUser() {
+    userId.value = '';
+    userName.value = '';
+    userLastName.value = '';
+    userPhone.value = '';
+    userDni.value = '';
+    userCod.value = '';
+    userReferent.value = '';
+    userStatusWeb.value = '';
+    userCountry.value = '';
+    userProduct.value = '';
+    userStatusRisk.value = '';
+    document.getElementById("comentsCallsConatiner").innerHTML = ""
+    comentCallTitle.classList = "d-none"
+    comentCallBtn.classList = "btn btn-outline-secondary d-none"
+    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
+  }
+
+  // Cuando se presiona el boton de editar, se obtienen los datos de la fila en cuestion para que sean mostrados en el formulario mostrando el modal para editarlos
+  function handleUpdateUserInfo(button) {
+    const tableRow = button.parentNode.parentNode;
+
+    const id = button.dataset.usuarioId;
+
+    const country = tableRow.cells[0].innerHTML;
+    const name = tableRow.cells[1].innerHTML;
+    const lastName = tableRow.cells[2].innerHTML;
+    const phone = tableRow.cells[3].innerHTML;
+    const dni = tableRow.cells[4].innerHTML;
+    const cod = tableRow.cells[5].innerHTML;
+    const referent = tableRow.cells[6].innerHTML;
+    const dateOfFirstContact = tableRow.cells[7].innerHTML;
+    const statusWeb = tableRow.cells[8].innerHTML;
+    const product = tableRow.cells[9].innerHTML;
+    const statusRisk = tableRow.cells[10].innerHTML;
+
+    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+    createModal.show()
+
+    userId.value = id;
+    userName.value = name;
+    userLastName.value = lastName;
+    userPhone.value = phone;
+    userDni.value = dni;
+    userCod.value = cod;
+    userReferent.value = referent;
+    userDateOfFirstContact.value = dateOfFirstContact;
+    userStatusWeb.value = statusWeb;
+    userCountry.value = country;
+    userProduct.value = product;
+    userStatusRisk.value = statusRisk;
+
+    // Estilos de los botones y labels
+    noComentsCall.classList = "d-none"
+    comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
+    comentCallBtn.classList.toggle("d-none")
+    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-space-between"
+
+    getDataComentCalls(phone)
+  }
+
+  // Se llama la funcion cuando se presiona el boton de guardar y se valida el telefono y el pais
+  function handleSaveChanges() {
+
+    const phone = document.getElementById('userPhone')
+    const country = document.getElementById('userCountry')
+
+    let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
+
+    if (passInputValidation) {
+      validateForm()
+    }
+  }
+
+  // Validamos los datos del formulario y generamos dos casos, uno para crear el usuario y el otro para actualizar los datos del mismo
+  function validateForm() {
     loadingOnOff()
 
     const formValues = document.getElementById('createUser');
 
     const form = {
-      userId: document.getElementById('userId').value,
-      userName: document.getElementById('userName').value,
-      userLastName: document.getElementById('userLastName').value,
-      userPhone: document.getElementById('userPhone').value,
-      userDni: document.getElementById('userDni').value,
-      userCod: document.getElementById('userCod').value,
-      userReferent: document.getElementById('userReferent').value,
-      userDateOfFirstContact: document.getElementById('userDateOfFirstContact').value,
-      userStatusWeb: document.getElementById('userStatusWeb').value,
-      userCountry: document.getElementById('userCountry').value,
-      userProduct: document.getElementById('userProduct').value,
-      userStatusRisk: document.getElementById('userStatusRisk').value,
+      userId: userId.value,
+      userName: userName.value,
+      userLastName: userLastName.value,
+      userPhone: userPhone.value,
+      userDni: userDni.value,
+      userCod: userCod.value,
+      userReferent: userReferent.value,
+      userDateOfFirstContact: userDateOfFirstContact.value,
+      userStatusWeb: userStatusWeb.value,
+      userCountry: userCountry.value,
+      userProduct: userProduct.value,
+      userStatusRisk: userStatusRisk.value,
     }
 
-    console.log(form)
-    const id = form.userId;
-
-    if (id === '') {
-      //Create
+    if (form.userId === '') {
+      //Create Client
       google.script.run
         .withSuccessHandler(result => {
           loadingOnOff()
@@ -40,6 +132,7 @@
         })
         .addUser(form);
     } else {
+      //Uodate Client
       google.script.run
         .withSuccessHandler(result => {
           loadingOnOff()
@@ -53,6 +146,7 @@
     }
   }
 
+  // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
   function searchData() {
 
     google.script.run
@@ -102,70 +196,7 @@
 
   }
 
-  function handleUpdateUserInfo(button) {
-    const tableRow = button.parentNode.parentNode;
-
-    const id = button.dataset.usuarioId;
-
-    const country = tableRow.cells[0].innerHTML;
-    const name = tableRow.cells[1].innerHTML;
-    const lastName = tableRow.cells[2].innerHTML;
-    const phone = tableRow.cells[3].innerHTML;
-    const dni = tableRow.cells[4].innerHTML;
-    const cod = tableRow.cells[5].innerHTML;
-    const referent = tableRow.cells[6].innerHTML;
-    const dateOfFirstContact = tableRow.cells[7].innerHTML;
-    const statusWeb = tableRow.cells[8].innerHTML;
-    const product = tableRow.cells[9].innerHTML;
-    const statusRisk = tableRow.cells[10].innerHTML;
-
-    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-    createModal.show()
-
-    document.getElementById('userId').value = id;
-    document.getElementById('userName').value = name;
-    document.getElementById('userLastName').value = lastName;
-    document.getElementById('userPhone').value = phone;
-    document.getElementById('userDni').value = dni;
-    document.getElementById('userCod').value = cod;
-    document.getElementById('userReferent').value = referent;
-    document.getElementById('userDateOfFirstContact').value = dateOfFirstContact;
-    document.getElementById('userStatusWeb').value = statusWeb;
-    document.getElementById('userCountry').value = country;
-    document.getElementById('userProduct').value = product;
-    document.getElementById('userStatusRisk').value = statusRisk;
-
-    getDataComentCalls(phone)
-
-  }
-
-  function handleSaveChanges() {
-
-    const phone = document.getElementById('userPhone')
-    const country = document.getElementById('userCountry')
-
-    let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
-
-    if (passInputValidation) {
-      validarFormulario()
-    }
-  }
-
-  function handleShowModalUser() {
-    document.getElementById('userId').value = '';
-    document.getElementById('userName').value = '';
-    document.getElementById('userLastName').value = '';
-    document.getElementById('userPhone').value = '';
-    document.getElementById('userDni').value = '';
-    document.getElementById('userCod').value = '';
-    document.getElementById('userReferent').value = '';
-    document.getElementById('userStatusWeb').value = '';
-    document.getElementById('userCountry').value = '';
-    document.getElementById('userProduct').value = '';
-    document.getElementById('userStatusRisk').value = '';
-
-  }
-
+  // Valida el numero de telefono para que solo tenga numeros entres 9 y 10 en total
   function validatePhoneNumber(phoneNumber) {
 
     let phoneNumberTrim = phoneNumber.trim()
@@ -185,11 +216,13 @@
     return true;
   }
 
+  // Function que activa y desactiva el loader
   function loadingOnOff() {
     document.querySelector('#createUserOBF').classList.toggle("d-none")
     document.querySelector('#loadingButton').classList.toggle("d-none")
   }
 
+  // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
   function handleSaveAlert() {
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
     const appendAlert = (message, type) => {
@@ -207,18 +240,143 @@
     const alertTrigger = document.getElementById('createUserOBF')
     if (alertTrigger) {
       appendAlert('Usuario creado exitosamente!', 'success')
-
     }
   }
 
+
+  // Tipificaciones
+
+  // Funcion que muestra todas la tipificaciones realizadas tanto del drive reciente con del antigua, como historial para no perder datos
   function getDataComentCalls(target) {
+
+    document.querySelector('#loadingComenstCall').classList.toggle("d-none")
+    comentsCallsConatiner.innerHTML = ""
+
     google.script.run
-      .withSuccessHandler(comentsCalls => {
-        let sortComentsCalls = comentsCalls
+      .withSuccessHandler(({ newComentsCall, oldComentsCall }) => {
+        document.querySelector('#loadingComenstCall').classList.toggle("d-none")
+
+        let filterComentsCalls = newComentsCall
           .filter(comentCall => comentCall[2] === target)
-        console.log(sortComentsCalls)
+          .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
+
+        const comentsCallsConatiner = document.getElementById("comentsCallsConatiner")
+        const comentsCallTemplate = document.getElementById("comentsCallTemplate")
+        const templateItem = comentsCallTemplate.content;
+
+        filterComentsCalls.forEach((call, index) => {
+          const comentCallItem = templateItem.cloneNode(true)
+
+          const headerCallItem = comentCallItem.querySelector(".accordion-button")
+          const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+          headerCallItem.dataset.bsTarget = `#panel-${index}`
+          headerCallItem.setAttribute("aria-controls", `panel-${index}`)
+
+          if (index === 0) {
+            headerCallItem.classList = "accordion-button"
+            headerCallItem.setAttribute("aria-expanded", "true")
+            bodyCallItem.parentNode.classList = "accordion-collapse collapse show"
+          }
+
+          bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
+
+          headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
+          bodyCallItem.textContent = `${call[5]}`
+
+          comentsCallsConatiner.appendChild(comentCallItem)
+        })
+
+        generateOldComentsCall(templateItem, oldComentsCall, target)
+
+        // Aplicar estilos a las etiquelas para mayor informacion al usuario
+        if (filterComentsCalls.length > 0) {
+          comentsCallsConatiner.classList = "accordion mt-5 mb-3"
+          noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
+          comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
+        }
+
+        comentsCallsConatiner.style.display = "block"
+
       })
       .readComentsCall()
   }
+
+  // Funcion que muestra las tipificaciones creadas en el antiguio formulario y que se muestra como historial
+  function generateOldComentsCall(templateItem, oldComentsCall, target) {
+    const comentCallItem = templateItem.cloneNode(true)
+
+    const headerCallItem = comentCallItem.querySelector(".accordion-button")
+    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+    headerCallItem.dataset.bsTarget = `#panel-old`
+    headerCallItem.setAttribute("aria-controls", `panel-old`)
+
+    bodyCallItem.parentNode.setAttribute("id", `panel-old`)
+
+    headerCallItem.textContent = "Tipificaciones antiguas"
+
+    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target) || -1
+
+    if (rowOldComentsCall === -1 || rowOldComentsCall.every(elem => elem === "")) {
+      comentsCallsConatiner.classList.toggle("d-none")
+      noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
+      comentCallTitle.classList = "d-none"
+    } else {
+      comentsCallsConatiner.classList = "accordion mt-5 mb-3"
+      const sliceRowOldComentsCall = rowOldComentsCall.slice(12,)
+      sliceRowOldComentsCall.forEach((comentsCall, index) => {
+
+        if ((index + 1) % 3 === 0 && (index + 1) < 10) {
+          bodyCallItem.innerHTML +=
+            `<div>
+              <p>${Math.ceil(index / 3)}° Llamada - Fecha: ${sliceRowOldComentsCall[index - 1] || "Sin registro"} - Medio: ${sliceRowOldComentsCall[index - 2] || "Sin registro"} - Resultado: ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
+            </div>
+            `
+        }
+      })
+
+      bodyCallItem.innerHTML +=
+        `<div>
+        <p>Notas: ${sliceRowOldComentsCall[9] || "Sin regsitro"}</p>
+        <p>Estatus de la gestion: ${sliceRowOldComentsCall[10] || "Sin regsitro"}</p>
+        <p>Motivo de no afiliacion: ${sliceRowOldComentsCall[11] || "Sin regsitro"}</p>
+        <p>Asesor: ${sliceRowOldComentsCall[12] || "Sin regsitro"}</p>
+      </div>`
+
+      comentsCallsConatiner.appendChild(comentCallItem)
+    }
+  }
+
+  // Funcion que muestra un modal para ingresar y guarda los datos de la tificacio, ademas muestra un alerta cuando se realiza correctamente
+  function addComentsCallHandler() {
+    const formValues = document.getElementById('createTipificacion');
+
+    const form = {
+      clientPhone: document.getElementById("userPhone").value,
+      callViaOfCalling: document.getElementById("callViaOfCalling").value,
+      callAgentName: document.getElementById("callAgentName").value,
+      callResults: document.getElementById("callResults").value,
+      callStatusClient: document.getElementById("callStatusClient").value,
+      callReasonToNotAfiliate: document.getElementById("callReasonToNotAfiliate").value,
+      callComentsOfCalling: document.getElementById("callComentsOfCalling").value
+    }
+
+    google.script.run
+      .withSuccessHandler(result => {
+        formValues.reset()
+        const createModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
+        createModal.hide();
+        handleSaveAlert()
+      })
+      .addComentsCall(form)
+
+  }
+
+  // Funcion que maneja las acciones cuando se guardan las tipificaciones
+  function handleSaveComentsCall() {
+    addComentsCallHandler()
+  }
+
 
 </script>
