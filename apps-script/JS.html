@@ -260,7 +260,6 @@
           .filter(comentCall => comentCall[2] === target)
           .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
 
-        const comentsCallsConatiner = document.getElementById("comentsCallsConatiner")
         const comentsCallTemplate = document.getElementById("comentsCallTemplate")
         const templateItem = comentsCallTemplate.content;
 
@@ -270,6 +269,7 @@
           const headerCallItem = comentCallItem.querySelector(".accordion-button")
           const bodyCallItem = comentCallItem.querySelector(".accordion-body")
 
+          // Configuracion del acodion donde se muestran los comentarios de la llamada
           headerCallItem.dataset.bsTarget = `#panel-${index}`
           headerCallItem.setAttribute("aria-controls", `panel-${index}`)
 
@@ -281,8 +281,50 @@
 
           bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
 
+
+          // Contenedor del comentario de la llamada
           headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
-          bodyCallItem.textContent = `${call[5]}`
+
+          // Informacion adicional de la llamada
+          bodyCallItem.innerHTML =
+            `<div class="d-flex flex-column gap-2">
+              <div class="d-flex justify-content-between p-3">
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Medio de contacto: </p>
+                  <p class="fw-normal">${call[1] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Fecha: </p>
+                  <p class="fw-normal">${call[3]}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Hora: </p>
+                  <p class="fw-normal">${call[4]}</p>
+                </div>
+              </div>
+              <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+                <div class="d-flex gap-2 px-2">
+                  <p class="fw-bolder">Resultado:</p>
+                  <p class="fw-normal">${call[5] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 px-2">
+                  <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+                  <p class="fw-normal">${call[7] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+                  <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+                  <p class="fw-normal">${call[8] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+                  <p class="fw-bolder text-wrap">Comentarios: </p>
+                  <p class="fw-normal">${call[6] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 mt-3 justify-content-center">
+                  <p class="fw-bolder text-wrap">Asesor: </p>
+                  <p class="fw-normal">${call[9] || "NULL"}</p>
+                </div>
+              </div>
+            </div>`
 
           comentsCallsConatiner.appendChild(comentCallItem)
         })
@@ -292,7 +334,7 @@
         // Aplicar estilos a las etiquelas para mayor informacion al usuario
         if (filterComentsCalls.length > 0) {
           comentsCallsConatiner.classList = "accordion mt-5 mb-3"
-          noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
+          noComentsCall.classList = "d-none"
           comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
         }
 
@@ -318,31 +360,52 @@
 
     const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target) || -1
 
-    if (rowOldComentsCall === -1 || rowOldComentsCall.every(elem => elem === "")) {
+    const sliceRowOldComentsCall = rowOldComentsCall !== -1 ? rowOldComentsCall.slice(12,) : -1
+
+    if (sliceRowOldComentsCall === -1 || sliceRowOldComentsCall.every(elem => elem === "")) {
       comentsCallsConatiner.classList.toggle("d-none")
       noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
       comentCallTitle.classList = "d-none"
     } else {
       comentsCallsConatiner.classList = "accordion mt-5 mb-3"
-      const sliceRowOldComentsCall = rowOldComentsCall.slice(12,)
+      let counterCalls = ""
       sliceRowOldComentsCall.forEach((comentsCall, index) => {
 
         if ((index + 1) % 3 === 0 && (index + 1) < 10) {
-          bodyCallItem.innerHTML +=
-            `<div>
-              <p>${Math.ceil(index / 3)}° Llamada - Fecha: ${sliceRowOldComentsCall[index - 1] || "Sin registro"} - Medio: ${sliceRowOldComentsCall[index - 2] || "Sin registro"} - Resultado: ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
-            </div>
+          counterCalls +=
+            `<tr class="d-flex justify-content-between">
+              <td><p>${Math.ceil(index / 3)}° Llamada - Fecha: ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p></td>
+              <td><p>Medio: ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p></td>
+              <td><p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p></td>
+            </tr>
             `
         }
       })
 
-      bodyCallItem.innerHTML +=
-        `<div>
-        <p>Notas: ${sliceRowOldComentsCall[9] || "Sin regsitro"}</p>
-        <p>Estatus de la gestion: ${sliceRowOldComentsCall[10] || "Sin regsitro"}</p>
-        <p>Motivo de no afiliacion: ${sliceRowOldComentsCall[11] || "Sin regsitro"}</p>
-        <p>Asesor: ${sliceRowOldComentsCall[12] || "Sin regsitro"}</p>
-      </div>`
+      bodyCallItem.innerHTML =
+        `
+          <table class="d-flex flex-column justify-content-between px-3">
+            ${counterCalls}
+          </table>
+          <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+            <div class="d-flex gap-2 px-2">
+              <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+              <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[11] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+              <p class="fw-bolder text-wrap">Comentarios: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[9] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 mt-3 justify-content-center">
+              <p class="fw-bolder text-wrap">Asesor: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[12] || "Sin registro"}</p>
+            </div>
+          </div>
+        `
 
       comentsCallsConatiner.appendChild(comentCallItem)
     }
