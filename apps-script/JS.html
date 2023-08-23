@@ -23,23 +23,45 @@
   const createUserOBF = document.getElementById("createUserOBF")
   const noComentsCall = document.getElementById('noComentsCall')
   const comentsCallsConatiner = document.getElementById("comentsCallsConatiner")
+  const formValues = document.getElementById('createUser');
+  const phone = document.getElementById('userPhone')
+  const country = document.getElementById('userCountry')
+  const phoneMsgValidation = document.getElementById("error-message-phone")
+  const countryMsgValidation = document.getElementById("error-message-country")
+  const tableBody = document.getElementById('tableBody-users');
+  const template = document.getElementById('rowTemplate')
+
 
   function handleShowModalUser() {
-    userId.value = '';
-    userName.value = '';
-    userLastName.value = '';
-    userPhone.value = '';
-    userDni.value = '';
-    userCod.value = '';
-    userReferent.value = '';
-    userStatusWeb.value = '';
-    userCountry.value = '';
-    userProduct.value = '';
-    userStatusRisk.value = '';
+    formValues.reset()
     document.getElementById("comentsCallsConatiner").innerHTML = ""
     comentCallTitle.classList = "d-none"
-    comentCallBtn.classList = "btn btn-outline-secondary d-none"
+    comentCallBtn.classList = "d-none"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
+    phoneMsgValidation.classList = "invalid-message d-none"
+    phone.classList = "form-control"
+    country.classList = "form-select"
+    countryMsgValidation.classList = "invalid-message d-none"
+
+    phone.addEventListener("keyup", (event) => {
+      if (validatePhoneNumber(event.target.value)) {
+        phone.classList = "form-control"
+        phoneMsgValidation.classList = "d-none"
+      } else {
+        phone.classList = "form-control invalid-input"
+        phoneMsgValidation.classList = "invalid-message"
+      }
+    })
+
+    country.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        country.classList = "form-select invalid-input"
+        countryMsgValidation.classList = "invalid-message"
+      } else {
+        countryMsgValidation.classList = "invalid-message d-none"
+      }
+    })
+
   }
 
   // Cuando se presiona el boton de editar, se obtienen los datos de la fila en cuestion para que sean mostrados en el formulario mostrando el modal para editarlos
@@ -79,19 +101,31 @@
     // Estilos de los botones y labels
     noComentsCall.classList = "d-none"
     comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
-    comentCallBtn.classList.toggle("d-none")
-    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-space-between"
+    comentCallBtn.classList = "btn btn-outline-secondary"
+    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
 
     getDataComentCalls(phone)
   }
 
   // Se llama la funcion cuando se presiona el boton de guardar y se valida el telefono y el pais
-  function handleSaveChanges() {
+  function handleSaveChanges(e) {
 
-    const phone = document.getElementById('userPhone')
-    const country = document.getElementById('userCountry')
+    e.preventDefault()
+
+    if (country.value !== "PE" || country.value !== "MX" || country.value === "") {
+      country.classList = "form-select invalid-input"
+      countryMsgValidation.classList = "invalid-message"
+    }
 
     let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
+
+    if (validatePhoneNumber(phone.value)) {
+      phone.classList = "form-control"
+      phoneMsgValidation.classList = "d-none"
+    } else {
+      phone.classList = "form-control invalid-input"
+      phoneMsgValidation.classList = "invalid-message"
+    }
 
     if (passInputValidation) {
       validateForm()
@@ -101,8 +135,6 @@
   // Validamos los datos del formulario y generamos dos casos, uno para crear el usuario y el otro para actualizar los datos del mismo
   function validateForm() {
     loadingOnOff()
-
-    const formValues = document.getElementById('createUser');
 
     const form = {
       userId: userId.value,
@@ -149,13 +181,16 @@
   // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
   function searchData() {
 
+    const searchloader = document.getElementById("searchClientLoader")
+    searchloader.classList = "d-flex justify-content-center"
+
     google.script.run
       .withSuccessHandler(usersData => {
-        let tableBody = document.getElementById('tableBody-users');
-        let template = document.getElementById('rowTemplate')
         let templateContent = template.content;
 
         tableBody.innerHTML = ''
+
+        searchloader.classList = "d-none"
 
         usersData.reverse().forEach(user => {
           const tr = templateContent.cloneNode(true)
@@ -373,20 +408,27 @@
 
         if ((index + 1) % 3 === 0 && (index + 1) < 10) {
           counterCalls +=
-            `<tr class="d-flex justify-content-between">
-              <td><p>${Math.ceil(index / 3)}° Llamada - Fecha: ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p></td>
-              <td><p>Medio: ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p></td>
-              <td><p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p></td>
-            </tr>
+            `
+            <div class="row my-0">
+              <div class="col-5 bg-transparent border border-0">
+                <p><strong>${Math.ceil(index / 3)}° Llamada - Fecha:</strong> ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p>
+              </div>
+              <div class="col bg-transparent border border-0">
+                <p><strong>Medio:</strong> ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p>
+              </div>
+              <div class="col-4 bg-transparent border border-0">
+                <p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
+              </div>
+            </div>
             `
         }
       })
 
       bodyCallItem.innerHTML =
         `
-          <table class="d-flex flex-column justify-content-between px-3">
+          <div class="d-flex flex-column px-3 mt-5 mb-2">
             ${counterCalls}
-          </table>
+          </div>
           <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
             <div class="d-flex gap-2 px-2">
               <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
@@ -442,4 +484,61 @@
   }
 
 
+  // Buscador
+
+  // Funcion que busca y muestra las informacion de un cliente
+  function handleFindClientByValue(event) {
+
+    event.preventDefault()
+
+    tableBody.innerHTML = ''
+
+    const searchloader = document.getElementById("searchClientLoader")
+    searchloader.classList = "d-flex justify-content-center"
+
+    const target = document.getElementById("inputSearchClient").value
+
+    google.script.run
+      .withSuccessHandler(userData => {
+        let templateContent = template.content;
+
+        searchloader.classList = "d-none"
+
+        userData.forEach(user => {
+          const tr = templateContent.cloneNode(true)
+
+          const nameCol = tr.querySelector(".template-name");
+          const lastNameCol = tr.querySelector(".template-lastName");
+          const countryCol = tr.querySelector(".template-country");
+          const phoneCol = tr.querySelector(".template-phone");
+          const dniCol = tr.querySelector(".template-dni");
+          const codCol = tr.querySelector(".template-cod");
+          const referenteCol = tr.querySelector(".template-referent");
+          const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+          const statusWebCol = tr.querySelector(".template-statusWeb");
+          const productCol = tr.querySelector(".template-product");
+          const statusRiskCol = tr.querySelector(".template-statusRisk");
+
+          const actionCol = tr.querySelector(".template-actions");
+          const editButton = tr.querySelector(".button-edit");
+
+          countryCol.textContent = user[1]
+          nameCol.textContent = user[2]
+          lastNameCol.textContent = user[3]
+          phoneCol.textContent = user[4]
+          dniCol.textContent = user[5]
+          codCol.textContent = user[6]
+          referenteCol.textContent = user[7]
+          dateOfFirstContactCol.textContent = user[8]
+          statusWebCol.textContent = user[9]
+          productCol.textContent = user[10]
+          statusRiskCol.textContent = user[11]
+
+          editButton.dataset.usuarioId = user[0]
+
+          tableBody.appendChild(tr);
+        })
+      })
+      .findUserByValue(target)
+  }
 </script>

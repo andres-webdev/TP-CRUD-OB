@@ -90,7 +90,7 @@ function currentHour() {
 // Añade la tipificacion que se regitro en el formulario en el sheets de Tipificaciones
 function addComentsCall(form) {
 
-  const id = crearNuevoId(sheetsTipificaciones);
+  const id = createId(sheetsTipificaciones);
   const viaOfCall = returnNullValue(form.callViaOfCalling);
   const phoneClient = returnNullValue(form.clientPhone);
   const dateOfContact = returnNullValue(currentDate());

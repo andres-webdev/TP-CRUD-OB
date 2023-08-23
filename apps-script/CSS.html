@@ -13,4 +13,33 @@
   #comentsCallsConatiner {
     display: none;
   }
+
+  #error-message-phone,
+  #error-message-country {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: var(--bs-form-invalid-color);
+  }
+
+  .form-control.invalid-input,
+  .form-select.invalid-input {
+    border-color: var(--bs-form-invalid-border-color);
+  }
+
+  #inputSearchClient {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  #searchClientInputBtn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  #searchClientLoader {
+    position: absolute;
+    top: calc(50%);
+    left: calc(50% - 40px);
+  }
 </style>

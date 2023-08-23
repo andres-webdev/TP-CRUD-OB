@@ -8,19 +8,71 @@
 
 <body>
   <main class="container">
-    <h1 class="mb-5 fw-bold text-primary-emphasis d-flex justify-content-center mt-4">OB Fallidos</h1>
+
+    <!-- Barra de navegacion -->
+    <nav class="navbar navbar-expand-lg navbar-light rounded mt-3 mb-5">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between">
+          <a class="navbar-brand" href="#">Tienda Pago (Logo)</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
+            aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse ms-4 me-4" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Drives
+                </button>
+                <ul class="dropdown-menu dropdown-menu-light">
+                  <li>
+                    <a class="dropdown-item py-2 pe-5 ps-3" href="#">OB-Completado</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2 pe-5 ps-3" href="#">OB-Fallido</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2 pe-5 ps-3" href="#">Otros...</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <p class="m-0 p-0 fs-5 fw-bold text-primary-emphasis d-flex">OB Fallidos</p>
+        <button type="button" class="btn btn-outline-danger">Salir</button>
+      </div>
+    </nav>
+
     <div id="liveAlertPlaceholder"></div>
-    <div class="d-flex justify-content-between mb-4">
-      <div class="col">
+    <div class="d-flex justify-content-between mb-4 mt-3">
+      <div class="col d-flex gap-3">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
           onclick="handleShowModalUser()"><i class="bi bi-plus-lg"></i> Agregar</button>
+
+        <!-- Filtros de la tabla -->
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Filtros
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Fecha</a></li>
+            <li><a class="dropdown-item" href="#">Pais</a></li>
+            <li><a class="dropdown-item" href="#">Estatus web</a></li>
+            <li><a class="dropdown-item" href="#">Estatus riesgo</a></li>
+            <li><a class="dropdown-item" href="#">Producto</a></li>
+          </ul>
+        </div>
       </div>
       <div class="col-3">
-        <div class="input-group">
+        <form class="d-flex">
           <input type="text" class="form-control" placeholder="Buscar por DNI, Telefono, Codigo"
-            aria-label="Recipient's username" aria-describedby="button-addon2">
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2">Buscar</button>
-        </div>
+            aria-label="Recipient's username" aria-describedby="button-addon2" id="inputSearchClient">
+          <button class="btn btn-outline-secondary" type="submit" id="searchClientInputBtn"
+            onclick="handleFindClientByValue(event)">Buscar</button>
+        </form>
       </div>
     </div>
     <!-- Tabla de todos los clientes -->
@@ -35,19 +87,22 @@
             <td>Nro doc</td>
             <td>Codigo</td>
             <td>Referente</td>
-            <td>Fecha</td>
+            <td style="min-width: 100px;">Fecha</td>
             <td>Estaus Web</td>
             <td>Producto</td>
             <td>Estatus Riesgo</td>
             <td>Acciones</td>
           </tr>
         </thead>
-        <tbody id="tableBody-users">
-
+        <tbody id="tableBody-users" class="table-group-divider">
         </tbody>
       </table>
     </div>
-
+    <div class="d-flex justify-content-center d-none" id="searchClientLoader">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   </main>
 
   <template id="rowTemplate">
@@ -59,7 +114,7 @@
       <td class="template-dni"></td>
       <td class="template-cod"></td>
       <td class="template-referent"></td>
-      <td class="template-dateOfFirstContact"></td>
+      <td class="template-dateOfFirstContact" style="min-width: 100px;"></td>
       <td class="template-statusWeb"></td>
       <td class="template-product"></td>
       <td class="template-statusRisk"></td>
@@ -105,9 +160,9 @@
                 <div class="form-floating">
                   <input type="number" class="form-control" id="userPhone" name="userPhone" required
                     placeholder="Telefono" />
-                  <label for="userPhone">Telefono *</label>
-                  <div class="invalid-feedback">
-                    Por favor, ingresar un numero de telefono
+                  <label for="userPhone" class="form-label">Telefono *</label>
+                  <div class="invalid-message d-none" id="error-message-phone">
+                    Por favor, ingresar número de telefono entre 9 y 10 digitos.
                   </div>
                 </div>
               </div>
@@ -147,17 +202,17 @@
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userCountry" required
                   name="userCountry">
-                  <option selected value="">Pais *</option>
+                  <option selected disabled value="">Pais *</option>
                   <option value="PE">PE</option>
                   <option value="MX">MX</option>
                 </select>
-                <div class="invalid-feedback">
-                  Por favor, ingresar el pais
+                <div class="invalid-message d-none" id="error-message-country">
+                  Por favor, ingresar el pais.
                 </div>
               </div>
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userProduct" name="userProduct">
-                  <option selected value="">Producto</option>
+                  <option selected disabled value="">Producto</option>
                   <option value="P7">P7</option>
                   <option value="Prestamo Personal">Prestamo Personal</option>
                   <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
@@ -167,7 +222,7 @@
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userStatusRisk"
                   name="userStatusRisk">
-                  <option selected value="">Estatus Riesgo</option>
+                  <option selected disabled value="">Estatus Riesgo</option>
                   <option value="DNI y Docs">DNI y Docs</option>
                   <option value="Califica">Califica</option>
                   <option value="No califica">No califica</option>
@@ -215,11 +270,11 @@
           </template>
 
         </div>
-        <div class="modal-footer d-flex justify-content-space-between">
+        <div class="modal-footer d-flex justify-content-between">
           <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
             data-bs-toggle="modal">Tipificar</button>
           <button type="submit" class="btn btn-primary" id="createUserOBF"
-            onclick="handleSaveChanges()">Guardar</button>
+            onclick="handleSaveChanges(event)">Guardar</button>
           <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Guardando...</span>
