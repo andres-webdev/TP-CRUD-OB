@@ -22,26 +22,25 @@
   const comentCallBtn = document.getElementById("comentCallBtn")
   const createUserOBF = document.getElementById("createUserOBF")
   const noComentsCall = document.getElementById('noComentsCall')
-  const comentsCallsConatiner = document.getElementById("comentsCallsConatiner")
+  const comentsCallsContainer = document.getElementById("comentsCallsContainer")
   const formValues = document.getElementById('createUser');
-  const phone = document.getElementById('userPhone')
-  const country = document.getElementById('userCountry')
+  const phone = document.getElementById('userPhone') // Repetido
   const phoneMsgValidation = document.getElementById("error-message-phone")
   const countryMsgValidation = document.getElementById("error-message-country")
   const tableBody = document.getElementById('tableBody-users');
   const template = document.getElementById('rowTemplate')
-
+  const target = document.getElementById("inputSearchClient")
 
   function handleShowModalUser() {
     formValues.reset()
-    document.getElementById("comentsCallsConatiner").innerHTML = ""
+    document.getElementById("comentsCallsContainer").innerHTML = ""
     comentCallTitle.classList = "d-none"
     comentCallBtn.classList = "d-none"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
     phoneMsgValidation.classList = "invalid-message d-none"
     phone.classList = "form-control"
-    country.classList = "form-select"
-    countryMsgValidation.classList = "invalid-message d-none"
+    userCountry.classList = "form-select"
+    countryMsgValidation.classList = "d-none"
 
     phone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -53,9 +52,9 @@
       }
     })
 
-    country.addEventListener("change", (event) => {
+    userCountry.addEventListener("change", (event) => {
       if (event.target.value === "") {
-        country.classList = "form-select invalid-input"
+        userCountry.classList = "form-select invalid-input"
         countryMsgValidation.classList = "invalid-message"
       } else {
         countryMsgValidation.classList = "invalid-message d-none"
@@ -99,25 +98,27 @@
     userStatusRisk.value = statusRisk;
 
     // Estilos de los botones y labels
+    userCountry.classList = "form-select"
+    countryMsgValidation.classList = "d-none"
     noComentsCall.classList = "d-none"
-    comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
+    comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
     comentCallBtn.classList = "btn btn-outline-secondary"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
 
     getDataComentCalls(phone)
   }
 
-  // Se llama la funcion cuando se presiona el boton de guardar y se valida el telefono y el pais
+  // Se llama la funcion cuando se presiona el boton de guardar, se valida el telefono y el pais
   function handleSaveChanges(e) {
 
     e.preventDefault()
 
-    if (country.value !== "PE" || country.value !== "MX" || country.value === "") {
-      country.classList = "form-select invalid-input"
+    if (userCountry.value === "") {
+      userCountry.classList = "form-select invalid-input"
       countryMsgValidation.classList = "invalid-message"
-    }
+    } 
 
-    let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
+    let passInputValidation = validatePhoneNumber(phone.value) && userCountry.value.length > 0
 
     if (validatePhoneNumber(phone.value)) {
       phone.classList = "form-control"
@@ -164,11 +165,16 @@
         })
         .addUser(form);
     } else {
-      //Uodate Client
+      //Update Client
       google.script.run
         .withSuccessHandler(result => {
           loadingOnOff()
-          searchData()
+          if(target.value === "") {
+            searchData()
+          } else {
+            findClientByValue(target.value)
+          }
+          
           formValues.reset()
           const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
           createModal.hide();
@@ -181,14 +187,13 @@
   // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
   function searchData() {
 
+    tableBody.innerHTML = ''
     const searchloader = document.getElementById("searchClientLoader")
     searchloader.classList = "d-flex justify-content-center"
 
     google.script.run
       .withSuccessHandler(usersData => {
         let templateContent = template.content;
-
-        tableBody.innerHTML = ''
 
         searchloader.classList = "d-none"
 
@@ -285,7 +290,7 @@
   function getDataComentCalls(target) {
 
     document.querySelector('#loadingComenstCall').classList.toggle("d-none")
-    comentsCallsConatiner.innerHTML = ""
+    comentsCallsContainer.innerHTML = ""
 
     google.script.run
       .withSuccessHandler(({ newComentsCall, oldComentsCall }) => {
@@ -361,19 +366,19 @@
               </div>
             </div>`
 
-          comentsCallsConatiner.appendChild(comentCallItem)
+          comentsCallsContainer.appendChild(comentCallItem)
         })
 
         generateOldComentsCall(templateItem, oldComentsCall, target)
 
         // Aplicar estilos a las etiquelas para mayor informacion al usuario
         if (filterComentsCalls.length > 0) {
-          comentsCallsConatiner.classList = "accordion mt-5 mb-3"
+          comentsCallsContainer.classList = "accordion mt-0 mb-3"
           noComentsCall.classList = "d-none"
-          comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-4 mb-1"
+          comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
         }
 
-        comentsCallsConatiner.style.display = "block"
+        comentsCallsContainer.style.display = "block"
 
       })
       .readComentsCall()
@@ -398,11 +403,11 @@
     const sliceRowOldComentsCall = rowOldComentsCall !== -1 ? rowOldComentsCall.slice(12,) : -1
 
     if (sliceRowOldComentsCall === -1 || sliceRowOldComentsCall.every(elem => elem === "")) {
-      comentsCallsConatiner.classList.toggle("d-none")
+      comentsCallsContainer.classList.toggle("d-none")
       noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
       comentCallTitle.classList = "d-none"
     } else {
-      comentsCallsConatiner.classList = "accordion mt-5 mb-3"
+      comentsCallsContainer.classList = "accordion mt-0 mb-3"
       let counterCalls = ""
       sliceRowOldComentsCall.forEach((comentsCall, index) => {
 
@@ -449,7 +454,7 @@
           </div>
         `
 
-      comentsCallsConatiner.appendChild(comentCallItem)
+      comentsCallsContainer.appendChild(comentCallItem)
     }
   }
 
@@ -491,12 +496,14 @@
 
     event.preventDefault()
 
+    findClientByValue(target.value)
+  }
+
+  function findClientByValue(target){
     tableBody.innerHTML = ''
 
     const searchloader = document.getElementById("searchClientLoader")
     searchloader.classList = "d-flex justify-content-center"
-
-    const target = document.getElementById("inputSearchClient").value
 
     google.script.run
       .withSuccessHandler(userData => {

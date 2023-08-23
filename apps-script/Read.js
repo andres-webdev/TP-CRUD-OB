@@ -42,5 +42,5 @@ function findUserByValue(target) {
       }
     });
 
-  return userData
+  return userData.length === 0 ? usersData : userData
 }
