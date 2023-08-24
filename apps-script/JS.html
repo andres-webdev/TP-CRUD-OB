@@ -24,12 +24,26 @@
   const noComentsCall = document.getElementById('noComentsCall')
   const comentsCallsContainer = document.getElementById("comentsCallsContainer")
   const formValues = document.getElementById('createUser');
-  const phone = document.getElementById('userPhone') // Repetido
   const phoneMsgValidation = document.getElementById("error-message-phone")
   const countryMsgValidation = document.getElementById("error-message-country")
   const tableBody = document.getElementById('tableBody-users');
   const template = document.getElementById('rowTemplate')
   const target = document.getElementById("inputSearchClient")
+  const searchloader = document.getElementById("searchClientLoader")
+  const formValuesComentsCall = document.getElementById('createComentsCall');
+  const agentName = document.getElementById("callAgentName")
+  const viaOfCalling = document.getElementById("callViaOfCalling")
+  const resultOfCalling = document.getElementById("callResults")
+  const statusClient = document.getElementById("callStatusClient")
+  const reasonToNotAfiliate = document.getElementById("callReasonToNotAfiliate")
+  const commentsOfCalling = document.getElementById("callComentsOfCalling")
+  const errorAgentName = document.getElementById("error-message-agentName")
+  const errorCallViaOfCalling = document.getElementById("error-message-callViaOfCalling")
+  const errorCallResults = document.getElementById("error-message-callResults")
+  const errorCallStatusClient = document.getElementById("error-message-callStatusClient")
+  const errorCallReasonToNotAfiliate = document.getElementById("error-message-callReasonToNotAfiliate")
+  const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
+
 
   function handleShowModalUser() {
     formValues.reset()
@@ -38,16 +52,17 @@
     comentCallBtn.classList = "d-none"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
     phoneMsgValidation.classList = "invalid-message d-none"
-    phone.classList = "form-control"
     userCountry.classList = "form-select"
     countryMsgValidation.classList = "d-none"
+    noComentsCall.classList = "d-none"
+    userPhone.classList = "form-control"
 
-    phone.addEventListener("keyup", (event) => {
+    userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
-        phone.classList = "form-control"
         phoneMsgValidation.classList = "d-none"
+        userPhone.classList = "form-control"
       } else {
-        phone.classList = "form-control invalid-input"
+        userPhone.classList = "form-control invalid-input"
         phoneMsgValidation.classList = "invalid-message"
       }
     })
@@ -57,14 +72,22 @@
         userCountry.classList = "form-select invalid-input"
         countryMsgValidation.classList = "invalid-message"
       } else {
-        countryMsgValidation.classList = "invalid-message d-none"
+        countryMsgValidation.classList = "d-none"
+        userCountry.classList = "form-select"
       }
     })
 
   }
 
+  // Function que activa y desactiva el loader de los identificadores de los elementos
+  function loadingBtnOnOff(btn, loader) {
+    document.querySelector(`#${btn}`).classList.toggle("d-none")
+    document.querySelector(`#${loader}`).classList.toggle("d-none")
+  }
+
   // Cuando se presiona el boton de editar, se obtienen los datos de la fila en cuestion para que sean mostrados en el formulario mostrando el modal para editarlos
   function handleUpdateUserInfo(button) {
+
     const tableRow = button.parentNode.parentNode;
 
     const id = button.dataset.usuarioId;
@@ -105,6 +128,9 @@
     comentCallBtn.classList = "btn btn-outline-secondary"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
 
+    // Resetear valores de la tipificacion
+    formValuesComentsCall.reset()
+
     getDataComentCalls(phone)
   }
 
@@ -116,15 +142,15 @@
     if (userCountry.value === "") {
       userCountry.classList = "form-select invalid-input"
       countryMsgValidation.classList = "invalid-message"
-    } 
+    }
 
-    let passInputValidation = validatePhoneNumber(phone.value) && userCountry.value.length > 0
+    let passInputValidation = validatePhoneNumber(userPhone.value) && userCountry.value.length > 0
 
-    if (validatePhoneNumber(phone.value)) {
-      phone.classList = "form-control"
+    if (validatePhoneNumber(userPhone.value)) {
+      userPhone.classList = "form-control"
       phoneMsgValidation.classList = "d-none"
     } else {
-      phone.classList = "form-control invalid-input"
+      userPhone.classList = "form-control invalid-input"
       phoneMsgValidation.classList = "invalid-message"
     }
 
@@ -135,7 +161,7 @@
 
   // Validamos los datos del formulario y generamos dos casos, uno para crear el usuario y el otro para actualizar los datos del mismo
   function validateForm() {
-    loadingOnOff()
+    loadingBtnOnOff("createUserOBF", "loadingButton")
 
     const form = {
       userId: userId.value,
@@ -156,29 +182,31 @@
       //Create Client
       google.script.run
         .withSuccessHandler(result => {
-          loadingOnOff()
+          loadingBtnOnOff("createUserOBF", "loadingButton")
           searchData()
           formValues.reset();
+          target.value = ""
           const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
           createModal.hide();
-          handleSaveAlert()
+          handleSaveAlert('Usuario creado exitosamente!', 'success')
         })
         .addUser(form);
     } else {
       //Update Client
       google.script.run
         .withSuccessHandler(result => {
-          loadingOnOff()
-          if(target.value === "") {
+          loadingBtnOnOff("createUserOBF", "loadingButton")
+          if (target.value === "") {
             searchData()
           } else {
             findClientByValue(target.value)
+            getNumberOfPages(result)
           }
-          
+
           formValues.reset()
           const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
           createModal.hide();
-          handleSaveAlert()
+          handleSaveAlert('Usuario actualizado exitosamente!', 'success')
         })
         .editUser(form)
     }
@@ -188,14 +216,16 @@
   function searchData() {
 
     tableBody.innerHTML = ''
-    const searchloader = document.getElementById("searchClientLoader")
-    searchloader.classList = "d-flex justify-content-center"
+
+    searchloader.classList = "position-absolute top-50 start-50 translate-middle"
 
     google.script.run
       .withSuccessHandler(usersData => {
         let templateContent = template.content;
 
         searchloader.classList = "d-none"
+
+        getNumberOfPages(usersData)
 
         usersData.reverse().forEach(user => {
           const tr = templateContent.cloneNode(true)
@@ -256,14 +286,8 @@
     return true;
   }
 
-  // Function que activa y desactiva el loader
-  function loadingOnOff() {
-    document.querySelector('#createUserOBF').classList.toggle("d-none")
-    document.querySelector('#loadingButton').classList.toggle("d-none")
-  }
-
   // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
-  function handleSaveAlert() {
+  function handleSaveAlert(message, type) {
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
     const appendAlert = (message, type) => {
       const wrapper = document.createElement('div')
@@ -279,8 +303,13 @@
 
     const alertTrigger = document.getElementById('createUserOBF')
     if (alertTrigger) {
-      appendAlert('Usuario creado exitosamente!', 'success')
+      appendAlert(message, type)
     }
+  }
+
+  function handleRefreshTable() {
+    searchData()
+    target.value = ""
   }
 
 
@@ -458,9 +487,76 @@
     }
   }
 
+  // 
+
+  function handleModalComentsCall() {
+
+    agentName.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        agentName.classList = "form-control invalid-input"
+        errorAgentName.classList = "invalid-message"
+      } else {
+        errorAgentName.classList = "d-none"
+        agentName.classList = "form-control"
+      }
+    })
+
+    viaOfCalling.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        viaOfCalling.classList = "form-select invalid-input"
+        errorCallViaOfCalling.classList = "invalid-message"
+      } else {
+        errorCallViaOfCalling.classList = "d-none"
+        viaOfCalling.classList = "form-select"
+      }
+    })
+
+    resultOfCalling.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        resultOfCalling.classList = "form-select invalid-input"
+        errorCallResults.classList = "invalid-message"
+      } else {
+        errorCallResults.classList = "d-none"
+        resultOfCalling.classList = "form-select"
+      }
+    })
+
+    statusClient.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        statusClient.classList = "form-select invalid-input"
+        errorCallStatusClient.classList = "invalid-message"
+      } else {
+        errorCallStatusClient.classList = "d-none"
+        statusClient.classList = "form-select"
+      }
+    })
+
+    reasonToNotAfiliate.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        reasonToNotAfiliate.classList = "form-select invalid-input"
+        errorCallReasonToNotAfiliate.classList = "invalid-message"
+      } else {
+        errorCallReasonToNotAfiliate.classList = "d-none"
+        reasonToNotAfiliate.classList = "form-select"
+      }
+    })
+
+    commentsOfCalling.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        commentsOfCalling.classList = "form-control invalid-input"
+        errorCallComentsOfCalling.classList = "invalid-message"
+      } else {
+        errorCallComentsOfCalling.classList = "d-none"
+        commentsOfCalling.classList = "form-control"
+      }
+    })
+
+  }
+
   // Funcion que muestra un modal para ingresar y guarda los datos de la tificacio, ademas muestra un alerta cuando se realiza correctamente
   function addComentsCallHandler() {
-    const formValues = document.getElementById('createTipificacion');
+
+    loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
 
     const form = {
       clientPhone: document.getElementById("userPhone").value,
@@ -474,18 +570,52 @@
 
     google.script.run
       .withSuccessHandler(result => {
-        formValues.reset()
+
+        loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
+        formValuesComentsCall.reset()
         const createModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
         createModal.hide();
-        handleSaveAlert()
+        handleSaveAlert('Tipificación creada exitosamente!', 'success')
+        formValuesComentsCall.reset()
       })
       .addComentsCall(form)
 
   }
 
   // Funcion que maneja las acciones cuando se guardan las tipificaciones
-  function handleSaveComentsCall() {
-    addComentsCallHandler()
+  function handleSaveComentsCall(event) {
+
+    event.preventDefault()
+
+    if (agentName.value === "" || viaOfCalling.value === "" || resultOfCalling.value === "" || statusClient.value === "" || reasonToNotAfiliate.value === "" || commentsOfCalling.value === "") {
+      agentName.classList = "form-control invalid-input"
+      viaOfCalling.classList = "form-select invalid-input"
+      resultOfCalling.classList = "form-select invalid-input"
+      statusClient.classList = "form-select invalid-input"
+      reasonToNotAfiliate.classList = "form-select invalid-input"
+      commentsOfCalling.classList = "form-control invalid-input"
+      errorAgentName.classList = "invalid-message"
+      errorCallViaOfCalling.classList = "invalid-message"
+      errorCallResults.classList = "invalid-message"
+      errorCallStatusClient.classList = "invalid-message"
+      errorCallReasonToNotAfiliate.classList = "invalid-message"
+      errorCallComentsOfCalling.classList = "invalid-message"
+    } else {
+      agentName.classList = "form-control"
+      viaOfCalling.classList = "form-select"
+      resultOfCalling.classList = "form-select"
+      statusClient.classList = "form-select"
+      reasonToNotAfiliate.classList = "form-select"
+      commentsOfCalling.classList = "form-control"
+      errorAgentName.classList = "d-none"
+      errorCallViaOfCalling.classList = "d-none"
+      errorCallResults.classList = "d-none"
+      errorCallStatusClient.classList = "d-none"
+      errorCallReasonToNotAfiliate.classList = "d-none"
+      errorCallComentsOfCalling.classList = "d-none"
+      addComentsCallHandler()
+    }
+
   }
 
 
@@ -499,11 +629,10 @@
     findClientByValue(target.value)
   }
 
-  function findClientByValue(target){
+  function findClientByValue(target) {
     tableBody.innerHTML = ''
 
-    const searchloader = document.getElementById("searchClientLoader")
-    searchloader.classList = "d-flex justify-content-center"
+    searchloader.classList = "position-absolute top-50 start-50 translate-middle"
 
     google.script.run
       .withSuccessHandler(userData => {
@@ -547,5 +676,35 @@
         })
       })
       .findUserByValue(target)
+  }
+
+  // Paginacion
+
+  function getNumberOfPages(usersList) {
+    const listOfPages = document.getElementById("listOfPages")
+    const numberOfPages = Math.ceil((usersList.length / 5))
+
+    let listOfPagesBtn = ""
+
+    for (let i = 0; i < numberOfPages; i++) {
+      listOfPagesBtn +=
+        `<li class="page-item"><a class="page-link" href="#" onclick="handleChangePage(event,${i})">${i + 1}</a></li>`
+    }
+
+    listOfPages.innerHTML =
+      ` <li class="page-item">
+        <li class="page-item disabled">
+          <span class="page-link rounded-start">Anterior</span>
+        </li>
+        ${listOfPagesBtn}
+        <li class="page-item">
+          <a class="page-link" href="#">Siguiente</a>
+      </li>
+      `
+  }
+
+  function handleChangePage(event, index) {
+    event.preventDefault()
+    console.log(index + 1)
   }
 </script>
