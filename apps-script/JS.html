@@ -2,8 +2,6 @@
   integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script>
 
-  window.addEventListener('load', searchData)
-
   // OB - Fallido --> Clientes
 
   const userId = document.getElementById('userId')
@@ -43,6 +41,17 @@
   const errorCallStatusClient = document.getElementById("error-message-callStatusClient")
   const errorCallReasonToNotAfiliate = document.getElementById("error-message-callReasonToNotAfiliate")
   const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
+  const navPagesContgainer = document.getElementById("navPagesContgainer")
+
+  //Paginacion
+
+  window.addEventListener('load', searchData)
+  
+  let currentPage = 0
+  let itemsPerPage = 5
+ /*  let startlistItemsPerPage = changePage * itemsPerPage
+  let endlistItemsPerPage = startlistItemsPerPage + itemsPerPage */
+  let totalData
 
 
   function handleShowModalUser() {
@@ -163,6 +172,8 @@
   function validateForm() {
     loadingBtnOnOff("createUserOBF", "loadingButton")
 
+    navPagesContgainer.classList = "d-none"
+
     const form = {
       userId: userId.value,
       userName: userName.value,
@@ -183,6 +194,7 @@
       google.script.run
         .withSuccessHandler(result => {
           loadingBtnOnOff("createUserOBF", "loadingButton")
+
           searchData()
           formValues.reset();
           target.value = ""
@@ -196,11 +208,14 @@
       google.script.run
         .withSuccessHandler(result => {
           loadingBtnOnOff("createUserOBF", "loadingButton")
+          
+
           if (target.value === "") {
             searchData()
           } else {
             findClientByValue(target.value)
             getNumberOfPages(result)
+            navPagesContgainer.classList = "position-static bottom-0 start-50"
           }
 
           formValues.reset()
@@ -216,18 +231,23 @@
   function searchData() {
 
     tableBody.innerHTML = ''
+    navPagesContgainer.classList = "d-none"
 
     searchloader.classList = "position-absolute top-50 start-50 translate-middle"
 
     google.script.run
       .withSuccessHandler(usersData => {
-        let templateContent = template.content;
 
         searchloader.classList = "d-none"
+        navPagesContgainer.classList = "position-static bottom-0 start-50"
 
         getNumberOfPages(usersData)
 
-        usersData.reverse().forEach(user => {
+        totalData = usersData.reverse()
+
+        setDataTable()
+
+        /* totalDataPerPage.reverse().forEach(user => {
           const tr = templateContent.cloneNode(true)
 
           const nameCol = tr.querySelector(".template-name");
@@ -260,7 +280,7 @@
           editButton.dataset.usuarioId = user[0]
 
           tableBody.appendChild(tr);
-        })
+        }) */
       })
       .readUsers()
 
@@ -634,46 +654,18 @@
 
     searchloader.classList = "position-absolute top-50 start-50 translate-middle"
 
+    navPagesContgainer.classList = "d-none"
+
     google.script.run
       .withSuccessHandler(userData => {
         let templateContent = template.content;
 
         searchloader.classList = "d-none"
+        navPagesContgainer.classList = "position-static bottom-0 start-50"
 
-        userData.forEach(user => {
-          const tr = templateContent.cloneNode(true)
+        getNumberOfPages(userData)
 
-          const nameCol = tr.querySelector(".template-name");
-          const lastNameCol = tr.querySelector(".template-lastName");
-          const countryCol = tr.querySelector(".template-country");
-          const phoneCol = tr.querySelector(".template-phone");
-          const dniCol = tr.querySelector(".template-dni");
-          const codCol = tr.querySelector(".template-cod");
-          const referenteCol = tr.querySelector(".template-referent");
-          const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
-          const statusWebCol = tr.querySelector(".template-statusWeb");
-          const productCol = tr.querySelector(".template-product");
-          const statusRiskCol = tr.querySelector(".template-statusRisk");
-
-          const actionCol = tr.querySelector(".template-actions");
-          const editButton = tr.querySelector(".button-edit");
-
-          countryCol.textContent = user[1]
-          nameCol.textContent = user[2]
-          lastNameCol.textContent = user[3]
-          phoneCol.textContent = user[4]
-          dniCol.textContent = user[5]
-          codCol.textContent = user[6]
-          referenteCol.textContent = user[7]
-          dateOfFirstContactCol.textContent = user[8]
-          statusWebCol.textContent = user[9]
-          productCol.textContent = user[10]
-          statusRiskCol.textContent = user[11]
-
-          editButton.dataset.usuarioId = user[0]
-
-          tableBody.appendChild(tr);
-        })
+        
       })
       .findUserByValue(target)
   }
@@ -703,8 +695,58 @@
       `
   }
 
+  // LLenar la tabla con los datos
+
+  function setDataTable(){
+
+    let templateContent = template.content;
+
+    let start = currentPage * itemsPerPage
+    let end = start + itemsPerPage
+    
+    const dataPerPage = totalData.slice(start, end)
+
+    dataPerPage.forEach(user => {
+      const tr = templateContent.cloneNode(true)
+
+      const nameCol = tr.querySelector(".template-name");
+      const lastNameCol = tr.querySelector(".template-lastName");
+      const countryCol = tr.querySelector(".template-country");
+      const phoneCol = tr.querySelector(".template-phone");
+      const dniCol = tr.querySelector(".template-dni");
+      const codCol = tr.querySelector(".template-cod");
+      const referenteCol = tr.querySelector(".template-referent");
+      const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+      const statusWebCol = tr.querySelector(".template-statusWeb");
+      const productCol = tr.querySelector(".template-product");
+      const statusRiskCol = tr.querySelector(".template-statusRisk");
+
+      const actionCol = tr.querySelector(".template-actions");
+      const editButton = tr.querySelector(".button-edit");
+
+      countryCol.textContent = user[1]
+      nameCol.textContent = user[2]
+      lastNameCol.textContent = user[3]
+      phoneCol.textContent = user[4]
+      dniCol.textContent = user[5]
+      codCol.textContent = user[6]
+      referenteCol.textContent = user[7]
+      dateOfFirstContactCol.textContent = user[8]
+      statusWebCol.textContent = user[9]
+      productCol.textContent = user[10]
+      statusRiskCol.textContent = user[11]
+
+      editButton.dataset.usuarioId = user[0]
+
+      tableBody.appendChild(tr);
+    })
+  }
+
+
   function handleChangePage(event, index) {
     event.preventDefault()
-    console.log(index + 1)
+    currentPage = index
+    tableBody.innerHTML = ''
+    setDataTable()
   }
 </script>
