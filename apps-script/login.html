@@ -4,11 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <title>TP - Drives</title>
 </head>
 
 <body>
-  <form class="needs-validation was-validated" id="form-login" novalidate>
+  <img class="navbar-brand" width="290px" height="68.74px"
+    src="https://res.cloudinary.com/dp3chx1yj/image/upload/v1692842604/Tienda%20Pago/tp-logo_cmtnqw.png"
+    alt="Logogtipo-Tienda-Pago" style="display:flex; margin: 1rem auto;" />
+  <form class="needs-validation" id="form-login" style="width: 300px; margin: 3rem auto;" novalidate>
     <div class="form-floating mb-3">
       <input type="email" class="form-control" id="loggingEmail" placeholder="nombre@example.com" required>
       <label for="loggingEmail">Correo Electrónico</label>
@@ -17,8 +23,11 @@
       <input type="password" class="form-control" id="loggingPassword" placeholder="Contraseña" required>
       <label for="loggingPassword">Contraseña</label>
     </div>
-    <button type="submit" class="btn btn-primary w-100" onclick="handleLoggingBtn()">Ingresar</button>
+    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
   </form>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
   <?!= include('loginjs'); ?>
 </body>
 

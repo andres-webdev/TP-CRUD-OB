@@ -42,11 +42,13 @@
   const errorCallReasonToNotAfiliate = document.getElementById("error-message-callReasonToNotAfiliate")
   const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
   const navPagesContgainer = document.getElementById("navPagesContgainer")
+  const userNameLogin = document.getElementById("userNameLogin")
 
   //Paginacion
 
   window.addEventListener('load', () => {
     searchData()
+    userNameLogin.textContent = localStorage.getItem("name")
   })
 
   let currentPage = 0

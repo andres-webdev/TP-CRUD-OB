@@ -5,6 +5,8 @@
   formLogin.addEventListener("submit", (event) => {
     event.preventDefault()
 
+    formLogin.classList.add("was-validated")
+
     const email = document.getElementById("loggingEmail").value;
     const password = document.getElementById("loggingPassword").value;
 
@@ -15,6 +17,23 @@
 
   const saveData = (result) => {
     // Almacena el objeto en el localStorage
+    localStorage.setItem('autenticado', result.authorization)
+    localStorage.setItem('name', result.name)
+    localStorage.setItem('email', result.email)
+    console.log(result.authorization)
+
+    if (result.authorization == "200") {
+      //document.getElementById("nameUser").textContent = "Hola, " + result.name
+
+      google.script.run
+        .withSuccessHandler((url) => {
+          window.open(url, "_top")
+        })
+        .getPageUrl("index")
+    } else {
+      console.log("Datos incorrectos")
+      return
+    }
 
   }
 
