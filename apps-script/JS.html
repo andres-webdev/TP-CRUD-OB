@@ -45,14 +45,14 @@
 
   //Paginacion
 
-  window.addEventListener('load', searchData)
-  
-  let currentPage = 0
-  let itemsPerPage = 5
- /*  let startlistItemsPerPage = changePage * itemsPerPage
-  let endlistItemsPerPage = startlistItemsPerPage + itemsPerPage */
-  let totalData
+  window.addEventListener('load', () => {
+    searchData()
+  })
 
+  let currentPage = 0
+  let itemsPerPage = 10
+  let totalData
+  let totalPages
 
   function handleShowModalUser() {
     formValues.reset()
@@ -208,7 +208,7 @@
       google.script.run
         .withSuccessHandler(result => {
           loadingBtnOnOff("createUserOBF", "loadingButton")
-          
+
 
           if (target.value === "") {
             searchData()
@@ -235,6 +235,8 @@
 
     searchloader.classList = "position-absolute top-50 start-50 translate-middle"
 
+    currentPage = 0
+
     google.script.run
       .withSuccessHandler(usersData => {
 
@@ -246,41 +248,6 @@
         totalData = usersData.reverse()
 
         setDataTable()
-
-        /* totalDataPerPage.reverse().forEach(user => {
-          const tr = templateContent.cloneNode(true)
-
-          const nameCol = tr.querySelector(".template-name");
-          const lastNameCol = tr.querySelector(".template-lastName");
-          const countryCol = tr.querySelector(".template-country");
-          const phoneCol = tr.querySelector(".template-phone");
-          const dniCol = tr.querySelector(".template-dni");
-          const codCol = tr.querySelector(".template-cod");
-          const referenteCol = tr.querySelector(".template-referent");
-          const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
-          const statusWebCol = tr.querySelector(".template-statusWeb");
-          const productCol = tr.querySelector(".template-product");
-          const statusRiskCol = tr.querySelector(".template-statusRisk");
-
-          const actionCol = tr.querySelector(".template-actions");
-          const editButton = tr.querySelector(".button-edit");
-
-          countryCol.textContent = user[1]
-          nameCol.textContent = user[2]
-          lastNameCol.textContent = user[3]
-          phoneCol.textContent = user[4]
-          dniCol.textContent = user[5]
-          codCol.textContent = user[6]
-          referenteCol.textContent = user[7]
-          dateOfFirstContactCol.textContent = user[8]
-          statusWebCol.textContent = user[9]
-          productCol.textContent = user[10]
-          statusRiskCol.textContent = user[11]
-
-          editButton.dataset.usuarioId = user[0]
-
-          tableBody.appendChild(tr);
-        }) */
       })
       .readUsers()
 
@@ -665,7 +632,9 @@
 
         getNumberOfPages(userData)
 
-        
+        totalData = userData.reverse()
+
+        setDataTable()
       })
       .findUserByValue(target)
   }
@@ -674,36 +643,99 @@
 
   function getNumberOfPages(usersList) {
     const listOfPages = document.getElementById("listOfPages")
-    const numberOfPages = Math.ceil((usersList.length / 5))
+    totalPages = Math.ceil((usersList.length / itemsPerPage))
 
     let listOfPagesBtn = ""
 
-    for (let i = 0; i < numberOfPages; i++) {
+    for (let i = 0; i < totalPages; i++) {
+
       listOfPagesBtn +=
-        `<li class="page-item"><a class="page-link" href="#" onclick="handleChangePage(event,${i})">${i + 1}</a></li>`
+        `<li class="page-item ${currentPage === i ? "active" : ""}"><a class="page-link" role="button" page-index=${i + 1}>${i + 1}</a></li>`
+
     }
 
     listOfPages.innerHTML =
       ` <li class="page-item">
-        <li class="page-item disabled">
-          <span class="page-link rounded-start">Anterior</span>
+        <li class="page-item disabled" id="prevPageBtn">
+          <a class="page-link rounded-start"  role="button">Anterior</a>
         </li>
         ${listOfPagesBtn}
-        <li class="page-item">
-          <a class="page-link" href="#">Siguiente</a>
+        <li class="page-item" id="nextPageBtn">
+          <a class="page-link" role="button">Siguiente</a>
       </li>
       `
+
+    document.querySelectorAll(".page-link").forEach(pageLink => {
+      const pageIndex = Number(pageLink.getAttribute("page-index"))
+
+      if (pageIndex) {
+        pageLink.addEventListener("click", () => {
+          setCurrentPage(pageIndex - 1)
+        })
+      }
+    })
+
+    const prevPageBtn = document.getElementById("prevPageBtn")
+    const nextPageBtn = document.getElementById("nextPageBtn")
+
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage !== 0) {
+        setCurrentPage(currentPage - 1)
+      }
+    })
+    nextPageBtn.addEventListener("click", () => {
+      if (currentPage + 1 !== totalPages) {
+        setCurrentPage(currentPage + 1)
+      }
+    })
+  }
+
+  function setCurrentPage(pageIndex) {
+    currentPage = pageIndex
+    tableBody.innerHTML = ''
+    setDataTable()
+    setCurrentPageStyles()
+    turnOnOffPrevNextButtons()
+  }
+
+  function setCurrentPageStyles() {
+    const prevActivePage = document.querySelector("li.page-item.active")
+    prevActivePage.classList.remove("active")
+
+    document.querySelectorAll(".page-link").forEach(pageLinkElement => {
+      const pageNewIndex = Number(pageLinkElement.getAttribute("page-index"));
+      if (pageNewIndex == currentPage + 1) {
+        const newActivePage = pageLinkElement.parentElement;
+        newActivePage.classList.add('active')
+      }
+    })
+  }
+
+  function turnOnOffPrevNextButtons() {
+    const prevPageBtn = document.getElementById("prevPageBtn")
+    const nextPageBtn = document.getElementById("nextPageBtn")
+    if (currentPage === 0) {
+      prevPageBtn.classList.add("disabled")
+    } else {
+      prevPageBtn.classList.remove("disabled")
+    }
+
+    if (currentPage + 1 === totalPages) {
+      nextPageBtn.classList.add("disabled")
+    } else {
+      nextPageBtn.classList.remove("disabled")
+    }
   }
 
   // LLenar la tabla con los datos
 
-  function setDataTable(){
+  function setDataTable() {
 
     let templateContent = template.content;
 
     let start = currentPage * itemsPerPage
     let end = start + itemsPerPage
-    
+
     const dataPerPage = totalData.slice(start, end)
 
     dataPerPage.forEach(user => {
@@ -743,10 +775,5 @@
   }
 
 
-  function handleChangePage(event, index) {
-    event.preventDefault()
-    currentPage = index
-    tableBody.innerHTML = ''
-    setDataTable()
-  }
+
 </script>

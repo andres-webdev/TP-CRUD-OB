@@ -5,3 +5,19 @@ const sheetsObFallidos = SS.getSheetByName('TP-CRUD')
 const DB_TIPIFICACIONES_ID = '1opjZDaBgqHjcuV1ZSX6iCu1GswVA2nw5-6n6ErlQJUE'
 const SSTIPIFICACIONES = SpreadsheetApp.openById(DB_TIPIFICACIONES_ID)
 const sheetsTipificaciones = SSTIPIFICACIONES.getSheetByName('Tipificaciones')
+
+function validateCredentials(email, password) {
+  const sheetAdmins = SpreadsheetApp
+    .openById("")
+    .getSheetByName("Administradores")
+
+  const dataSheetAdmins = sheetAdmins.getDataRange().getValues()
+
+  const sheetWs = SpreadsheetApp
+    .openById("")
+    .getSheetByName("LoginCrud")
+
+  const currentDate = new Date()
+
+
+}
