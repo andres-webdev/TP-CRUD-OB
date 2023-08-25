@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP - Drives</title>
+</head>
+
+<body>
+  <form class="needs-validation was-validated" id="form-login" novalidate>
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="loggingEmail" placeholder="nombre@example.com" required>
+      <label for="loggingEmail">Correo Electrónico</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control" id="loggingPassword" placeholder="Contraseña" required>
+      <label for="loggingPassword">Contraseña</label>
+    </div>
+    <button type="submit" class="btn btn-primary w-100" onclick="handleLoggingBtn()">Ingresar</button>
+  </form>
+  <?!= include('loginjs'); ?>
+</body>
+
+</html>

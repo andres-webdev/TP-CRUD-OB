@@ -1,0 +1,21 @@
+<script>
+
+  const formLogin = document.getElementById("form-login")
+
+  formLogin.addEventListener("submit", (event) => {
+    event.preventDefault()
+
+    const email = document.getElementById("loggingEmail").value;
+    const password = document.getElementById("loggingPassword").value;
+
+    google.script.run
+      .withSuccessHandler(saveData)
+      .validateCredentials(email, password)
+  })
+
+  const saveData = (result) => {
+    // Almacena el objeto en el localStorage
+
+  }
+
+</script>
