@@ -11,7 +11,7 @@ function validateCredentials(email, password) {
     .openById("1t87Zgidm6s4fE5yvO7P77sXoTw8QBLtU9ouCnux_YTM")
     .getSheetByName("Administradores")
 
-  const dataSheetAdmins = sheetAdmins.getDataRange().getValues()
+  const dataSheetAdmins = sheetAdmins.getDataRange().getDisplayValues()
 
   const sheetWs = SpreadsheetApp
     .openById("1t87Zgidm6s4fE5yvO7P77sXoTw8QBLtU9ouCnux_YTM")
@@ -23,18 +23,21 @@ function validateCredentials(email, password) {
     if (dataSheetAdmins[i][1] === email && dataSheetAdmins[i][2] === password) {
       const nameUser = dataSheetAdmins[i][0]
       const emailUser = dataSheetAdmins[i][1]
+      const roleUser = dataSheetAdmins[i][3]
 
       sheetWs.appendRow([
         `${emailUser}`,
         nameUser,
         currentDate.toLocaleDateString(),
-        currentDate.toLocaleTimeString()
+        currentDate.toLocaleTimeString(),
+        roleUser
       ])
 
       return {
         authorization: "200",
         name: nameUser,
         email: emailUser,
+        role: roleUser,
       }
 
     }
@@ -44,14 +47,15 @@ function validateCredentials(email, password) {
     authorization: "400",
     name: null,
     email: null,
+    role: null
   }
 
 }
 
 function getPageUrl(name) {
   if (name) {
-    const url = ScriptApp.getService().getUrl()
-    return url + "?page=" + name
+    const urlPage = ScriptApp.getService().getUrl()
+    return urlPage + "?page=" + name
   } else {
     return ScriptApp.getService().getUrl()
   }

@@ -16,6 +16,7 @@
   const userProduct = document.getElementById('userProduct')
   const userStatusRisk = document.getElementById('userStatusRisk')
   const userDateOfFirstContact = document.getElementById('userDateOfFirstContact')
+
   const comentCallTitle = document.getElementById("comentCallTitle")
   const comentCallBtn = document.getElementById("comentCallBtn")
   const createUserOBF = document.getElementById("createUserOBF")
@@ -43,13 +44,37 @@
   const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
   const navPagesContgainer = document.getElementById("navPagesContgainer")
   const userNameLogin = document.getElementById("userNameLogin")
+  const createClientModalBtn = document.getElementById("createClientModalBtn")
 
-  //Paginacion
+  //Logging
 
   window.addEventListener('load', () => {
     searchData()
-    userNameLogin.textContent = localStorage.getItem("name")
+    userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
+    if (localStorage.getItem("role") === "agent") {
+      createClientModalBtn.classList.add("d-none")
+      userId.setAttribute("disabled", "")
+      userName.setAttribute("disabled", "")
+      userLastName.setAttribute("disabled", "")
+      userPhone.setAttribute("disabled", "")
+      userDni.setAttribute("disabled", "")
+      userCod.setAttribute("disabled", "")
+      userReferent.setAttribute("disabled", "")
+      userStatusWeb.setAttribute("disabled", "")
+      userCountry.setAttribute("disabled", "")
+      userProduct.setAttribute("disabled", "")
+      userStatusRisk.setAttribute("disabled", "")
+      userDateOfFirstContact.setAttribute("disabled", "")
+      createUserOBF.classList.add("d-none")
+    }
   })
+
+  function handleLogOutSession() {
+    window.open("https://script.google.com/a/tiendapago.com/macros/s/AKfycbwt3v6tBcGZ8svjd66vAk-X6jm3FygBgbIpZrqBijg/dev", '_top');
+    localStorage.clear();
+  }
+
+  //Paginacion
 
   let currentPage = 0
   let itemsPerPage = 10
@@ -141,6 +166,7 @@
 
     // Resetear valores de la tipificacion
     formValuesComentsCall.reset()
+    formValuesComentsCall.classList.remove("was-validated")
 
     getDataComentCalls(phone)
   }
@@ -232,6 +258,8 @@
   // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
   function searchData() {
 
+    document.getElementById("updateDataTableBtn").setAttribute("disabled", "")
+
     tableBody.innerHTML = ''
     navPagesContgainer.classList = "d-none"
 
@@ -250,6 +278,9 @@
         totalData = usersData.reverse()
 
         setDataTable()
+
+        document.getElementById("updateDataTableBtn").removeAttribute("disabled")
+
       })
       .readUsers()
 
@@ -519,16 +550,16 @@
         statusClient.classList = "form-select"
       }
     })
-
-    reasonToNotAfiliate.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        reasonToNotAfiliate.classList = "form-select invalid-input"
-        errorCallReasonToNotAfiliate.classList = "invalid-message"
-      } else {
-        errorCallReasonToNotAfiliate.classList = "d-none"
-        reasonToNotAfiliate.classList = "form-select"
-      }
-    })
+    /* 
+        reasonToNotAfiliate.addEventListener("change", (event) => {
+          if (event.target.value === "") {
+            reasonToNotAfiliate.classList = "form-select invalid-input"
+            errorCallReasonToNotAfiliate.classList = "invalid-message"
+          } else {
+            errorCallReasonToNotAfiliate.classList = "d-none"
+            reasonToNotAfiliate.classList = "form-select"
+          }
+        }) */
 
     commentsOfCalling.addEventListener("keyup", (event) => {
       if (event.target.value === "") {
@@ -539,6 +570,18 @@
         commentsOfCalling.classList = "form-control"
       }
     })
+
+    agentName.classList = "form-control"
+    viaOfCalling.classList = "form-select"
+    resultOfCalling.classList = "form-select"
+    statusClient.classList = "form-select"
+    reasonToNotAfiliate.classList = "form-select"
+    commentsOfCalling.classList = "form-control"
+    errorAgentName.classList = "d-none"
+    errorCallViaOfCalling.classList = "d-none"
+    errorCallResults.classList = "d-none"
+    errorCallStatusClient.classList = "d-none"
+    errorCallComentsOfCalling.classList = "d-none"
 
   }
 
@@ -561,7 +604,6 @@
       .withSuccessHandler(result => {
 
         loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
-        formValuesComentsCall.reset()
         const createModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
         createModal.hide();
         handleSaveAlert('Tipificación creada exitosamente!', 'success')
@@ -576,32 +618,33 @@
 
     event.preventDefault()
 
-    if (agentName.value === "" || viaOfCalling.value === "" || resultOfCalling.value === "" || statusClient.value === "" || reasonToNotAfiliate.value === "" || commentsOfCalling.value === "") {
-      agentName.classList = "form-control invalid-input"
-      viaOfCalling.classList = "form-select invalid-input"
-      resultOfCalling.classList = "form-select invalid-input"
-      statusClient.classList = "form-select invalid-input"
-      reasonToNotAfiliate.classList = "form-select invalid-input"
-      commentsOfCalling.classList = "form-control invalid-input"
+    if (agentName.value === "") {
+      agentName.classList = "form-select invalid-input"
       errorAgentName.classList = "invalid-message"
+    } else if (viaOfCalling.value === "") {
+      viaOfCalling.classList = "form-select invalid-input"
       errorCallViaOfCalling.classList = "invalid-message"
+    } else if (resultOfCalling.value === "") {
+      resultOfCalling.classList = "form-select invalid-input"
       errorCallResults.classList = "invalid-message"
+    } else if (statusClient.value === "") {
+      statusClient.classList = "form-select invalid-input"
       errorCallStatusClient.classList = "invalid-message"
-      errorCallReasonToNotAfiliate.classList = "invalid-message"
+    } else if (commentsOfCalling.value === "") {
+      commentsOfCalling.classList = "form-control invalid-input"
       errorCallComentsOfCalling.classList = "invalid-message"
     } else {
       agentName.classList = "form-control"
       viaOfCalling.classList = "form-select"
       resultOfCalling.classList = "form-select"
       statusClient.classList = "form-select"
-      reasonToNotAfiliate.classList = "form-select"
       commentsOfCalling.classList = "form-control"
       errorAgentName.classList = "d-none"
       errorCallViaOfCalling.classList = "d-none"
       errorCallResults.classList = "d-none"
       errorCallStatusClient.classList = "d-none"
-      errorCallReasonToNotAfiliate.classList = "d-none"
       errorCallComentsOfCalling.classList = "d-none"
+
       addComentsCallHandler()
     }
 
@@ -619,6 +662,9 @@
   }
 
   function findClientByValue(target) {
+
+    document.getElementById("searchClientInputBtn").setAttribute("disabled", "")
+
     tableBody.innerHTML = ''
 
     searchloader.classList = "position-absolute top-50 start-50 translate-middle"
@@ -627,6 +673,7 @@
 
     google.script.run
       .withSuccessHandler(userData => {
+
         let templateContent = template.content;
 
         searchloader.classList = "d-none"
@@ -637,6 +684,8 @@
         totalData = userData.reverse()
 
         setDataTable()
+
+        document.getElementById("searchClientInputBtn").removeAttribute("disabled")
       })
       .findUserByValue(target)
   }

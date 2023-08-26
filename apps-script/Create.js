@@ -83,7 +83,9 @@ function currentHour() {
     }
   }
 
-  return `${date.getHours() - 1}:${minutes()}`
+  const hour = date.getHours()
+
+  return `${hour}:${minutes()}`
 }
 
 // Funciones para las tipificaciones

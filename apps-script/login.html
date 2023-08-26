@@ -11,20 +11,25 @@
 </head>
 
 <body>
-  <img class="navbar-brand" width="290px" height="68.74px"
-    src="https://res.cloudinary.com/dp3chx1yj/image/upload/v1692842604/Tienda%20Pago/tp-logo_cmtnqw.png"
-    alt="Logogtipo-Tienda-Pago" style="display:flex; margin: 1rem auto;" />
-  <form class="needs-validation" id="form-login" style="width: 300px; margin: 3rem auto;" novalidate>
-    <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="loggingEmail" placeholder="nombre@example.com" required>
-      <label for="loggingEmail">Correo Electrónico</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="loggingPassword" placeholder="Contraseña" required>
-      <label for="loggingPassword">Contraseña</label>
-    </div>
-    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-  </form>
+  <div class="position-absolute top-50 start-50 translate-middle">
+    <img class="navbar-brand" width="290px" height="68.74px"
+      src="https://res.cloudinary.com/dp3chx1yj/image/upload/v1692842604/Tienda%20Pago/tp-logo_cmtnqw.png"
+      alt="Logogtipo-Tienda-Pago" style="display:flex; margin: 1rem auto;" />
+    <form class="needs-validation" id="form-login" style="width: 320px; margin: 2rem auto;" novalidate>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="loggingEmail" placeholder="nombre@example.com" required>
+        <label for="loggingEmail">Correo Electrónico</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="loggingPassword" placeholder="Contraseña" required>
+        <label for="loggingPassword">Contraseña</label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" id="loggingBtn">Ingresar</button>
+      <button class="btn btn-primary w-100 d-none" id="loadingLoggingBtn" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span role="status">Cargando...</span>
+    </form>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>

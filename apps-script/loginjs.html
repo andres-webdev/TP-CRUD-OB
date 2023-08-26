@@ -1,9 +1,15 @@
 <script>
 
   const formLogin = document.getElementById("form-login")
+  const loadingLoggingBtn = document.getElementById("loadingLoggingBtn")
+  const loggingBtn = document.getElementById("loggingBtn")
+
 
   formLogin.addEventListener("submit", (event) => {
     event.preventDefault()
+
+    loggingBtn.classList.add("d-none")
+    loadingLoggingBtn.classList.remove("d-none")
 
     formLogin.classList.add("was-validated")
 
@@ -20,6 +26,7 @@
     localStorage.setItem('autenticado', result.authorization)
     localStorage.setItem('name', result.name)
     localStorage.setItem('email', result.email)
+    localStorage.setItem('role', result.role)
     console.log(result.authorization)
 
     if (result.authorization == "200") {
@@ -34,6 +41,9 @@
       console.log("Datos incorrectos")
       return
     }
+
+    loadingLoggingBtn.classList.add("d-none")
+    loggingBtn.classList.remove("d-none")
 
   }
 
