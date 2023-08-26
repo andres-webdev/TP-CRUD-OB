@@ -27,24 +27,22 @@
     localStorage.setItem('name', result.name)
     localStorage.setItem('email', result.email)
     localStorage.setItem('role', result.role)
-    console.log(result.authorization)
+
+    loggingBtn.removeAttribute("disabled")
 
     if (result.authorization == "200") {
-      //document.getElementById("nameUser").textContent = "Hola, " + result.name
-
       google.script.run
         .withSuccessHandler((url) => {
           window.open(url, "_top")
+          loadingLoggingBtn.classList.add("d-none")
+          loggingBtn.classList.remove("d-none")
+          loggingBtn.setAttribute("disabled", "")
         })
         .getPageUrl("index")
     } else {
       console.log("Datos incorrectos")
       return
     }
-
-    loadingLoggingBtn.classList.add("d-none")
-    loggingBtn.classList.remove("d-none")
-
   }
 
 </script>
