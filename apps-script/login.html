@@ -23,6 +23,12 @@
       <div class="form-floating mb-3">
         <input type="password" class="form-control" id="loggingPassword" placeholder="Contraseña" required>
         <label for="loggingPassword">Contraseña</label>
+        <div class="invalid-message d-none" id="error-message-loggin" style="width: 100%;
+        margin-top: 0.25rem;
+        font-size: .875em;
+        color: var(--bs-form-invalid-color);">
+          Por favor, ingresar correo o contraseña validos.
+        </div>
       </div>
       <button type="submit" class="btn btn-primary w-100" id="loggingBtn">Ingresar</button>
       <button class="btn btn-primary w-100 d-none" id="loadingLoggingBtn" type="button" disabled>

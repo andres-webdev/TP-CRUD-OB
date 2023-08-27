@@ -265,7 +265,7 @@
     tableBody.innerHTML = ''
     navPagesContgainer.classList = "d-none"
 
-    searchloader.classList = "position-absolute top-50 start-50 translate-middle"
+    searchloader.classList.remove("d-none")
 
     currentPage = 0
 
@@ -606,7 +606,7 @@
       .withSuccessHandler(result => {
 
         loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
-        const createModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
+        const createModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
         createModal.hide();
         handleSaveAlert('Tipificación creada exitosamente!', 'success')
         formValuesComentsCall.reset()
@@ -647,7 +647,11 @@
       errorCallStatusClient.classList = "d-none"
       errorCallComentsOfCalling.classList = "d-none"
 
-      addComentsCallHandler()
+      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
+      const confirmCommentsCallModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
+      secondaryModal.hide();
+      confirmCommentsCallModal.show();
+
     }
 
   }
@@ -669,7 +673,7 @@
 
     tableBody.innerHTML = ''
 
-    searchloader.classList = "position-absolute top-50 start-50 translate-middle"
+    searchloader.classList.remove("d-none")
 
     navPagesContgainer.classList = "d-none"
 

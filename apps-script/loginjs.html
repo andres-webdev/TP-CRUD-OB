@@ -3,22 +3,25 @@
   const formLogin = document.getElementById("form-login")
   const loadingLoggingBtn = document.getElementById("loadingLoggingBtn")
   const loggingBtn = document.getElementById("loggingBtn")
-
+  const email = document.getElementById("loggingEmail")
+  const password = document.getElementById("loggingPassword")
+  const errorMessageLoggin = document.getElementById("error-message-loggin")
 
   formLogin.addEventListener("submit", (event) => {
     event.preventDefault()
 
+    errorMessageLoggin.classList.add("d-none")
     loggingBtn.classList.add("d-none")
     loadingLoggingBtn.classList.remove("d-none")
 
     formLogin.classList.add("was-validated")
 
-    const email = document.getElementById("loggingEmail").value;
-    const password = document.getElementById("loggingPassword").value;
+    const emailValue = email.value;
+    const passwordValue = password.value;
 
     google.script.run
       .withSuccessHandler(saveData)
-      .validateCredentials(email, password)
+      .validateCredentials(emailValue, passwordValue)
   })
 
   const saveData = (result) => {
@@ -34,12 +37,32 @@
       google.script.run
         .withSuccessHandler((url) => {
           window.open(url, "_top")
-          loadingLoggingBtn.classList.add("d-none")
-          loggingBtn.classList.remove("d-none")
+          errorMessageLoggin.classList.add("d-none")
+          //loggingBtn.classList.remove("d-none")
+
           loggingBtn.setAttribute("disabled", "")
+          email.classList.remove("is-invalid")
+          password.classList.remove("is-invalid")
+          email.classList.add("is-valid")
+          password.classList.add("is-valid")
+          formLogin.classList.add("was-validated")
+
+        })
+        .withFailureHandler(() => {
+          console.log("Error del servidor")
         })
         .getPageUrl("index")
     } else {
+      email.classList.remove("is-valid")
+      password.classList.remove("is-valid")
+      email.classList.add("is-invalid")
+      password.classList.add("is-invalid")
+      errorMessageLoggin.classList.remove("d-none")
+      formLogin.classList.remove("was-validated")
+      loggingBtn.classList.remove("d-none")
+      loggingBtn.removeAttribute("disabled")
+      loadingLoggingBtn.classList.add("d-none")
+
       console.log("Datos incorrectos")
       return
     }

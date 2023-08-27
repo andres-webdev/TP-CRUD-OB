@@ -45,8 +45,8 @@
 
   #searchClientLoader {
     position: absolute;
-    top: calc(50%);
-    left: calc(50% - 40px);
+    top: 50%;
+    left: calc(50% - 35px);
   }
 
   .container-fluid {
@@ -55,6 +55,11 @@
 
   #titleDrive {
     top: 20px;
+  }
+
+  .headerLogout {
+    width: 310px;
+    justify-content: end;
   }
 
   @media (max-width: 767px) {
@@ -84,8 +89,14 @@
 
     .headerLogout {
       margin: 1rem auto;
-      justify-content: space-between;
       width: 100%;
+      justify-content: space-between;
+    }
+
+    #searchClientLoader {
+      position: absolute;
+      top: 90%;
+      left: calc(50% - 20px);
     }
   }
 </style>
