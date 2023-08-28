@@ -57,6 +57,9 @@
   const errorMessageSendRequestComents = document.getElementById("error-message-sendRequestComents")
   const sendRequestToEvalBtn = document.getElementById("sendToEvalToCreditsBtn")
 
+  const notificateToTheAgentBtn = document.getElementById("notificateToTheAgent")
+  const uploadImagesModalBtn = document.getElementById("uploadImagesModal")
+
   //Logging
 
   window.addEventListener('load', () => {
@@ -105,6 +108,9 @@
     noComentsCall.classList = "d-none"
     sendRequestToEvalBtn.classList = "d-none"
     userPhone.classList = "form-control"
+    notificateToTheAgentBtn.classList.add("d-none")
+    uploadImagesModalBtn.classList.add("d-none")
+
 
     userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -185,6 +191,9 @@
     // Resetear valores de la tipificacion
     formValuesComentsCall.reset()
     formValuesComentsCall.classList.remove("was-validated")
+
+    notificateToTheAgentBtn.classList.remove("d-none")
+    uploadImagesModalBtn.classList.remove("d-none")
 
     sentRequestToCreditsForm.reset()
 
@@ -397,7 +406,7 @@
           // Informacion adicional de la llamada
           bodyCallItem.innerHTML =
             `<div class="d-flex flex-column gap-2">
-              <div class="d-flex justify-content-between p-3">
+              <div class="bg-transparent d-flex justify-content-between p-3" id="comentsCallDetailsCointainer">
                 <div class="d-flex gap-2">
                   <p class="fw-bolder">Medio de contacto: </p>
                   <p class="fw-normal">${call[1] || "NULL"}</p>

@@ -292,6 +292,14 @@
               onclick="handleSendRequestToEvaluation()" data-bs-toggle="modal">
               Enviar a evaluar
             </button>
+            <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
+              data-bs-toggle="modal">
+              Notificar al asesor
+            </button>
+            <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
+              data-bs-toggle="modal">
+              Subir Imagenes
+            </button>
           </div>
           <button type="submit" class="btn btn-primary" id="createUserOBF"
             onclick="handleSaveChanges(event)">Guardar</button>
@@ -412,9 +420,9 @@
               </label>
             </div>
             <div class="form-floating d-none" id="comentsOfRequestToCreditContainer">
-              <textarea class="form-control" placeholder="Cometarios de la solicitud a creditos"
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
                 id="comentsOfRequestToCredit" style="height: 150px"></textarea>
-              <label for="comentsOfRequestToCredit">Cometarios de la solicitud a creditos</label>
+              <label for="comentsOfRequestToCredit" class="text-wrap">Cometarios de la solicitud a creditos</label>
               <div class="invalid-message d-none" id="error-message-comentsOfRequestToCredit">
                 Por favor, ingresar comentarios de la llamada.
               </div>
@@ -474,9 +482,9 @@
               </div>
             </div>
             <div class="form-floating" id="sendRequestComentsContainer">
-              <textarea class="form-control" placeholder="Cometarios de la solicitud a creditos" id="sendRequestComents"
-                style="height: 150px"></textarea>
-              <label for="sendRequestComents">Cometarios de la solicitud para creditos</label>
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                id="sendRequestComents" style="height: 150px"></textarea>
+              <label for="sendRequestComents" class="text-wrap">Cometarios de la solicitud para creditos</label>
               <div class="invalid-message d-none" id="error-message-sendRequestComents">
                 Por favor, ingresar comentarios de la solicitud.
               </div>
@@ -488,6 +496,147 @@
             Volver
           </button>
           <button class="btn btn-primary" type="submit" onclick="handleSendRequestToCredit(event)">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar las solicitudes de evauluacion realizadas -->
+
+  <div class="modal fade modal-lg modal-dialog-scrollable" id="fourthModal" tabindex="-1" aria-labelledby="fourthModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitudes Realizadas</h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive mb-3">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <td>Nombre</td>
+                  <td>Apellido</td>
+                  <td>Nro doc</td>
+                  <td>Telefono</td>
+                  <td style="min-width: 100px;">Fecha de solicitud</td>
+                  <td>Hora</td>
+                  <td>Asesor</td>
+                  <td>Comentarios</td>
+                </tr>
+                <tr></tr>
+                <td>Andres</td>
+                <td>Marquez</td>
+                <td>23232</td>
+                <td>924509844</td>
+                <td style="min-width: 100px;">2023-08-27</td>
+                <td>11:49</td>
+                <td>Andres</td>
+                <td>NULL</td>
+                <tr>
+                  <td>Andres</td>
+                  <td>Marquez</td>
+                  <td>23232</td>
+                  <td>924509844</td>
+                  <td style="min-width: 100px;">2023-08-27</td>
+                  <td>11:49</td>
+                  <td>Andres</td>
+                  <td>NULL</td>
+                </tr>
+              </thead>
+              <tbody id="requestSendedByClient" class="table-group-divider">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-target="#createModal"
+            data-bs-toggle="modal">Atras</button>
+          <button type="button" class="btn btn-primary" data-bs-target="#fifthModal" data-bs-toggle="modal">Notificar al
+            asesor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para enviar la notificacion haciendo mencion al agente -->
+
+  <div class="modal fade" id="fifthModal" aria-hidden="true" aria-labelledby="fifthModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Notificación
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#fourthModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="sentRequestToAgentToCall" id="sentRequestToAgentToCall" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="sentRequestAgentName" placeholder="Nombre" />
+                  <label for="sentRequestAgentName">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-sentRequestAgentName">
+                    Por favor, ingresar nombre.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating" id="sendRequestComentsContainer">
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                id="sendRequestComents" style="height: 150px"></textarea>
+              <label for="sendRequestComents" class="text-wrap">Cometarios Adicionales</label>
+              <div class="invalid-message d-none" id="error-message-sendRequestComents">
+                Por favor, ingresar comentarios de la solicitud.
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" data-bs-toggle="modal">
+            Volver
+          </button>
+          <button class="btn btn-primary" type="submit">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal para subir imagen a la carpeta de google drive del cliente -->
+
+  <div class="modal fade" id="sixthModal" aria-hidden="true" aria-labelledby="sixthModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Subir Imagen
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="uploadImageForm" id="uploadImageForm" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <!-- Subir Imagen -->
+                  <input type="text" class="form-control" id="inputUploadImage" placeholder="Nombre" />
+                  <label for="inputUploadImage">Cargar Imagen</label>
+                  <div class="invalid-message d-none" id="error-message-inputUploadImage">
+                    Por favor, subir imagen.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
+            Volver
+          </button>
+          <button class="btn btn-primary" type="submit">Subir</button>
         </div>
       </div>
     </div>
