@@ -36,15 +36,26 @@
   const statusClient = document.getElementById("callStatusClient")
   const reasonToNotAfiliate = document.getElementById("callReasonToNotAfiliate")
   const commentsOfCalling = document.getElementById("callComentsOfCalling")
+  const checkboxSendRequestToCredit = document.getElementById('chevkBoxEvalClient');
+  const comentsOfRequestToCredit = document.getElementById("comentsOfRequestToCredit")
+  const comentsOfRequestToCreditContainer = document.getElementById('comentsOfRequestToCreditContainer')
+
   const errorAgentName = document.getElementById("error-message-agentName")
   const errorCallViaOfCalling = document.getElementById("error-message-callViaOfCalling")
   const errorCallResults = document.getElementById("error-message-callResults")
   const errorCallStatusClient = document.getElementById("error-message-callStatusClient")
   const errorCallReasonToNotAfiliate = document.getElementById("error-message-callReasonToNotAfiliate")
   const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
+  const errorComentsOfRequestToCredit = document.getElementById("error-message-comentsOfRequestToCredit")
   const navPagesContgainer = document.getElementById("navPagesContgainer")
   const userNameLogin = document.getElementById("userNameLogin")
   const createClientModalBtn = document.getElementById("createClientModalBtn")
+
+  const sentRequestAgentName = document.getElementById("sentRequestAgentName")
+  const errorMessageSentRequestAgentName = document.getElementById("error-message-sentRequestAgentName")
+  const sendRequestComents = document.getElementById("sendRequestComents")
+  const errorMessageSendRequestComents = document.getElementById("error-message-sendRequestComents")
+  const sendRequestToEvalBtn = document.getElementById("sendToEvalToCreditsBtn")
 
   //Logging
 
@@ -83,7 +94,8 @@
 
   function handleShowModalUser() {
     formValues.reset()
-    document.getElementById("comentsCallsContainer").innerHTML = ""
+    comentsCallsContainer.innerHTML = ""
+    comentsCallsContainer.classList = "d-none"
     comentCallTitle.classList = "d-none"
     comentCallBtn.classList = "d-none"
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
@@ -91,6 +103,7 @@
     userCountry.classList = "form-select"
     countryMsgValidation.classList = "d-none"
     noComentsCall.classList = "d-none"
+    sendRequestToEvalBtn.classList = "d-none"
     userPhone.classList = "form-control"
 
     userPhone.addEventListener("keyup", (event) => {
@@ -157,6 +170,7 @@
     userStatusRisk.value = statusRisk;
 
     // Estilos de los botones y labels
+    comentsCallsContainer.classList.remove("d-none")
     userCountry.classList = "form-select"
     countryMsgValidation.classList = "d-none"
     noComentsCall.classList = "d-none"
@@ -165,10 +179,14 @@
     createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
     phoneMsgValidation.classList = "d-none"
     userPhone.classList = "form-control"
+    comentsOfRequestToCreditContainer.classList.add('d-none');
+    sendRequestToEvalBtn.classList = "btn btn-outline-secondary"
 
     // Resetear valores de la tipificacion
     formValuesComentsCall.reset()
     formValuesComentsCall.classList.remove("was-validated")
+
+    sentRequestToCreditsForm.reset()
 
     getDataComentCalls(phone)
   }
@@ -552,16 +570,6 @@
         statusClient.classList = "form-select"
       }
     })
-    /* 
-        reasonToNotAfiliate.addEventListener("change", (event) => {
-          if (event.target.value === "") {
-            reasonToNotAfiliate.classList = "form-select invalid-input"
-            errorCallReasonToNotAfiliate.classList = "invalid-message"
-          } else {
-            errorCallReasonToNotAfiliate.classList = "d-none"
-            reasonToNotAfiliate.classList = "form-select"
-          }
-        }) */
 
     commentsOfCalling.addEventListener("keyup", (event) => {
       if (event.target.value === "") {
@@ -573,12 +581,33 @@
       }
     })
 
+    checkboxSendRequestToCredit.addEventListener('click', () => {
+      console.log('click');
+      if (checkboxSendRequestToCredit.checked) {
+        comentsOfRequestToCreditContainer.classList.remove('d-none');
+      } else {
+        comentsOfRequestToCreditContainer.classList.add('d-none');
+      }
+    });
+
+    comentsOfRequestToCredit.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        comentsOfRequestToCredit.classList = "form-control invalid-input"
+        errorComentsOfRequestToCredit.classList = "invalid-message"
+      } else {
+        errorComentsOfRequestToCredit.classList = "d-none"
+        comentsOfRequestToCredit.classList = "form-control"
+      }
+    })
+
+
     agentName.classList = "form-control"
     viaOfCalling.classList = "form-select"
     resultOfCalling.classList = "form-select"
     statusClient.classList = "form-select"
     reasonToNotAfiliate.classList = "form-select"
     commentsOfCalling.classList = "form-control"
+    comentsOfRequestToCredit.classList = "form-control"
     errorAgentName.classList = "d-none"
     errorCallViaOfCalling.classList = "d-none"
     errorCallResults.classList = "d-none"
@@ -593,13 +622,13 @@
     loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
 
     const form = {
-      clientPhone: document.getElementById("userPhone").value,
-      callViaOfCalling: document.getElementById("callViaOfCalling").value,
-      callAgentName: document.getElementById("callAgentName").value,
-      callResults: document.getElementById("callResults").value,
-      callStatusClient: document.getElementById("callStatusClient").value,
-      callReasonToNotAfiliate: document.getElementById("callReasonToNotAfiliate").value,
-      callComentsOfCalling: document.getElementById("callComentsOfCalling").value
+      clientPhone: userPhone.value,
+      callViaOfCalling: viaOfCalling.value,
+      callAgentName: agentName.value,
+      callResults: resultOfCalling.value,
+      callStatusClient: statusClient.value,
+      callReasonToNotAfiliate: reasonToNotAfiliate.value,
+      callComentsOfCalling: commentsOfCalling.value
     }
 
     google.script.run
@@ -612,6 +641,95 @@
         formValuesComentsCall.reset()
       })
       .addComentsCall(form)
+
+    if (checkboxSendRequestToCredit.checked) {
+
+      const info = {
+        clientName: userName.value,
+        clientLastName: userLastName.value,
+        clientDni: userDni.value,
+        clientPhone: userPhone.value,
+        callAgentName: agentName.value,
+        commentsToEval: comentsOfRequestToCredit.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
+        slackUserName: localStorage.getItem("slackUserName")
+      }
+
+      sendRequestToCreditDepartment(info)
+    }
+
+  }
+
+
+  // Funcion que guarda las solucitudes de evaluacion al area de creditos
+  function sendRequestToCreditDepartment(info) {
+
+    google.script.run
+      .withSuccessHandler(result => {
+      })
+      .saveRequestToCredit(info)
+
+    google.script.run
+      .sendSlackMessage(info)
+  }
+
+  // Funcion que maneja el envio de la solicitud para la evaluacion de un cliente
+  function handleSendRequestToCredit(event) {
+    event.preventDefault()
+
+    if (sentRequestAgentName.value === "") {
+      sentRequestAgentName.classList = "form-control invalid-input"
+      errorMessageSentRequestAgentName.classList = "invalid-message"
+    } else if (sendRequestComents.value === "") {
+      sendRequestComents.classList = "form-control invalid-input"
+      errorMessageSendRequestComents.classList = "invalid-message"
+    } else {
+      sentRequestAgentName.classList = "form-control"
+      sendRequestComents.classList = "form-control"
+      errorMessageSentRequestAgentName.classList = "d-none"
+      errorMessageSendRequestComents.classList = "d-none"
+
+      const info = {
+        clientName: userName.value,
+        clientLastName: userLastName.value,
+        clientDni: userDni.value,
+        clientPhone: userPhone.value,
+        callAgentName: sentRequestAgentName.value,
+        commentsToEval: sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
+        slackUserName: localStorage.getItem("slackUserName")
+      }
+
+      sendRequestToCreditDepartment(info)
+
+      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
+      secondaryModal.hide();
+    }
+  }
+
+  function handleSendRequestToEvaluation() {
+    const primaryModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+    const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
+    primaryModal.hide();
+    secondaryModal.show();
+
+    sentRequestAgentName.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        sentRequestAgentName.classList = "form-control invalid-input"
+        errorMessageSentRequestAgentName.classList = "invalid-message"
+      } else {
+        errorMessageSentRequestAgentName.classList = "d-none"
+        sentRequestAgentName.classList = "form-control"
+      }
+    })
+
+    sendRequestComents.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        sendRequestComents.classList = "form-control invalid-input"
+        errorMessageSendRequestComents.classList = "invalid-message"
+      } else {
+        errorMessageSendRequestComents.classList = "d-none"
+        sendRequestComents.classList = "form-control"
+      }
+    })
 
   }
 
@@ -635,17 +753,22 @@
     } else if (commentsOfCalling.value === "") {
       commentsOfCalling.classList = "form-control invalid-input"
       errorCallComentsOfCalling.classList = "invalid-message"
+    } else if (comentsOfRequestToCredit.value === "") {
+      comentsOfRequestToCredit.classList = "form-control invalid-input"
+      errorComentsOfRequestToCredit.classList = "invalid-message"
     } else {
       agentName.classList = "form-control"
       viaOfCalling.classList = "form-select"
       resultOfCalling.classList = "form-select"
       statusClient.classList = "form-select"
       commentsOfCalling.classList = "form-control"
+      comentsOfRequestToCredit.classList = "form-control"
       errorAgentName.classList = "d-none"
       errorCallViaOfCalling.classList = "d-none"
       errorCallResults.classList = "d-none"
       errorCallStatusClient.classList = "d-none"
       errorCallComentsOfCalling.classList = "d-none"
+      errorComentsOfRequestToCredit.classList = "d-none"
 
       const secondaryModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
       const confirmCommentsCallModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');

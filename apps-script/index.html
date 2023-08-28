@@ -285,8 +285,14 @@
 
         </div>
         <div class="modal-footer d-flex justify-content-between">
-          <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
-            onclick="handleModalComentsCall()" data-bs-toggle="modal">Tipificar</button>
+          <div>
+            <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
+              onclick="handleModalComentsCall()" data-bs-toggle="modal">Tipificar</button>
+            <button class="btn btn-outline-secondary" data-bs-target="#ternaryModal" id="sendToEvalToCreditsBtn"
+              onclick="handleSendRequestToEvaluation()" data-bs-toggle="modal">
+              Enviar a evaluar
+            </button>
+          </div>
           <button type="submit" class="btn btn-primary" id="createUserOBF"
             onclick="handleSaveChanges(event)">Guardar</button>
           <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
@@ -399,20 +405,25 @@
                 Por favor, ingresar comentarios de la llamada.
               </div>
             </div>
-            <div class="form-check mt-3">
-              <input class="form-check-input" type="checkbox" value="" id="chevkBoxEvalClient">
+            <div class="form-check my-3">
+              <input class="form-check-input" type="checkbox" value="" id="chevkBoxEvalClient" />
               <label class="form-check-label" for="chevkBoxEvalClient">
                 Enviar a evaluar al area de créditos
               </label>
+            </div>
+            <div class="form-floating d-none" id="comentsOfRequestToCreditContainer">
+              <textarea class="form-control" placeholder="Cometarios de la solicitud a creditos"
+                id="comentsOfRequestToCredit" style="height: 150px"></textarea>
+              <label for="comentsOfRequestToCredit">Cometarios de la solicitud a creditos</label>
+              <div class="invalid-message d-none" id="error-message-comentsOfRequestToCredit">
+                Por favor, ingresar comentarios de la llamada.
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">Volver</button>
           <button class="btn btn-primary" type="submit" onclick="handleSaveComentsCall(event)">Guardar</button>
-          <!-- <button class="btn btn-primary d-none" id="loadingButtonCommentsCall" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            <span role="status">Guardando...</span> -->
         </div>
       </div>
     </div>
@@ -434,6 +445,49 @@
           <button class="btn btn-primary d-none" id="loadingButtonCommentsCall" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Guardando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Enviar solicitud de Evaluacion al area de creditos -->
+  <div class="modal fade" id="ternaryModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Enviar a evaluar
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="sentRequestToCreditsForm" id="sentRequestToCreditsForm" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="sentRequestAgentName" placeholder="Nombre" />
+                  <label for="sentRequestAgentName">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-sentRequestAgentName">
+                    Por favor, ingresar nombre.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating" id="sendRequestComentsContainer">
+              <textarea class="form-control" placeholder="Cometarios de la solicitud a creditos" id="sendRequestComents"
+                style="height: 150px"></textarea>
+              <label for="sendRequestComents">Cometarios de la solicitud para creditos</label>
+              <div class="invalid-message d-none" id="error-message-sendRequestComents">
+                Por favor, ingresar comentarios de la solicitud.
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
+            Volver
+          </button>
+          <button class="btn btn-primary" type="submit" onclick="handleSendRequestToCredit(event)">Enviar</button>
         </div>
       </div>
     </div>

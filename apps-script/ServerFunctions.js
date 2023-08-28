@@ -41,12 +41,12 @@
 
 function doGet(e) {
   if (e.parameter.page) {
-    var pageName = e.parameter.page.trim().toLowerCase();
+    let pageName = e.parameter.page.trim().toLowerCase();
     if (pageName !== "login") {
-      var template = HtmlService.createTemplateFromFile(pageName);
+      let template = HtmlService.createTemplateFromFile(pageName);
       template.url = getPageUrl();
-      var output = template.evaluate();
-      var htmlOutput = HtmlService.createHtmlOutput(output);
+      let output = template.evaluate();
+      let htmlOutput = HtmlService.createHtmlOutput(output);
       htmlOutput.addMetaTag('viewport', 'width=device-width, initial-scale=1');
       // htmlOutput.setXFrameOptionsMode(HtmlService.XFFrameOptionsMode.ALLOWALL); // Configurar opciones de encabezado X-Frame-Options
       return htmlOutput;
@@ -60,17 +60,17 @@ function doGet(e) {
 
 function homePage() {
   // var pages = ['vistatabla','vistatabla1','vistatabla2','vistatabla3','vistatabla4'];
-  var pages = ['vistageneral', 'vistatabla', 'vistatabla1', 'vistatabla2', 'vistatabla3', 'vistatabla4', 'vistatabla6', 'vistatabla7', 'vistatabla8'];
+  let pages = ['index'];
 
-  var urls = pages.map(function (name) {
+  let urls = pages.map(function (name) {
     return getPageUrl(name);
   });
   // var template = HtmlService.createTemplateFromFile("vistageneral");
-  var template = HtmlService.createTemplateFromFile("login");
+  let template = HtmlService.createTemplateFromFile("login");
 
   template.test = urls;
-  var output = template.evaluate();
-  var htmlOutput = HtmlService.createHtmlOutput(output);
+  let output = template.evaluate();
+  let htmlOutput = HtmlService.createHtmlOutput(output);
   htmlOutput.addMetaTag('viewport', 'width=device-width, initial-scale=1');
 
   return htmlOutput;

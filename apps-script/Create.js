@@ -119,3 +119,84 @@ function addComentsCall(form) {
   return "Added coments call"
 
 }
+
+// Funciones para la evaluacion de la linea de credito
+
+function saveRequestToCredit(info) {
+  const id = createId(sheetsSolicitudesCreditos);
+  const phoneClient = returnNullValue(info.clientPhone);
+  const dateOfContact = returnNullValue(currentDate());
+  const hourOfCall = returnNullValue(currentHour());
+  const agent = returnNullValue(info.callAgentName);
+  const clientName = returnNullValue(info.clientName)
+  const clientLastName = returnNullValue(info.clientLastName)
+  const commentsToEval = returnNullValue(info.commentsToEval)
+  const clientDni = info.clientDni === "" ? "NULL" : info.clientDni
+
+  sheetsSolicitudesCreditos.appendRow([
+    id,
+    clientName,
+    clientLastName,
+    clientDni,
+    phoneClient,
+    dateOfContact,
+    hourOfCall,
+    agent,
+    commentsToEval
+  ]);
+
+  return "Added request"
+}
+
+// Enviar mensaje a Slack
+async function sendSlackMessage(info) {
+
+  const url = "https://hooks.slack.com/services/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"
+  const params = {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify({
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": ":incoming_envelope: Solicitud de Evaluación Crediticia:"
+          }
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": `*:pushpin: Nombre del cliente:*\n        • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:iphone: Teléfono:*\n        • ${info.clientPhone}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:identification_card: Documento de identidad:*\n        • ${info.clientDni === "" ? "Sin registro" : info.clientDni}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:large_blue_diamond: Asesor:*\n        • ${info.callAgentName} - ${info.slackUserName}`
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*:page_with_curl: Comentarios:*\n        • ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
+          }
+        }
+      ]
+    })
+  }
+
+  const sendMsg = UrlFetchApp.fetch(url, params)
+  let respCode = sendMsg.getResponseCode()
+  console.log(respCode)
+}
