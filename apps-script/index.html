@@ -251,17 +251,33 @@
           </form>
 
           <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+            id="comentCallTitleHistory">Historico</p>
+
+            <div class="card" style="width: 100%;">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Jefferson:</strong> Cliente afiliado</li>
+                <li class="list-group-item" style="background-color: #FFF1E9;">23/08/2023 - <strong>Martin:</strong> Realizar welcome</li>
+                <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Andres:</strong> Ya envio boletas, su apoyo asigando la linea</li>
+                <li class="list-group-item" style="background-color: #FFF1E9;">21/08/2023 - <strong>Alvaro:</strong> Solicitar boletas actualizadas</li>
+                <li class="list-group-item" style="background-color: #E9F5FF;">20/08/2023 - <strong>Andres:</strong> Cliente envia boletas, su apoyo con la evaluacion</li>
+              </ul>
+            </div>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
+            id="noComentsHistory">Sin información</p>
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstHistory">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
+            </div>
+          </div>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
             id="comentCallTitle">Tipificaciones</p>
 
           <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
             id="noComentsCall">No hay
             tipificaciones
             registradas</p>
-          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Cargando tipificaciones...</span>
-            </div>
-          </div>
 
           <!-- Seccion de tipificaciones -->
           <div class="accordion mt-0 mb-3" id="comentsCallsContainer">
