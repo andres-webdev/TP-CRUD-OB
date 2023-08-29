@@ -22,19 +22,8 @@
     google.script.run
       .withSuccessHandler(saveData)
       .validateCredentials(emailValue, passwordValue)
-  })
 
-  const saveData = (result) => {
-    // Almacena el objeto en el localStorage
-    localStorage.setItem('autenticado', result.authorization)
-    localStorage.setItem('name', result.name)
-    localStorage.setItem('email', result.email)
-    localStorage.setItem('role', result.role)
-    localStorage.setItem('slackUserName', result.slackUserName)
-
-    loggingBtn.removeAttribute("disabled")
-
-    if (result.authorization == "200") {
+    if (localStorage.getItem("autenticado") === "200") {
       google.script.run
         .withSuccessHandler((url) => {
           window.open(url, "_top")
@@ -53,7 +42,21 @@
           console.log("Error del servidor")
         })
         .getPageUrl("index")
-    } else {
+    }
+  })
+
+  const saveData = (result) => {
+    // Almacena el objeto en el localStorage
+    localStorage.setItem('autenticado', result.authorization)
+    localStorage.setItem('name', result.name)
+    localStorage.setItem('email', result.email)
+    localStorage.setItem('role', result.role)
+    localStorage.setItem('slackUserName', result.slackUserName)
+
+    loggingBtn.removeAttribute("disabled")
+
+    if (result.authorization !== "200") {
+
       email.classList.remove("is-valid")
       password.classList.remove("is-valid")
       email.classList.add("is-invalid")

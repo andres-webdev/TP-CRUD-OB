@@ -29,6 +29,15 @@ function addUser(form) {
     statusRisk
   ]);
 
+  let clientFolderImages = DriveApp.getFolderById("1afzW-Hw2-hZYD-DMZz2LQlL9w7HHWUE3")
+  let subClientFolderImages = clientFolderImages.createFolder(`Cliente_tlf_${phone}`)
+  const linkToFolder = `https://drive.google.com/drive/folders/${subClientFolderImages.getId()}`
+
+  const fila = searchRow(id, sheetsObFallidos);
+  sheetsObFallidos.getRange(fila, 26, 1, 1).setValues([[
+    linkToFolder
+  ]])
+
   return "User created"
 
 }
@@ -148,10 +157,11 @@ function saveRequestToCredit(info) {
   return "Added request"
 }
 
-// Enviar mensaje a Slack
+// Enviar mensaje a Slack de solicitud de evaluacion
 async function sendSlackMessage(info) {
 
-  const url = "https://hooks.slack.com/services/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"
+  const url = "https://hooks.slack.com/services/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"
+
   const params = {
     method: "post",
     contentType: "application/json",
@@ -190,6 +200,72 @@ async function sendSlackMessage(info) {
           "text": {
             "type": "mrkdwn",
             "text": `*:page_with_curl: Comentarios:*\n        • ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
+          }
+        }
+      ]
+    })
+  }
+
+  const sendMsg = UrlFetchApp.fetch(url, params)
+  let respCode = sendMsg.getResponseCode()
+  console.log(respCode)
+}
+
+//
+// Enviar mensaje a Slack
+async function sendSlackMessageOfResult(info) {
+
+  const url = "https://hooks.slack.com/services/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"
+
+  const params = {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify({
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": ":ticket: Resultado de la Evaluación Crediticia:"
+          }
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": `*:pushpin: Nombre del cliente:*\n        • ${info.clientName} ${info.clientLastName}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:large_blue_diamond: Asesor:*\n        • ${info.agent} - ${info.slackUserNameAgent}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:iphone: Teléfono:*\n        • ${info.clientPhone}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:large_orange_diamond: Creditos:*\n        • ${info.creditos} - ${info.slackUserNameCredit}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*:identification_card: Documento de identidad:*\n        • ${info.clientDni}`
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*:page_with_curl: Comentarios del asesor:*\n        • ${info.comentsAgent}`
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*:classical_building: Resultado:*\n        • ${info.commentsCredits}`
           }
         }
       ]

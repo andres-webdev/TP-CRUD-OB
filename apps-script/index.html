@@ -293,7 +293,7 @@
               Enviar a evaluar
             </button>
             <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
-              data-bs-toggle="modal">
+              onclick="showRequestsCreditsInTable()" data-bs-toggle="modal">
               Notificar al asesor
             </button>
             <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
@@ -524,25 +524,7 @@
                   <td>Hora</td>
                   <td>Asesor</td>
                   <td>Comentarios</td>
-                </tr>
-                <tr></tr>
-                <td>Andres</td>
-                <td>Marquez</td>
-                <td>23232</td>
-                <td>924509844</td>
-                <td style="min-width: 100px;">2023-08-27</td>
-                <td>11:49</td>
-                <td>Andres</td>
-                <td>NULL</td>
-                <tr>
-                  <td>Andres</td>
-                  <td>Marquez</td>
-                  <td>23232</td>
-                  <td>924509844</td>
-                  <td style="min-width: 100px;">2023-08-27</td>
-                  <td>11:49</td>
-                  <td>Andres</td>
-                  <td>NULL</td>
+                  <td>Respuesta de Creditos</td>
                 </tr>
               </thead>
               <tbody id="requestSendedByClient" class="table-group-divider">
@@ -553,12 +535,28 @@
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-outline-secondary" data-bs-target="#createModal"
             data-bs-toggle="modal">Atras</button>
-          <button type="button" class="btn btn-primary" data-bs-target="#fifthModal" data-bs-toggle="modal">Notificar al
+          <button type="button" class="btn btn-primary" data-bs-target="#fifthModal" data-bs-toggle="modal"
+            id="notificateToTheAgentBtn" onclick="handleSendNotificationResult()">Notificar al
             asesor</button>
         </div>
       </div>
     </div>
   </div>
+
+  <template id="rowTemplateRequestToCredit">
+    <tr>
+      <td class="template-id" hidden></td>
+      <td class="template-name"></td>
+      <td class="template-lastName"></td>
+      <td class="template-dni"></td>
+      <td class="template-phone"></td>
+      <td class="template-dateOfRequest" style="min-width: 100px;"></td>
+      <td class="template-timeOfRequest"></td>
+      <td class="template-agentOfTheCase"></td>
+      <td class="template-comentsOfAgenteToCredits"></td>
+      <td class="template-resultOfCredits"></td>
+    </tr>
+  </template>
 
   <!-- Modal para enviar la notificacion haciendo mencion al agente -->
 
@@ -576,19 +574,19 @@
             <div class="row mb-3">
               <div class="col">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="sentRequestAgentName" placeholder="Nombre" />
-                  <label for="sentRequestAgentName">Asesor</label>
-                  <div class="invalid-message d-none" id="error-message-sentRequestAgentName">
+                  <input type="text" class="form-control" id="sentNotificacionToAgent" placeholder="Nombre" />
+                  <label for="sentNotificacionToAgent">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-sentNotificacionToAgent">
                     Por favor, ingresar nombre.
                   </div>
                 </div>
               </div>
             </div>
-            <div class="form-floating" id="sendRequestComentsContainer">
+            <div class="form-floating" id="sendRequestResultComentsContainer">
               <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
-                id="sendRequestComents" style="height: 150px"></textarea>
-              <label for="sendRequestComents" class="text-wrap">Cometarios Adicionales</label>
-              <div class="invalid-message d-none" id="error-message-sendRequestComents">
+                id="sendRequestResultComents" style="height: 150px"></textarea>
+              <label for="sendRequestResultComents" class="text-wrap">Cometarios Adicionales</label>
+              <div class="invalid-message d-none" id="error-message-sendRequestResultComents">
                 Por favor, ingresar comentarios de la solicitud.
               </div>
             </div>
@@ -598,7 +596,11 @@
           <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" data-bs-toggle="modal">
             Volver
           </button>
-          <button class="btn btn-primary" type="submit">Enviar</button>
+          <button class="btn btn-primary" type="submit" onclick="handleResultOfCreditRequest()"
+            id="sendResultOfCreditRequestBtn">Enviar</button>
+          <button class="btn btn-primary d-none" id="loadingResultOfCreditRequest" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
         </div>
       </div>
     </div>

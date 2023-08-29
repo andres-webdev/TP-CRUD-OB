@@ -47,7 +47,9 @@ function doGet(e) {
       template.url = getPageUrl();
       let output = template.evaluate();
       let htmlOutput = HtmlService.createHtmlOutput(output);
-      htmlOutput.addMetaTag('viewport', 'width=device-width, initial-scale=1');
+      htmlOutput
+        .setTitle("Home")
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
       // htmlOutput.setXFrameOptionsMode(HtmlService.XFFrameOptionsMode.ALLOWALL); // Configurar opciones de encabezado X-Frame-Options
       return htmlOutput;
     } else {
@@ -71,7 +73,9 @@ function homePage() {
   template.test = urls;
   let output = template.evaluate();
   let htmlOutput = HtmlService.createHtmlOutput(output);
-  htmlOutput.addMetaTag('viewport', 'width=device-width, initial-scale=1');
+  htmlOutput
+    .setTitle("Login")
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 
   return htmlOutput;
 }

@@ -1,6 +1,6 @@
 // Editar los datos del cliente, exceptuando el DNI
 function editUser(form) {
-  const fila = searchRow(form.userId);
+  const fila = searchRow(form.userId, sheetsObFallidos);
 
   const name = returnNullValue(form.userName)
   const lastName = returnNullValue(form.userLastName)
@@ -30,13 +30,27 @@ function editUser(form) {
   return "User Edited"
 }
 // Se busca la fila en base al DNI del usuario
-function searchRow(id = '1') {
-  const ids = sheetsObFallidos
-    .getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 1)
+function searchRow(id = '1', sheet) {
+  const ids = sheet
+    .getRange(2, 1, sheet.getLastRow() - 1, 1)
     .getValues()
     .flat()
 
   const index = ids.indexOf(Number(id))
   const row = index + 2;
   return row
+}
+
+// Editar la respuesta del area de creditos a la solicitud
+function updateResultOfRequest(info) {
+
+  const fila = searchRow(info.requestId, sheetsSolicitudesCreditos);
+
+  const comentsByCredit = returnNullValue(info.comentsByCredit)
+
+  sheetsSolicitudesCreditos.getRange(fila, 10, 1, 1).setValues([[
+    comentsByCredit
+  ]])
+
+  return "Request Edited"
 }

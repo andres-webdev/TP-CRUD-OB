@@ -60,6 +60,21 @@
   const notificateToTheAgentBtn = document.getElementById("notificateToTheAgent")
   const uploadImagesModalBtn = document.getElementById("uploadImagesModal")
 
+  const rowTemplateRequestToCredit = document.getElementById("rowTemplateRequestToCredit")
+  const requestSendedByClientTable = document.getElementById("requestSendedByClient")
+  const sendRequestResultComents = document.getElementById("sendRequestResultComents")
+  const sentNotificacionToAgent = document.getElementById("sentNotificacionToAgent")
+  const errorMessageSendResultComents = document.getElementById("error-message-sendRequestResultComents")
+  const errorAgentSendResult = document.getElementById("error-message-sentNotificacionToAgent")
+  const notificateToTheAgent = document.getElementById("notificateToTheAgentBtn")
+  const loadingResultOfCreditRequest = document.getElementById("loadingResultOfCreditRequest")
+  const sendResultOfCreditRequestBtn = document.getElementById("sendResultOfCreditRequestBtn")
+
+  let infoResultOfTheRequest = {
+    requestId: '',
+    comentsByCredit: ''
+  }
+
   //Logging
 
   window.addEventListener('load', () => {
@@ -187,6 +202,7 @@
     userPhone.classList = "form-control"
     comentsOfRequestToCreditContainer.classList.add('d-none');
     sendRequestToEvalBtn.classList = "btn btn-outline-secondary"
+    document.getElementById("sentRequestToAgentToCall").reset()
 
     // Resetear valores de la tipificacion
     formValuesComentsCall.reset()
@@ -742,6 +758,176 @@
 
   }
 
+  // Funcion que muestra las solicitudes de creditos en una tabla
+  function showRequestsCreditsInTable() {
+
+    requestSendedByClientTable.innerHTML =
+      `<tr>
+        <td colspan="9">
+        <div class="d-flex justify-content-center mt-5 mb-3" id="loadingResquestToCredit">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando solicitudes...</span>
+          </div>
+        </div>
+      </td>
+     </tr>
+    `
+
+    notificateToTheAgent.classList = "d-none"
+
+    google.script.run
+      .withSuccessHandler(requestData => {
+
+        requestSendedByClientTable.innerHTML = ""
+
+        if (requestData.length > 0) {
+          setRequestDataTable(requestData)
+          infoResultOfTheRequest.requestId = requestData[requestData.length - 1][0]
+          notificateToTheAgent.classList = "btn btn-primary"
+        } else {
+          requestSendedByClientTable.innerHTML =
+            `
+          <tr style="text-align: center;">
+            <td colspan="9">
+              <p>No hay solicicitudes realizadas</p>
+            </td>
+          </tr>
+          `
+        }
+
+
+      })
+      .readRequestToCreditByClient(userPhone.value)
+
+  }
+
+  function handleSendNotificationResult() {
+
+    errorMessageSendResultComents.classList = "d-none"
+    errorAgentSendResult.classList = "d-none"
+
+    sentNotificacionToAgent.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        sentNotificacionToAgent.classList = "form-control invalid-input"
+        errorAgentSendResult.classList = "invalid-message"
+      } else {
+        errorAgentSendResult.classList = "d-none"
+        sentNotificacionToAgent.classList = "form-control"
+      }
+    })
+
+    sendRequestResultComents.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        sendRequestResultComents.classList = "form-control invalid-input"
+        errorMessageSendResultComents.classList = "invalid-message"
+      } else {
+        errorMessageSendResultComents.classList = "d-none"
+        sendRequestResultComents.classList = "form-control"
+      }
+    })
+
+  }
+
+  // Funcion que llena la tabla con los valores recibidos
+  function setRequestDataTable(data) {
+
+    let templateContent = rowTemplateRequestToCredit.content;
+
+    data.forEach(user => {
+      const tr = templateContent.cloneNode(true)
+
+      const id = tr.querySelector(".template-id");
+      const nameCol = tr.querySelector(".template-name");
+      const lastNameCol = tr.querySelector(".template-lastName");
+      const phoneCol = tr.querySelector(".template-phone");
+      const dniCol = tr.querySelector(".template-dni");
+      const dateOfRequest = tr.querySelector(".template-dateOfRequest");
+      const timeOfRequest = tr.querySelector(".template-timeOfRequest")
+      const agentOfTheCase = tr.querySelector(".template-agentOfTheCase")
+      const comentsOfAgenteToCredits = tr.querySelector(".template-comentsOfAgenteToCredits")
+      const resultOfCredits = tr.querySelector(".template-resultOfCredits");
+
+      id.value = user[0]
+      nameCol.textContent = user[1]
+      lastNameCol.textContent = user[2]
+      dniCol.textContent = user[3]
+      phoneCol.textContent = user[4]
+      dateOfRequest.textContent = user[5]
+      timeOfRequest.textContent = user[6]
+      agentOfTheCase.textContent = user[7]
+      comentsOfAgenteToCredits.textContent = user[8]
+      resultOfCredits.textContent = !user[9] ? "Sin respuesta" : user[9]
+
+      requestSendedByClientTable.appendChild(tr);
+    })
+  }
+
+  // Funcion que guarda la respuesta de creditos y envia el mensaje al canal de slack para continuar con el proceso
+  function handleResultOfCreditRequest() {
+
+    infoResultOfTheRequest.comentsByCredit = sendRequestResultComents.value
+
+
+    if (sentNotificacionToAgent.value === "") {
+      sentNotificacionToAgent.classList = "form-control invalid-input"
+      errorAgentSendResult.classList = "invalid-message"
+    } else if (sendRequestResultComents.value === "") {
+      sendRequestResultComents.classList = "form-control invalid-input"
+      errorMessageSendResultComents.classList = "invalid-message"
+    } else {
+
+      const createModal = bootstrap.Modal.getOrCreateInstance('#fifthModal');
+      loadingResultOfCreditRequest.classList.remove("d-none")
+      sendResultOfCreditRequestBtn.classList.add("d-none")
+
+      const info = {
+        clientName: userName.value,
+        clientLastName: userLastName.value,
+        clientPhone: userPhone.value,
+        clientDni: userDni.value,
+        //agent: agentName.value,
+        //comentsAgent: comentsOfRequestToCredit.value,
+        slackUserNameAgent: "@Andres Marquez",
+        slackUserNameCredit: "@Andres Marquez",
+        creditos: "Martin",
+        commentsCredits: sendRequestResultComents.value
+      }
+
+      google.script.run
+        .withSuccessHandler(result => {
+          if (Array.isArray(result)) {
+            info.agent = result[result.length - 1][7]
+            info.comentsAgent = result[result.length - 1][8]
+
+            google.script.run
+              .withSuccessHandler(result => {
+                sentNotificacionToAgent.classList = "form-control"
+                sendRequestResultComents.classList = "form-control"
+                errorMessageSendResultComents.classList = "d-none"
+                errorAgentSendResult.classList = "d-none"
+                loadingResultOfCreditRequest.classList.add("d-none")
+                sendResultOfCreditRequestBtn.classList.remove("d-none")
+
+                google.script.run
+                  .sendSlackMessageOfResult(info)
+
+                createModal.hide();
+              })
+              .updateResultOfRequest(infoResultOfTheRequest)
+          } else {
+            console.log("Error")
+          }
+        })
+        .readRequestToCreditByClient(userPhone.value)
+
+
+
+
+    }
+
+  }
+
+
   // Funcion que maneja las acciones cuando se guardan las tipificaciones
   function handleSaveComentsCall(event) {
 
@@ -787,7 +973,6 @@
     }
 
   }
-
 
   // Buscador
 

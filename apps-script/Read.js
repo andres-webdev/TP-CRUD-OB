@@ -44,3 +44,13 @@ function findUserByValue(target) {
 
   return userData.length > 0 ? userData : []
 }
+
+// Obtenemos los valores del rango seleccionando de las peticiones realizadas a creditos
+function readRequestToCreditByClient(number) {
+  const readRequest = sheetsSolicitudesCreditos.getDataRange().getDisplayValues();
+  readRequest.shift();
+  if (readRequest.length === 0) {
+    return "No hay registros para mostrar"
+  }
+  return readRequest.filter(request => request[4] === number)
+}
