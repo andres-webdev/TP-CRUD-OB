@@ -49,7 +49,7 @@ function createId(sheets) {
     return id
   }
 
-  const ids = sheets.getRange(2, 1, sheets.getLastRow() - 1, 1).getValues().map(id => id[0]);
+  const ids = sheets.getRange(2, 1, sheets.getLastRow() - 1, 1).getValues().flat();
 
   let maxId = 0;
 
@@ -151,7 +151,37 @@ function saveRequestToCredit(info) {
     dateOfContact,
     hourOfCall,
     agent,
-    commentsToEval
+    commentsToEval,
+    "Call-Center"
+  ]);
+
+  return "Added request"
+}
+
+// Funciones para la respuesta de creditos
+
+function saveResponseOfCredit(infoResquest) {
+  const id = createId(sheetsRespuestaCreditos);
+  const phoneClient = returnNullValue(infoResquest.clientPhone);
+  const dateOfContact = returnNullValue(currentDate());
+  const hourOfCall = returnNullValue(currentHour());
+  const agent = returnNullValue(infoResquest.callAgentName);
+  const clientName = returnNullValue(infoResquest.clientName)
+  const clientLastName = returnNullValue(infoResquest.clientLastName)
+  const commentsToEval = returnNullValue(infoResquest.commentsToEval)
+  const clientDni = infoResquest.clientDni === "" ? "NULL" : infoResquest.clientDni
+
+  sheetsRespuestaCreditos.appendRow([
+    id,
+    clientName,
+    clientLastName,
+    clientDni,
+    phoneClient,
+    dateOfContact,
+    hourOfCall,
+    agent,
+    commentsToEval,
+    "Creditos"
   ]);
 
   return "Added request"
@@ -160,7 +190,7 @@ function saveRequestToCredit(info) {
 // Enviar mensaje a Slack de solicitud de evaluacion
 async function sendSlackMessage(info) {
 
-  const url = "https://hooks.slack.com/services/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"
+  const url = "https://hooks.slack.com/services/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"
 
   const params = {
     method: "post",
@@ -215,7 +245,7 @@ async function sendSlackMessage(info) {
 // Enviar mensaje a Slack
 async function sendSlackMessageOfResult(info) {
 
-  const url = "https://hooks.slack.com/services/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"
+  const url = "https://hooks.slack.com/services/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"
 
   const params = {
     method: "post",

@@ -14,6 +14,10 @@ const DB_SOLICITUDES_CREDITO_ID = '1eOTj9U_v2rpn1GwobpVi7X4WQE_pIRsAt-q3SxwLwEQ'
 const SSSOLICITUDES = SpreadsheetApp.openById(DB_SOLICITUDES_CREDITO_ID)
 const sheetsSolicitudesCreditos = SSSOLICITUDES.getSheetByName('Solicitudes')
 
+const DB_RESPUESTAS_CREDITO_ID = '1Q6yNYnqvs07cVFZGpeN7lcOVDs26M23XZE9UoPsY5Ic'
+const SSRESPUESTAS = SpreadsheetApp.openById(DB_RESPUESTAS_CREDITO_ID)
+const sheetsRespuestaCreditos = SSRESPUESTAS.getSheetByName('Respuestas')
+
 function validateCredentials(email, password) {
 
   const dataSheetAdmins = sheetAdmins.getDataRange().getDisplayValues()

@@ -54,3 +54,19 @@ function readRequestToCreditByClient(number) {
   }
   return readRequest.filter(request => request[4] === number)
 }
+
+// Obtener todas la solicitudes y respuestas de realizadas
+function getAllRequestsByPhoneClient(phone) {
+  const readRequest = sheetsSolicitudesCreditos.getDataRange().getDisplayValues();
+  const readResult = sheetsRespuestaCreditos.getDataRange().getDisplayValues();
+  readRequest.shift();
+  readResult.shift();
+
+  const filterRequestsByPhone = readRequest.filter(elem => elem[4] === phone)
+  const filterResultsByPhone = readResult.filter(elem => elem[4] === phone)
+
+  const requestsAndResultsByPhone = [...filterRequestsByPhone, ...filterResultsByPhone]
+    .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[5]}, ${nextComentCall[6]}`) - new Date(`${comentCall[5]}, ${comentCall[6]}`))
+
+  return requestsAndResultsByPhone
+}

@@ -253,19 +253,24 @@
           <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
             id="comentCallTitleHistory">Historico</p>
 
-            <div class="card" style="width: 100%;">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Jefferson:</strong> Cliente afiliado</li>
-                <li class="list-group-item" style="background-color: #FFF1E9;">23/08/2023 - <strong>Martin:</strong> Realizar welcome</li>
-                <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Andres:</strong> Ya envio boletas, su apoyo asigando la linea</li>
-                <li class="list-group-item" style="background-color: #FFF1E9;">21/08/2023 - <strong>Alvaro:</strong> Solicitar boletas actualizadas</li>
-                <li class="list-group-item" style="background-color: #E9F5FF;">20/08/2023 - <strong>Andres:</strong> Cliente envia boletas, su apoyo con la evaluacion</li>
-              </ul>
-            </div>
+          <div class="card" style="width: 100%;" id="generalRequestsToCredit">
+            <ul class="list-group list-group-flush" id="generalRequestsToCreditList">
+              <!--  <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Jefferson:</strong>
+                Cliente afiliado</li>
+              <li class="list-group-item" style="background-color: #FFF1E9;">23/08/2023 - <strong>Martin:</strong>
+                Realizar welcome</li>
+              <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Andres:</strong> Ya
+                envio boletas, su apoyo asigando la linea</li>
+              <li class="list-group-item" style="background-color: #FFF1E9;">21/08/2023 - <strong>Alvaro:</strong>
+                Solicitar boletas actualizadas</li>
+              <li class="list-group-item" style="background-color: #E9F5FF;">20/08/2023 - <strong>Andres:</strong>
+                Cliente envia boletas, su apoyo con la evaluacion</li> -->
+            </ul>
+          </div>
 
           <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
-            id="noComentsHistory">Sin información</p>
-          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstHistory">
+            id="noComentsHistory">Sin información</p><!-- NADA -->
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Cargando tipificaciones...</span>
             </div>
@@ -291,7 +296,7 @@
                   <!-- Titulo de la tipificacion -->
                 </button>
               </h2>
-              <div id="" class="accordion-collapse collapse">
+              <div class="accordion-collapse collapse">
                 <div class="accordion-body">
                   <!-- Informacion de la tipificacion -->
                 </div>
@@ -532,15 +537,11 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <td>Nombre</td>
-                  <td>Apellido</td>
-                  <td>Nro doc</td>
-                  <td>Telefono</td>
-                  <td style="min-width: 100px;">Fecha de solicitud</td>
+                  <td>Fecha de solicitud</td>
                   <td>Hora</td>
-                  <td>Asesor</td>
+                  <td>Asesor/Gestor</td>
                   <td>Comentarios</td>
-                  <td>Respuesta de Creditos</td>
+                  <td>Area</td>
                 </tr>
               </thead>
               <tbody id="requestSendedByClient" class="table-group-divider">
@@ -562,15 +563,11 @@
   <template id="rowTemplateRequestToCredit">
     <tr>
       <td class="template-id" hidden></td>
-      <td class="template-name"></td>
-      <td class="template-lastName"></td>
-      <td class="template-dni"></td>
-      <td class="template-phone"></td>
       <td class="template-dateOfRequest" style="min-width: 100px;"></td>
       <td class="template-timeOfRequest"></td>
       <td class="template-agentOfTheCase"></td>
       <td class="template-comentsOfAgenteToCredits"></td>
-      <td class="template-resultOfCredits"></td>
+      <td class="template-area"></td>
     </tr>
   </template>
 
@@ -659,8 +656,12 @@
       </div>
     </div>
   </div>
-
+  <?!= include('elements') ?>
+  <?!= include('ClientViews') ?>
+  <?!= include('ComentCalls') ?>
   <?!= include('JS') ?>
+
+
 </body>
 
 </html>
