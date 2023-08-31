@@ -190,7 +190,7 @@ function saveResponseOfCredit(infoResquest) {
 // Enviar mensaje a Slack de solicitud de evaluacion
 async function sendSlackMessage(info) {
 
-  const url = "https://hooks.slack.com/services/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"
+  const url = ""
 
   const params = {
     method: "post",
@@ -245,7 +245,7 @@ async function sendSlackMessage(info) {
 // Enviar mensaje a Slack
 async function sendSlackMessageOfResult(info) {
 
-  const url = "https://hooks.slack.com/services/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"
+  const url = ""
 
   const params = {
     method: "post",
