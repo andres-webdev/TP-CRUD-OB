@@ -21,6 +21,7 @@
     clientMainModal.notificateToTheAgentBtn.classList.add("d-none")
     clientMainModal.uploadImagesModalBtn.classList.add("d-none")
     clientMainModal.comentCallTitle.classList.add("d-none")
+    clientMainModal.comentCallTitleHistory.classList.add("d-none")
 
     userInputs.userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -97,6 +98,7 @@
     userInputs.userPhone.classList = "form-control"
     comentsCallFormModal.comentsOfRequestToCreditContainer.classList.add('d-none');
     clientMainModal.sendRequestToEvalBtn.classList = "btn btn-outline-secondary"
+    clientMainModal.comentCallTitleHistory.classList.remove("d-none")
     document.getElementById("sentRequestToAgentToCall").reset()
 
     // Resetear valores de la tipificacion
@@ -108,6 +110,7 @@
 
     sentRequestToCreditsForm.reset()
 
+    clientMainModal.generalRequestsToCreditList.innerHTML = ""
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
   }
@@ -199,7 +202,7 @@
 
         })
 
-        generalRequestsToCreditList.innerHTML = `${item}`
+        clientMainModal.generalRequestsToCreditList.innerHTML = `${item}`
       })
       .getAllRequestsByPhoneClient(phoneClient)
   }

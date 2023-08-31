@@ -306,8 +306,13 @@
   // Funcion que guarda las solucitudes de evaluacion al area de creditos
   function sendRequestToCreditDepartment(info) {
 
+    loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
+
     google.script.run
       .withSuccessHandler(result => {
+        
+        loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
+
       })
       .saveRequestToCredit(info)
 
@@ -331,7 +336,15 @@
       requestFormModal.errorMessageSentRequestAgentName.classList = "d-none"
       requestFormModal.errorMessageSendRequestComents.classList = "d-none"
 
-      const info = {
+      const ternaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
+      const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
+      ternaryModal.hide();
+      confirmSendRequestModal.show();
+    }
+  }
+
+  function confirmSendRequestToCredit(){
+    const info = {
         clientName: userInputs.userName.value,
         clientLastName: userInputs.userLastName.value,
         clientDni: userInputs.userDni.value,
@@ -343,9 +356,8 @@
 
       sendRequestToCreditDepartment(info)
 
-      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
-      secondaryModal.hide();
-    }
+      const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
+      confirmSendRequestModal.hide();
   }
 
   function handleSendRequestToEvaluation() {
@@ -395,7 +407,7 @@
     } else if (comentsCallFormModal.commentsOfCalling.value === "") {
       comentsCallFormModal.commentsOfCalling.classList = "form-control invalid-input"
       comentsCallFormModal.errorCallComentsOfCalling.classList = "invalid-message"
-    } else if (comentsCallFormModal.comentsOfRequestToCredit.value === "") {
+    } else if (comentsCallFormModal.checkboxSendRequestToCredit.checked === true && comentsCallFormModal.comentsOfRequestToCredit.value === "") {
       comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control invalid-input"
       comentsCallFormModal.errorComentsOfRequestToCredit.classList = "invalid-message"
     } else {

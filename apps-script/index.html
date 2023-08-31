@@ -255,16 +255,6 @@
 
           <div class="card" style="width: 100%;" id="generalRequestsToCredit">
             <ul class="list-group list-group-flush" id="generalRequestsToCreditList">
-              <!--  <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Jefferson:</strong>
-                Cliente afiliado</li>
-              <li class="list-group-item" style="background-color: #FFF1E9;">23/08/2023 - <strong>Martin:</strong>
-                Realizar welcome</li>
-              <li class="list-group-item" style="background-color: #E9F5FF;">22/08/2023 - <strong>Andres:</strong> Ya
-                envio boletas, su apoyo asigando la linea</li>
-              <li class="list-group-item" style="background-color: #FFF1E9;">21/08/2023 - <strong>Alvaro:</strong>
-                Solicitar boletas actualizadas</li>
-              <li class="list-group-item" style="background-color: #E9F5FF;">20/08/2023 - <strong>Andres:</strong>
-                Cliente envia boletas, su apoyo con la evaluacion</li> -->
             </ul>
           </div>
 
@@ -315,7 +305,7 @@
             </button>
             <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
               onclick="showRequestsCreditsInTable()" data-bs-toggle="modal">
-              Notificar al asesor
+              Solicitudes
             </button>
             <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
               data-bs-toggle="modal">
@@ -516,11 +506,35 @@
           <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
             Volver
           </button>
-          <button class="btn btn-primary" type="submit" onclick="handleSendRequestToCredit(event)">Enviar</button>
+          <button class="btn btn-primary" type="submit" id="confirmRequestToEvalBtn" onclick="handleSendRequestToCredit(event)">Confirmar</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Confirmacion de la solicitud de evaluacion -->
+
+  <div class="modal fade" id="confirmSendRequestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class=" modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">¿Esta seguro de enviar la solicitud?</h1>
+          <button type="button" class="btn-close" data-bs-target="#ternaryModal" data-bs-toggle="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-target="#ternaryModal"
+            data-bs-toggle="modal">Volver</button>
+          <button type="button" class="btn btn-primary" id="saveCommentsCallBtn"
+          onclick="confirmSendRequestToCredit()">Guardar</button>
+          <button class="btn btn-primary d-none" id="loadingButtonSendRequest" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Modal para mostrar las solicitudes de evauluacion realizadas -->
 
