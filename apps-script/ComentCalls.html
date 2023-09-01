@@ -86,6 +86,7 @@
         })
 
         generateOldComentsCall(templateItem, oldComentsCall, target)
+        
 
         // Aplicar estilos a las etiquelas para mayor informacion al usuario
         if (filterComentsCalls.length > 0) {
@@ -114,11 +115,16 @@
 
     headerCallItem.textContent = "Tipificaciones antiguas"
 
-    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target) || -1
+    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target)
 
-    const sliceRowOldComentsCall = rowOldComentsCall !== -1 ? rowOldComentsCall.slice(12,) : -1
+    let sliceRowOldComentsCall = -1
 
-    if (sliceRowOldComentsCall === -1 || sliceRowOldComentsCall.every(elem => elem === "")) {
+
+    if(rowOldComentsCall){
+      sliceRowOldComentsCall = rowOldComentsCall.slice(12,25)
+    }
+
+    if (sliceRowOldComentsCall.every(elem => elem === "") || sliceRowOldComentsCall === -1) {
       clientMainModal.comentsCallsContainer.classList.toggle("d-none")
       clientMainModal.noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
       clientMainModal.comentCallTitle.classList = "d-none"

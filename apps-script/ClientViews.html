@@ -21,7 +21,9 @@
     clientMainModal.notificateToTheAgentBtn.classList.add("d-none")
     clientMainModal.uploadImagesModalBtn.classList.add("d-none")
     clientMainModal.comentCallTitle.classList.add("d-none")
-    clientMainModal.comentCallTitleHistory.classList.add("d-none")
+    clientMainModal.comentCallTitleHistory.classList.add("d-none")    
+    clientMainModal.generalRequestsToCredit.classList.add("d-none")
+    clientMainModal.noRequestsToCredit.classList.add("d-none")
 
     userInputs.userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -108,9 +110,11 @@
     clientMainModal.notificateToTheAgentBtn.classList.remove("d-none")
     clientMainModal.uploadImagesModalBtn.classList.remove("d-none")
 
+    clientMainModal.generalRequestsToCredit.classList.add("d-none")
+    clientMainModal.noRequestsToCredit.classList.add("d-none")
+
     sentRequestToCreditsForm.reset()
 
-    clientMainModal.generalRequestsToCreditList.innerHTML = ""
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
   }
@@ -183,7 +187,7 @@
   // Funcion que muestra el historial total de solicitudes y respuestas de creditos
   function handleTotalRequestHistory(phoneClient) {
 
-    //comentCallTitleHistory
+    clientMainModal.loadingRequestHistory.classList.toggle("d-none")
 
     google.script.run
       .withSuccessHandler(result => {
@@ -202,7 +206,15 @@
 
         })
 
-        clientMainModal.generalRequestsToCreditList.innerHTML = `${item}`
+        if(item === ""){
+          clientMainModal.noRequestsToCredit.classList.remove("d-none")
+          clientMainModal.generalRequestsToCredit.classList.add("d-none")
+        } else {
+          clientMainModal.generalRequestsToCreditList.innerHTML = `${item}`
+          clientMainModal.generalRequestsToCredit.classList.remove("d-none")
+        }
+
+        clientMainModal.loadingRequestHistory.classList.toggle("d-none")
       })
       .getAllRequestsByPhoneClient(phoneClient)
   }
