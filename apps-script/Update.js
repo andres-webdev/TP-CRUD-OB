@@ -42,7 +42,7 @@ function searchRow(id = '1', sheet) {
 }
 
 // Editar la respuesta del area de creditos a la solicitud
-function updateResultOfRequest(info) {
+/* function updateResultOfRequest(info) {
 
   const fila = searchRow(info.requestId, sheetsSolicitudesCreditos);
 
@@ -54,3 +54,4 @@ function updateResultOfRequest(info) {
 
   return "Request Edited"
 }
+ */

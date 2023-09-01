@@ -1,0 +1,558 @@
+<script>
+
+  //Paginacion
+  let currentPage = 0
+  let itemsPerPage = 10
+  let totalData
+  let totalPages
+
+  function handleShowModalUser() {
+    clientMainModal.formValues.reset()
+    clientMainModal.comentsCallsContainer.innerHTML = ""
+    clientMainModal.comentsCallsContainer.classList = "d-none"
+    clientMainModal.comentCallBtn.classList = "d-none"
+    clientMainModal.createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
+    clientMainModal.phoneMsgValidation.classList = "invalid-message d-none"
+    userInputs.userCountry.classList = "form-select"
+    clientMainModal.countryMsgValidation.classList = "d-none"
+    clientMainModal.noComentsCall.classList = "d-none"
+    clientMainModal.sendRequestToEvalBtn.classList = "d-none"
+    userInputs.userPhone.classList = "form-control"
+    clientMainModal.notificateToTheAgentBtn.classList.add("d-none")
+    clientMainModal.uploadImagesModalBtn.classList.add("d-none")
+    clientMainModal.comentCallTitle.classList.add("d-none")
+    clientMainModal.comentCallTitleHistory.classList.add("d-none")    
+    clientMainModal.generalRequestsToCredit.classList.add("d-none")
+    clientMainModal.noRequestsToCredit.classList.add("d-none")
+
+    userInputs.userPhone.addEventListener("keyup", (event) => {
+      if (validatePhoneNumber(event.target.value)) {
+        clientMainModal.phoneMsgValidation.classList = "d-none"
+        userInputs.userPhone.classList = "form-control"
+      } else {
+        userInputs.userPhone.classList = "form-control invalid-input"
+        clientMainModal.phoneMsgValidation.classList = "invalid-message"
+      }
+    })
+
+    userInputs.userCountry.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        userInputs.userCountry.classList = "form-select invalid-input"
+        clientMainModal.countryMsgValidation.classList = "invalid-message"
+      } else {
+        clientMainModal.countryMsgValidation.classList = "d-none"
+        userInputs.userCountry.classList = "form-select"
+      }
+    })
+
+  }
+
+  // Function que activa y desactiva el loader de los identificadores de los elementos
+  function loadingBtnOnOff(btn, loader) {
+    document.querySelector(`#${btn}`).classList.toggle("d-none")
+    document.querySelector(`#${loader}`).classList.toggle("d-none")
+  }
+
+  // Cuando se presiona el boton de editar, se obtienen los datos de la fila en cuestion para que sean mostrados en el formulario mostrando el modal para editarlos
+  function handleUpdateUserInfo(button) {
+
+    const tableRow = button.parentNode.parentNode;
+
+    const id = button.dataset.usuarioId;
+
+    const country = tableRow.cells[0].innerHTML;
+    const name = tableRow.cells[1].innerHTML;
+    const lastName = tableRow.cells[2].innerHTML;
+    const phone = tableRow.cells[3].innerHTML;
+    const dni = tableRow.cells[4].innerHTML;
+    const cod = tableRow.cells[5].innerHTML;
+    const referent = tableRow.cells[6].innerHTML;
+    const dateOfFirstContact = tableRow.cells[7].innerHTML;
+    const statusWeb = tableRow.cells[8].innerHTML;
+    const product = tableRow.cells[9].innerHTML;
+    const statusRisk = tableRow.cells[10].innerHTML;
+
+    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+    createModal.show()
+
+    userInputs.userId.value = id;
+    userInputs.userName.value = name;
+    userInputs.userLastName.value = lastName;
+    userInputs.userPhone.value = phone;
+    userInputs.userDni.value = dni;
+    userInputs.userCod.value = cod;
+    userInputs.userReferent.value = referent;
+    userInputs.userDateOfFirstContact.value = dateOfFirstContact;
+    userInputs.userStatusWeb.value = statusWeb;
+    userInputs.userCountry.value = country;
+    userInputs.userProduct.value = product;
+    userInputs.userStatusRisk.value = statusRisk;
+
+    // Estilos de los botones y labels
+    clientMainModal.comentsCallsContainer.classList.remove("d-none")
+    userInputs.userCountry.classList = "form-select"
+    clientMainModal.countryMsgValidation.classList = "d-none"
+    clientMainModal.noComentsCall.classList = "d-none"
+    clientMainModal.comentCallTitle.classList.add("d-none")
+    clientMainModal.comentCallBtn.classList = "btn btn-outline-secondary"
+    clientMainModal.createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
+    clientMainModal.phoneMsgValidation.classList = "d-none"
+    userInputs.userPhone.classList = "form-control"
+    comentsCallFormModal.comentsOfRequestToCreditContainer.classList.add('d-none');
+    clientMainModal.sendRequestToEvalBtn.classList = "btn btn-outline-secondary"
+    clientMainModal.comentCallTitleHistory.classList.remove("d-none")
+    document.getElementById("sentRequestToAgentToCall").reset()
+
+    // Resetear valores de la tipificacion
+    comentsCallFormModal.formValuesComentsCall.reset()
+    comentsCallFormModal.formValuesComentsCall.classList.remove("was-validated")
+
+    clientMainModal.notificateToTheAgentBtn.classList.remove("d-none")
+    clientMainModal.uploadImagesModalBtn.classList.remove("d-none")
+
+    clientMainModal.generalRequestsToCredit.classList.add("d-none")
+    clientMainModal.noRequestsToCredit.classList.add("d-none")
+
+    sentRequestToCreditsForm.reset()
+
+    handleTotalRequestHistory(phone)
+    getDataComentCalls(phone)
+  }
+
+  // Funcion que guarda la respuesta de creditos y envia el mensaje al canal de slack para continuar con el proceso
+  function handleResultOfCreditRequest() {
+
+    infoResultOfTheRequest.comentsByCredit = requestTableModal.sendRequestResultComents.value
+
+    if (requestTableModal.sentNotificacionToAgent.value === "") {
+      requestTableModal.sentNotificacionToAgent.classList = "form-control invalid-input"
+      requestTableModal.errorAgentSendResult.classList = "invalid-message"
+    } else if (requestTableModal.sendRequestResultComents.value === "") {
+      requestTableModal.sendRequestResultComents.classList = "form-control invalid-input"
+      requestTableModal.errorMessageSendResultComents.classList = "invalid-message"
+    } else {
+
+      const createModal = bootstrap.Modal.getOrCreateInstance('#fifthModal');
+      requestTableModal.loadingResultOfCreditRequest.classList.remove("d-none")
+      requestTableModal.sendResultOfCreditRequestBtn.classList.add("d-none")
+
+      const infoSlack = {
+        clientName: userInputs.userName.value,
+        clientLastName: userInputs.userLastName.value,
+        clientPhone: userInputs.userPhone.value,
+        clientDni: userInputs.userDni.value,
+        agent: "agentName.value",
+        comentsAgent: "comentsOfRequestToCredit.value",
+        slackUserNameAgent: "@Andres Marquez",
+        slackUserNameCredit: "@Andres Marquez",
+        creditos: "Martin",
+        commentsCredits: requestTableModal.sendRequestResultComents.value
+      }
+
+      const infoResquest = {
+        clientName: userInputs.userName.value,
+        clientLastName: userInputs.userLastName.value,
+        clientDni: userInputs.userDni.value,
+        clientPhone: userInputs.userPhone.value,
+        callAgentName: requestTableModal.sentNotificacionToAgent.value,
+        commentsToEval: requestTableModal.sendRequestResultComents.value, // Comentarios de la respuesta de creditos
+        slackUserName: localStorage.getItem("slackUserName")
+      }
+
+      google.script.run
+        .withSuccessHandler(() => {
+
+          /* infoSlack.agent = result[result.length - 1][7]
+          infoSlack.comentsAgent = result[result.length - 1][8]
+    */
+          requestTableModal.sentNotificacionToAgent.classList = "form-control"
+          requestTableModal.sendRequestResultComents.classList = "form-control"
+          requestTableModal.errorMessageSendResultComents.classList = "d-none"
+          requestTableModal.errorAgentSendResult.classList = "d-none"
+          requestTableModal.loadingResultOfCreditRequest.classList.add("d-none")
+          requestTableModal.sendResultOfCreditRequestBtn.classList.remove("d-none")
+
+          google.script.run
+            .sendSlackMessageOfResult(infoSlack)
+
+          createModal.hide();
+
+        })
+        .saveResponseOfCredit(infoResquest)
+    }
+
+  }
+
+  // Historia
+  // Funcion que muestra el historial total de solicitudes y respuestas de creditos
+  function handleTotalRequestHistory(phoneClient) {
+
+    clientMainModal.loadingRequestHistory.classList.toggle("d-none")
+
+    google.script.run
+      .withSuccessHandler(result => {
+
+        let item = ""
+
+        result.forEach(elem => {
+
+          if (elem[9] === "Creditos") {
+            item += `<li class="list-group-item" style="background-color: #FFF1E9;">${elem[5]} - <strong>${elem[7]}:</strong>
+              ${elem[8]}</li>`
+          } else if (elem[9] === "Call-Center") {
+            item += `<li class="list-group-item" style="background-color: #E9F5FF;">${elem[5]} - <strong>${elem[7]}:</strong>
+              ${elem[8]}</li>`
+          }
+
+        })
+
+        if(item === ""){
+          clientMainModal.noRequestsToCredit.classList.remove("d-none")
+          clientMainModal.generalRequestsToCredit.classList.add("d-none")
+        } else {
+          clientMainModal.generalRequestsToCreditList.innerHTML = `${item}`
+          clientMainModal.generalRequestsToCredit.classList.remove("d-none")
+        }
+
+        clientMainModal.loadingRequestHistory.classList.toggle("d-none")
+      })
+      .getAllRequestsByPhoneClient(phoneClient)
+  }
+
+  // Se llama la funcion cuando se presiona el boton de guardar, se valida el telefono y el pais
+  function handleSaveChanges(e) {
+
+    e.preventDefault()
+
+    if (userInputs.userCountry.value === "") {
+      userInputs.userCountry.classList = "form-select invalid-input"
+      clientMainModal.countryMsgValidation.classList = "invalid-message"
+    }
+
+    let passInputValidation = validatePhoneNumber(userInputs.userPhone.value) && userInputs.userCountry.value.length > 0
+
+    if (validatePhoneNumber(userInputs.userPhone.value)) {
+      userInputs.userPhone.classList = "form-control"
+      clientMainModal.phoneMsgValidation.classList = "d-none"
+    } else {
+      userInputs.userPhone.classList = "form-control invalid-input"
+      clientMainModal.phoneMsgValidation.classList = "invalid-message"
+    }
+
+    if (passInputValidation) {
+      validateForm()
+    }
+  }
+
+  // Validamos los datos del formulario y generamos dos casos, uno para crear el usuario y el otro para actualizar los datos del mismo
+  function validateForm() {
+    loadingBtnOnOff("createUserOBF", "loadingButton")
+
+    homePage.navPagesContgainer.classList = "d-none"
+
+    const form = {
+      userId: userInputs.userId.value,
+      userName: userInputs.userName.value,
+      userLastName: userInputs.userLastName.value,
+      userPhone: userInputs.userPhone.value,
+      userDni: userInputs.userDni.value,
+      userCod: userInputs.userCod.value,
+      userReferent: userInputs.userReferent.value,
+      userDateOfFirstContact: userInputs.userDateOfFirstContact.value,
+      userStatusWeb: userInputs.userStatusWeb.value,
+      userCountry: userInputs.userCountry.value,
+      userProduct: userInputs.userProduct.value,
+      userStatusRisk: userInputs.userStatusRisk.value,
+    }
+
+    if (form.userId === '') {
+      //Create Client
+      google.script.run
+        .withSuccessHandler(result => {
+          loadingBtnOnOff("createUserOBF", "loadingButton")
+
+          searchData()
+          clientMainModal.formValues.reset();
+          homePage.target.value = ""
+          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+          createModal.hide();
+          handleSaveAlert('Usuario creado exitosamente!', 'success')
+        })
+        .addUser(form);
+    } else {
+      //Update Client
+      google.script.run
+        .withSuccessHandler(result => {
+          loadingBtnOnOff("createUserOBF", "loadingButton")
+
+
+          if (homePage.target.value === "") {
+            searchData()
+          } else {
+            findClientByValue(homePage.target.value)
+            getNumberOfPages(result)
+            homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+          }
+
+          clientMainModal.formValues.reset()
+          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+          createModal.hide();
+          handleSaveAlert('Usuario actualizado exitosamente!', 'success')
+        })
+        .editUser(form)
+    }
+  }
+
+  // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
+  function searchData() {
+
+    homePage.updateDataTableBtn.setAttribute("disabled", "")
+
+    homePage.tableBody.innerHTML = ''
+    homePage.navPagesContgainer.classList = "d-none"
+
+    homePage.searchloader.classList.remove("d-none")
+
+    currentPage = 0
+
+    google.script.run
+      .withSuccessHandler(usersData => {
+
+        homePage.searchloader.classList = "d-none"
+        homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+
+        getNumberOfPages(usersData)
+
+        totalData = usersData.reverse()
+
+        setDataTable()
+
+        homePage.updateDataTableBtn.removeAttribute("disabled")
+
+      })
+      .readUsers()
+
+  }
+
+  // Valida el numero de telefono para que solo tenga numeros entres 9 y 10 en total
+  function validatePhoneNumber(phoneNumber) {
+
+    let phoneNumberTrim = phoneNumber.trim()
+
+    // Check if the phone number is nine digits long.
+    if (phoneNumberTrim.length < 9 || phoneNumberTrim.length > 10) {
+      return false;
+    }
+
+    // Check if the phone number only contains digits.
+    for (var i = 0; i < phoneNumberTrim.length; i++) {
+      if (phoneNumberTrim.charAt(i) !== "0" && phoneNumberTrim.charAt(i) !== "1" && phoneNumberTrim.charAt(i) !== "2" && phoneNumberTrim.charAt(i) !== "3" && phoneNumberTrim.charAt(i) !== "4" && phoneNumberTrim.charAt(i) !== "5" && phoneNumberTrim.charAt(i) !== "6" && phoneNumberTrim.charAt(i) !== "7" && phoneNumberTrim.charAt(i) !== "8" && phoneNumberTrim.charAt(i) !== "9") {
+        return false;
+      }
+    }
+    // The phone number is valid.
+    return true;
+  }
+
+  // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
+  function handleSaveAlert(message, type) {
+    const alertPlaceholder = homePage.liveAlertPlaceholder
+    const appendAlert = (message, type) => {
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+      ].join('')
+
+      alertPlaceholder.append(wrapper)
+    }
+
+    const alertTrigger = clientMainModal.createUserOBF
+    if (alertTrigger) {
+      appendAlert(message, type)
+    }
+  }
+
+  function handleRefreshTable() {
+    searchData()
+    homePage.target.value = ""
+  }
+
+  // Buscador
+
+  // Funcion que busca y muestra las informacion de un cliente
+  function handleFindClientByValue(event) {
+
+    event.preventDefault()
+
+    findClientByValue(homePage.target.value)
+  }
+
+  function findClientByValue(target) {
+
+    homePage.searchClientInputBtn.setAttribute("disabled", "")
+
+    homePage.tableBody.innerHTML = ''
+
+    homePage.searchloader.classList.remove("d-none")
+
+    homePage.navPagesContgainer.classList = "d-none"
+
+    google.script.run
+      .withSuccessHandler(userData => {
+
+        //let templateContent = template.content;/* IN */
+
+        homePage.searchloader.classList = "d-none"
+        homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+
+        getNumberOfPages(userData)
+
+        totalData = userData.reverse()
+
+        setDataTable()
+
+        homePage.searchClientInputBtn.removeAttribute("disabled")
+      })
+      .findUserByValue(target)
+  }
+
+  // Paginacion
+
+  function getNumberOfPages(usersList) {
+    totalPages = Math.ceil((usersList.length / itemsPerPage))
+
+    let listOfPagesBtn = ""
+
+    for (let i = 0; i < totalPages; i++) {
+
+      listOfPagesBtn +=
+        `<li class="page-item ${currentPage === i ? "active" : ""}"><a class="page-link" role="button" page-index=${i + 1}>${i + 1}</a></li>`
+
+    }
+
+    homePage.listOfPages.innerHTML =
+      ` <li class="page-item">
+        <li class="page-item disabled" id="prevPageBtn">
+          <a class="page-link rounded-start"  role="button">Anterior</a>
+        </li>
+        ${listOfPagesBtn}
+        <li class="page-item" id="nextPageBtn">
+          <a class="page-link" role="button">Siguiente</a>
+      </li>
+      `
+
+    document.querySelectorAll(".page-link").forEach(pageLink => {
+      const pageIndex = Number(pageLink.getAttribute("page-index"))
+
+      if (pageIndex) {
+        pageLink.addEventListener("click", () => {
+          setCurrentPage(pageIndex - 1)
+        })
+      }
+    })
+
+    const prevPageBtn = document.getElementById("prevPageBtn")
+    const nextPageBtn = document.getElementById("nextPageBtn")
+
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage !== 0) {
+        setCurrentPage(currentPage - 1)
+      }
+    })
+    nextPageBtn.addEventListener("click", () => {
+      if (currentPage + 1 !== totalPages) {
+        setCurrentPage(currentPage + 1)
+      }
+    })
+  }
+
+  function setCurrentPage(pageIndex) {
+    currentPage = pageIndex
+    homePage.tableBody.innerHTML = ''
+    setDataTable()
+    setCurrentPageStyles()
+    turnOnOffPrevNextButtons()
+  }
+
+  function setCurrentPageStyles() {
+    const prevActivePage = document.querySelector("li.page-item.active")
+    prevActivePage.classList.remove("active")
+
+    document.querySelectorAll(".page-link").forEach(pageLinkElement => {
+      const pageNewIndex = Number(pageLinkElement.getAttribute("page-index"));
+      if (pageNewIndex == currentPage + 1) {
+        const newActivePage = pageLinkElement.parentElement;
+        newActivePage.classList.add('active')
+      }
+    })
+  }
+
+  function turnOnOffPrevNextButtons() {
+    const prevPageBtn = document.getElementById("prevPageBtn")
+    const nextPageBtn = document.getElementById("nextPageBtn")
+    if (currentPage === 0) {
+      prevPageBtn.classList.add("disabled")
+    } else {
+      prevPageBtn.classList.remove("disabled")
+    }
+
+    if (currentPage + 1 === totalPages) {
+      nextPageBtn.classList.add("disabled")
+    } else {
+      nextPageBtn.classList.remove("disabled")
+    }
+  }
+
+  // LLenar la tabla con los datos
+
+  function setDataTable() {
+
+    let templateContent = homePage.template.content;
+
+    let start = currentPage * itemsPerPage
+    let end = start + itemsPerPage
+
+    const dataPerPage = totalData.slice(start, end)
+
+    dataPerPage.forEach(user => {
+      const tr = templateContent.cloneNode(true)
+
+      const nameCol = tr.querySelector(".template-name");
+      const lastNameCol = tr.querySelector(".template-lastName");
+      const countryCol = tr.querySelector(".template-country");
+      const phoneCol = tr.querySelector(".template-phone");
+      const dniCol = tr.querySelector(".template-dni");
+      const codCol = tr.querySelector(".template-cod");
+      const referenteCol = tr.querySelector(".template-referent");
+      const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+      const statusWebCol = tr.querySelector(".template-statusWeb");
+      const productCol = tr.querySelector(".template-product");
+      const statusRiskCol = tr.querySelector(".template-statusRisk");
+
+      const actionCol = tr.querySelector(".template-actions");
+      const editButton = tr.querySelector(".button-edit");
+
+      countryCol.textContent = user[1]
+      nameCol.textContent = user[2]
+      lastNameCol.textContent = user[3]
+      phoneCol.textContent = user[4]
+      dniCol.textContent = user[5]
+      codCol.textContent = user[6]
+      referenteCol.textContent = user[7]
+      dateOfFirstContactCol.textContent = user[8]
+      statusWebCol.textContent = user[9]
+      productCol.textContent = user[10]
+      statusRiskCol.textContent = user[11]
+
+      editButton.dataset.usuarioId = user[0]
+
+      homePage.tableBody.appendChild(tr);
+    })
+  }
+
+
+
+</script>

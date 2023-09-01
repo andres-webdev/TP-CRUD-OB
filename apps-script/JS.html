@@ -4,72 +4,6 @@
 
   // OB - Fallido --> Clientes
 
-  const userId = document.getElementById('userId')
-  const userName = document.getElementById('userName')
-  const userLastName = document.getElementById('userLastName')
-  const userPhone = document.getElementById('userPhone')
-  const userDni = document.getElementById('userDni')
-  const userCod = document.getElementById('userCod')
-  const userReferent = document.getElementById('userReferent')
-  const userStatusWeb = document.getElementById('userStatusWeb')
-  const userCountry = document.getElementById('userCountry')
-  const userProduct = document.getElementById('userProduct')
-  const userStatusRisk = document.getElementById('userStatusRisk')
-  const userDateOfFirstContact = document.getElementById('userDateOfFirstContact')
-
-  const comentCallTitle = document.getElementById("comentCallTitle")
-  const comentCallBtn = document.getElementById("comentCallBtn")
-  const createUserOBF = document.getElementById("createUserOBF")
-  const noComentsCall = document.getElementById('noComentsCall')
-  const comentsCallsContainer = document.getElementById("comentsCallsContainer")
-  const formValues = document.getElementById('createUser');
-  const phoneMsgValidation = document.getElementById("error-message-phone")
-  const countryMsgValidation = document.getElementById("error-message-country")
-  const tableBody = document.getElementById('tableBody-users');
-  const template = document.getElementById('rowTemplate')
-  const target = document.getElementById("inputSearchClient")
-  const searchloader = document.getElementById("searchClientLoader")
-  const formValuesComentsCall = document.getElementById('createComentsCall');
-  const agentName = document.getElementById("callAgentName")
-  const viaOfCalling = document.getElementById("callViaOfCalling")
-  const resultOfCalling = document.getElementById("callResults")
-  const statusClient = document.getElementById("callStatusClient")
-  const reasonToNotAfiliate = document.getElementById("callReasonToNotAfiliate")
-  const commentsOfCalling = document.getElementById("callComentsOfCalling")
-  const checkboxSendRequestToCredit = document.getElementById('chevkBoxEvalClient');
-  const comentsOfRequestToCredit = document.getElementById("comentsOfRequestToCredit")
-  const comentsOfRequestToCreditContainer = document.getElementById('comentsOfRequestToCreditContainer')
-
-  const errorAgentName = document.getElementById("error-message-agentName")
-  const errorCallViaOfCalling = document.getElementById("error-message-callViaOfCalling")
-  const errorCallResults = document.getElementById("error-message-callResults")
-  const errorCallStatusClient = document.getElementById("error-message-callStatusClient")
-  const errorCallReasonToNotAfiliate = document.getElementById("error-message-callReasonToNotAfiliate")
-  const errorCallComentsOfCalling = document.getElementById("error-message-callComentsOfCalling")
-  const errorComentsOfRequestToCredit = document.getElementById("error-message-comentsOfRequestToCredit")
-  const navPagesContgainer = document.getElementById("navPagesContgainer")
-  const userNameLogin = document.getElementById("userNameLogin")
-  const createClientModalBtn = document.getElementById("createClientModalBtn")
-
-  const sentRequestAgentName = document.getElementById("sentRequestAgentName")
-  const errorMessageSentRequestAgentName = document.getElementById("error-message-sentRequestAgentName")
-  const sendRequestComents = document.getElementById("sendRequestComents")
-  const errorMessageSendRequestComents = document.getElementById("error-message-sendRequestComents")
-  const sendRequestToEvalBtn = document.getElementById("sendToEvalToCreditsBtn")
-
-  const notificateToTheAgentBtn = document.getElementById("notificateToTheAgent")
-  const uploadImagesModalBtn = document.getElementById("uploadImagesModal")
-
-  const rowTemplateRequestToCredit = document.getElementById("rowTemplateRequestToCredit")
-  const requestSendedByClientTable = document.getElementById("requestSendedByClient")
-  const sendRequestResultComents = document.getElementById("sendRequestResultComents")
-  const sentNotificacionToAgent = document.getElementById("sentNotificacionToAgent")
-  const errorMessageSendResultComents = document.getElementById("error-message-sendRequestResultComents")
-  const errorAgentSendResult = document.getElementById("error-message-sentNotificacionToAgent")
-  const notificateToTheAgent = document.getElementById("notificateToTheAgentBtn")
-  const loadingResultOfCreditRequest = document.getElementById("loadingResultOfCreditRequest")
-  const sendResultOfCreditRequestBtn = document.getElementById("sendResultOfCreditRequestBtn")
-
   let infoResultOfTheRequest = {
     requestId: '',
     comentsByCredit: ''
@@ -79,22 +13,22 @@
 
   window.addEventListener('load', () => {
     searchData()
-    userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
+    userLogin.userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
     if (localStorage.getItem("role") === "agent") {
-      createClientModalBtn.classList.add("d-none")
-      userId.setAttribute("disabled", "")
-      userName.setAttribute("disabled", "")
-      userLastName.setAttribute("disabled", "")
-      userPhone.setAttribute("disabled", "")
-      userDni.setAttribute("disabled", "")
-      userCod.setAttribute("disabled", "")
-      userReferent.setAttribute("disabled", "")
-      userStatusWeb.setAttribute("disabled", "")
-      userCountry.setAttribute("disabled", "")
-      userProduct.setAttribute("disabled", "")
-      userStatusRisk.setAttribute("disabled", "")
-      userDateOfFirstContact.setAttribute("disabled", "")
-      createUserOBF.classList.add("d-none")
+      homePage.createClientModalBtn.classList.add("d-none")
+      userInputs.userId.setAttribute("disabled", "")
+      userInputs.userName.setAttribute("disabled", "")
+      userInputs.userLastName.setAttribute("disabled", "")
+      userInputs.userPhone.setAttribute("disabled", "")
+      userInputs.userDni.setAttribute("disabled", "")
+      userInputs.userCod.setAttribute("disabled", "")
+      userInputs.userReferent.setAttribute("disabled", "")
+      userInputs.userStatusWeb.setAttribute("disabled", "")
+      userInputs.userCountry.setAttribute("disabled", "")
+      userInputs.userProduct.setAttribute("disabled", "")
+      userInputs.userStatusRisk.setAttribute("disabled", "")
+      userInputs.userDateOfFirstContact.setAttribute("disabled", "")
+      clientMainModal.createUserOBF.classList.add("d-none")
     }
   })
 
@@ -103,257 +37,15 @@
     localStorage.clear();
   }
 
-  //Paginacion
-
-  let currentPage = 0
-  let itemsPerPage = 10
-  let totalData
-  let totalPages
-
-  function handleShowModalUser() {
-    formValues.reset()
-    comentsCallsContainer.innerHTML = ""
-    comentsCallsContainer.classList = "d-none"
-    comentCallTitle.classList = "d-none"
-    comentCallBtn.classList = "d-none"
-    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
-    phoneMsgValidation.classList = "invalid-message d-none"
-    userCountry.classList = "form-select"
-    countryMsgValidation.classList = "d-none"
-    noComentsCall.classList = "d-none"
-    sendRequestToEvalBtn.classList = "d-none"
-    userPhone.classList = "form-control"
-    notificateToTheAgentBtn.classList.add("d-none")
-    uploadImagesModalBtn.classList.add("d-none")
-
-
-    userPhone.addEventListener("keyup", (event) => {
-      if (validatePhoneNumber(event.target.value)) {
-        phoneMsgValidation.classList = "d-none"
-        userPhone.classList = "form-control"
-      } else {
-        userPhone.classList = "form-control invalid-input"
-        phoneMsgValidation.classList = "invalid-message"
-      }
-    })
-
-    userCountry.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        userCountry.classList = "form-select invalid-input"
-        countryMsgValidation.classList = "invalid-message"
-      } else {
-        countryMsgValidation.classList = "d-none"
-        userCountry.classList = "form-select"
-      }
-    })
-
-  }
-
   // Function que activa y desactiva el loader de los identificadores de los elementos
   function loadingBtnOnOff(btn, loader) {
     document.querySelector(`#${btn}`).classList.toggle("d-none")
     document.querySelector(`#${loader}`).classList.toggle("d-none")
   }
 
-  // Cuando se presiona el boton de editar, se obtienen los datos de la fila en cuestion para que sean mostrados en el formulario mostrando el modal para editarlos
-  function handleUpdateUserInfo(button) {
-
-    const tableRow = button.parentNode.parentNode;
-
-    const id = button.dataset.usuarioId;
-
-    const country = tableRow.cells[0].innerHTML;
-    const name = tableRow.cells[1].innerHTML;
-    const lastName = tableRow.cells[2].innerHTML;
-    const phone = tableRow.cells[3].innerHTML;
-    const dni = tableRow.cells[4].innerHTML;
-    const cod = tableRow.cells[5].innerHTML;
-    const referent = tableRow.cells[6].innerHTML;
-    const dateOfFirstContact = tableRow.cells[7].innerHTML;
-    const statusWeb = tableRow.cells[8].innerHTML;
-    const product = tableRow.cells[9].innerHTML;
-    const statusRisk = tableRow.cells[10].innerHTML;
-
-    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-    createModal.show()
-
-    userId.value = id;
-    userName.value = name;
-    userLastName.value = lastName;
-    userPhone.value = phone;
-    userDni.value = dni;
-    userCod.value = cod;
-    userReferent.value = referent;
-    userDateOfFirstContact.value = dateOfFirstContact;
-    userStatusWeb.value = statusWeb;
-    userCountry.value = country;
-    userProduct.value = product;
-    userStatusRisk.value = statusRisk;
-
-    // Estilos de los botones y labels
-    comentsCallsContainer.classList.remove("d-none")
-    userCountry.classList = "form-select"
-    countryMsgValidation.classList = "d-none"
-    noComentsCall.classList = "d-none"
-    comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
-    comentCallBtn.classList = "btn btn-outline-secondary"
-    createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-between"
-    phoneMsgValidation.classList = "d-none"
-    userPhone.classList = "form-control"
-    comentsOfRequestToCreditContainer.classList.add('d-none');
-    sendRequestToEvalBtn.classList = "btn btn-outline-secondary"
-    document.getElementById("sentRequestToAgentToCall").reset()
-
-    // Resetear valores de la tipificacion
-    formValuesComentsCall.reset()
-    formValuesComentsCall.classList.remove("was-validated")
-
-    notificateToTheAgentBtn.classList.remove("d-none")
-    uploadImagesModalBtn.classList.remove("d-none")
-
-    sentRequestToCreditsForm.reset()
-
-    getDataComentCalls(phone)
-  }
-
-  // Se llama la funcion cuando se presiona el boton de guardar, se valida el telefono y el pais
-  function handleSaveChanges(e) {
-
-    e.preventDefault()
-
-    if (userCountry.value === "") {
-      userCountry.classList = "form-select invalid-input"
-      countryMsgValidation.classList = "invalid-message"
-    }
-
-    let passInputValidation = validatePhoneNumber(userPhone.value) && userCountry.value.length > 0
-
-    if (validatePhoneNumber(userPhone.value)) {
-      userPhone.classList = "form-control"
-      phoneMsgValidation.classList = "d-none"
-    } else {
-      userPhone.classList = "form-control invalid-input"
-      phoneMsgValidation.classList = "invalid-message"
-    }
-
-    if (passInputValidation) {
-      validateForm()
-    }
-  }
-
-  // Validamos los datos del formulario y generamos dos casos, uno para crear el usuario y el otro para actualizar los datos del mismo
-  function validateForm() {
-    loadingBtnOnOff("createUserOBF", "loadingButton")
-
-    navPagesContgainer.classList = "d-none"
-
-    const form = {
-      userId: userId.value,
-      userName: userName.value,
-      userLastName: userLastName.value,
-      userPhone: userPhone.value,
-      userDni: userDni.value,
-      userCod: userCod.value,
-      userReferent: userReferent.value,
-      userDateOfFirstContact: userDateOfFirstContact.value,
-      userStatusWeb: userStatusWeb.value,
-      userCountry: userCountry.value,
-      userProduct: userProduct.value,
-      userStatusRisk: userStatusRisk.value,
-    }
-
-    if (form.userId === '') {
-      //Create Client
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingBtnOnOff("createUserOBF", "loadingButton")
-
-          searchData()
-          formValues.reset();
-          target.value = ""
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert('Usuario creado exitosamente!', 'success')
-        })
-        .addUser(form);
-    } else {
-      //Update Client
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingBtnOnOff("createUserOBF", "loadingButton")
-
-
-          if (target.value === "") {
-            searchData()
-          } else {
-            findClientByValue(target.value)
-            getNumberOfPages(result)
-            navPagesContgainer.classList = "position-static bottom-0 start-50"
-          }
-
-          formValues.reset()
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert('Usuario actualizado exitosamente!', 'success')
-        })
-        .editUser(form)
-    }
-  }
-
-  // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
-  function searchData() {
-
-    document.getElementById("updateDataTableBtn").setAttribute("disabled", "")
-
-    tableBody.innerHTML = ''
-    navPagesContgainer.classList = "d-none"
-
-    searchloader.classList.remove("d-none")
-
-    currentPage = 0
-
-    google.script.run
-      .withSuccessHandler(usersData => {
-
-        searchloader.classList = "d-none"
-        navPagesContgainer.classList = "position-static bottom-0 start-50"
-
-        getNumberOfPages(usersData)
-
-        totalData = usersData.reverse()
-
-        setDataTable()
-
-        document.getElementById("updateDataTableBtn").removeAttribute("disabled")
-
-      })
-      .readUsers()
-
-  }
-
-  // Valida el numero de telefono para que solo tenga numeros entres 9 y 10 en total
-  function validatePhoneNumber(phoneNumber) {
-
-    let phoneNumberTrim = phoneNumber.trim()
-
-    // Check if the phone number is nine digits long.
-    if (phoneNumberTrim.length < 9 || phoneNumberTrim.length > 10) {
-      return false;
-    }
-
-    // Check if the phone number only contains digits.
-    for (var i = 0; i < phoneNumberTrim.length; i++) {
-      if (phoneNumberTrim.charAt(i) !== "0" && phoneNumberTrim.charAt(i) !== "1" && phoneNumberTrim.charAt(i) !== "2" && phoneNumberTrim.charAt(i) !== "3" && phoneNumberTrim.charAt(i) !== "4" && phoneNumberTrim.charAt(i) !== "5" && phoneNumberTrim.charAt(i) !== "6" && phoneNumberTrim.charAt(i) !== "7" && phoneNumberTrim.charAt(i) !== "8" && phoneNumberTrim.charAt(i) !== "9") {
-        return false;
-      }
-    }
-    // The phone number is valid.
-    return true;
-  }
-
   // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
   function handleSaveAlert(message, type) {
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const alertPlaceholder = homePage.liveAlertPlaceholder
     const appendAlert = (message, type) => {
       const wrapper = document.createElement('div')
       wrapper.innerHTML = [
@@ -366,402 +58,43 @@
       alertPlaceholder.append(wrapper)
     }
 
-    const alertTrigger = document.getElementById('createUserOBF')
+    const alertTrigger = clientMainModal.createUserOBF
     if (alertTrigger) {
       appendAlert(message, type)
     }
   }
 
-  function handleRefreshTable() {
-    searchData()
-    target.value = ""
-  }
+  // Solicitudes de Evaluacion
+  // Funcion que llena la tabla con los valores recibidos
+  function setRequestDataTable(data) {
 
+    let templateContent = requestTableModal.rowTemplateRequestToCredit.content;
 
-  // Tipificaciones
+    data.forEach(user => {
+      const tr = templateContent.cloneNode(true)
 
-  // Funcion que muestra todas la tipificaciones realizadas tanto del drive reciente con del antigua, como historial para no perder datos
-  function getDataComentCalls(target) {
+      const id = tr.querySelector(".template-id");
+      const dateOfRequest = tr.querySelector(".template-dateOfRequest");
+      const timeOfRequest = tr.querySelector(".template-timeOfRequest")
+      const agentOfTheCase = tr.querySelector(".template-agentOfTheCase")
+      const comentsOfAgenteToCredits = tr.querySelector(".template-comentsOfAgenteToCredits")
+      const area = tr.querySelector(".template-area")
 
-    document.querySelector('#loadingComenstCall').classList.toggle("d-none")
-    comentsCallsContainer.innerHTML = ""
+      id.value = user[0]
+      dateOfRequest.textContent = user[5]
+      timeOfRequest.textContent = user[6]
+      agentOfTheCase.textContent = user[7]
+      comentsOfAgenteToCredits.textContent = user[8]
+      area.textContent = user[9]
 
-    google.script.run
-      .withSuccessHandler(({ newComentsCall, oldComentsCall }) => {
-        document.querySelector('#loadingComenstCall').classList.toggle("d-none")
-
-        let filterComentsCalls = newComentsCall
-          .filter(comentCall => comentCall[2] === target)
-          .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
-
-        const comentsCallTemplate = document.getElementById("comentsCallTemplate")
-        const templateItem = comentsCallTemplate.content;
-
-        filterComentsCalls.forEach((call, index) => {
-          const comentCallItem = templateItem.cloneNode(true)
-
-          const headerCallItem = comentCallItem.querySelector(".accordion-button")
-          const bodyCallItem = comentCallItem.querySelector(".accordion-body")
-
-          // Configuracion del acodion donde se muestran los comentarios de la llamada
-          headerCallItem.dataset.bsTarget = `#panel-${index}`
-          headerCallItem.setAttribute("aria-controls", `panel-${index}`)
-
-          if (index === 0) {
-            headerCallItem.classList = "accordion-button"
-            headerCallItem.setAttribute("aria-expanded", "true")
-            bodyCallItem.parentNode.classList = "accordion-collapse collapse show"
-          }
-
-          bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
-
-
-          // Contenedor del comentario de la llamada
-          headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
-
-          // Informacion adicional de la llamada
-          bodyCallItem.innerHTML =
-            `<div class="d-flex flex-column gap-2">
-              <div class="bg-transparent d-flex justify-content-between p-3" id="comentsCallDetailsCointainer">
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Medio de contacto: </p>
-                  <p class="fw-normal">${call[1] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Fecha: </p>
-                  <p class="fw-normal">${call[3]}</p>
-                </div>
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Hora: </p>
-                  <p class="fw-normal">${call[4]}</p>
-                </div>
-              </div>
-              <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
-                <div class="d-flex gap-2 px-2">
-                  <p class="fw-bolder">Resultado:</p>
-                  <p class="fw-normal">${call[5] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 px-2">
-                  <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
-                  <p class="fw-normal">${call[7] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
-                  <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
-                  <p class="fw-normal">${call[8] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
-                  <p class="fw-bolder text-wrap">Comentarios: </p>
-                  <p class="fw-normal">${call[6] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 mt-3 justify-content-center">
-                  <p class="fw-bolder text-wrap">Asesor: </p>
-                  <p class="fw-normal">${call[9] || "NULL"}</p>
-                </div>
-              </div>
-            </div>`
-
-          comentsCallsContainer.appendChild(comentCallItem)
-        })
-
-        generateOldComentsCall(templateItem, oldComentsCall, target)
-
-        // Aplicar estilos a las etiquelas para mayor informacion al usuario
-        if (filterComentsCalls.length > 0) {
-          comentsCallsContainer.classList = "accordion mt-0 mb-3"
-          noComentsCall.classList = "d-none"
-          comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
-        }
-
-        comentsCallsContainer.style.display = "block"
-
-      })
-      .readComentsCall()
-  }
-
-  // Funcion que muestra las tipificaciones creadas en el antiguio formulario y que se muestra como historial
-  function generateOldComentsCall(templateItem, oldComentsCall, target) {
-    const comentCallItem = templateItem.cloneNode(true)
-
-    const headerCallItem = comentCallItem.querySelector(".accordion-button")
-    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
-
-    headerCallItem.dataset.bsTarget = `#panel-old`
-    headerCallItem.setAttribute("aria-controls", `panel-old`)
-
-    bodyCallItem.parentNode.setAttribute("id", `panel-old`)
-
-    headerCallItem.textContent = "Tipificaciones antiguas"
-
-    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target) || -1
-
-    const sliceRowOldComentsCall = rowOldComentsCall !== -1 ? rowOldComentsCall.slice(12,) : -1
-
-    if (sliceRowOldComentsCall === -1 || sliceRowOldComentsCall.every(elem => elem === "")) {
-      comentsCallsContainer.classList.toggle("d-none")
-      noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
-      comentCallTitle.classList = "d-none"
-    } else {
-      comentsCallsContainer.classList = "accordion mt-0 mb-3"
-      let counterCalls = ""
-      sliceRowOldComentsCall.forEach((comentsCall, index) => {
-
-        if ((index + 1) % 3 === 0 && (index + 1) < 10) {
-          counterCalls +=
-            `
-            <div class="row my-0">
-              <div class="col-5 bg-transparent border border-0">
-                <p><strong>${Math.ceil(index / 3)}° Llamada - Fecha:</strong> ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p>
-              </div>
-              <div class="col bg-transparent border border-0">
-                <p><strong>Medio:</strong> ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p>
-              </div>
-              <div class="col-4 bg-transparent border border-0">
-                <p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
-              </div>
-            </div>
-            `
-        }
-      })
-
-      bodyCallItem.innerHTML =
-        `
-          <div class="d-flex flex-column px-3 mt-5 mb-2">
-            ${counterCalls}
-          </div>
-          <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
-            <div class="d-flex gap-2 px-2">
-              <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
-            </div>
-            <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
-              <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[11] || "Sin registro"}</p>
-            </div>
-            <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
-              <p class="fw-bolder text-wrap">Comentarios: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[9] || "Sin registro"}</p>
-            </div>
-            <div class="d-flex gap-2 mt-3 justify-content-center">
-              <p class="fw-bolder text-wrap">Asesor: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[12] || "Sin registro"}</p>
-            </div>
-          </div>
-        `
-
-      comentsCallsContainer.appendChild(comentCallItem)
-    }
-  }
-
-  // 
-
-  function handleModalComentsCall() {
-
-    agentName.addEventListener("keyup", (event) => {
-      if (event.target.value === "") {
-        agentName.classList = "form-control invalid-input"
-        errorAgentName.classList = "invalid-message"
-      } else {
-        errorAgentName.classList = "d-none"
-        agentName.classList = "form-control"
-      }
+      requestTableModal.requestSendedByClientTable.appendChild(tr);
     })
-
-    viaOfCalling.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        viaOfCalling.classList = "form-select invalid-input"
-        errorCallViaOfCalling.classList = "invalid-message"
-      } else {
-        errorCallViaOfCalling.classList = "d-none"
-        viaOfCalling.classList = "form-select"
-      }
-    })
-
-    resultOfCalling.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        resultOfCalling.classList = "form-select invalid-input"
-        errorCallResults.classList = "invalid-message"
-      } else {
-        errorCallResults.classList = "d-none"
-        resultOfCalling.classList = "form-select"
-      }
-    })
-
-    statusClient.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        statusClient.classList = "form-select invalid-input"
-        errorCallStatusClient.classList = "invalid-message"
-      } else {
-        errorCallStatusClient.classList = "d-none"
-        statusClient.classList = "form-select"
-      }
-    })
-
-    commentsOfCalling.addEventListener("keyup", (event) => {
-      if (event.target.value === "") {
-        commentsOfCalling.classList = "form-control invalid-input"
-        errorCallComentsOfCalling.classList = "invalid-message"
-      } else {
-        errorCallComentsOfCalling.classList = "d-none"
-        commentsOfCalling.classList = "form-control"
-      }
-    })
-
-    checkboxSendRequestToCredit.addEventListener('click', () => {
-      console.log('click');
-      if (checkboxSendRequestToCredit.checked) {
-        comentsOfRequestToCreditContainer.classList.remove('d-none');
-      } else {
-        comentsOfRequestToCreditContainer.classList.add('d-none');
-      }
-    });
-
-    comentsOfRequestToCredit.addEventListener("keyup", (event) => {
-      if (event.target.value === "") {
-        comentsOfRequestToCredit.classList = "form-control invalid-input"
-        errorComentsOfRequestToCredit.classList = "invalid-message"
-      } else {
-        errorComentsOfRequestToCredit.classList = "d-none"
-        comentsOfRequestToCredit.classList = "form-control"
-      }
-    })
-
-
-    agentName.classList = "form-control"
-    viaOfCalling.classList = "form-select"
-    resultOfCalling.classList = "form-select"
-    statusClient.classList = "form-select"
-    reasonToNotAfiliate.classList = "form-select"
-    commentsOfCalling.classList = "form-control"
-    comentsOfRequestToCredit.classList = "form-control"
-    errorAgentName.classList = "d-none"
-    errorCallViaOfCalling.classList = "d-none"
-    errorCallResults.classList = "d-none"
-    errorCallStatusClient.classList = "d-none"
-    errorCallComentsOfCalling.classList = "d-none"
-
-  }
-
-  // Funcion que muestra un modal para ingresar y guarda los datos de la tificacio, ademas muestra un alerta cuando se realiza correctamente
-  function addComentsCallHandler() {
-
-    loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
-
-    const form = {
-      clientPhone: userPhone.value,
-      callViaOfCalling: viaOfCalling.value,
-      callAgentName: agentName.value,
-      callResults: resultOfCalling.value,
-      callStatusClient: statusClient.value,
-      callReasonToNotAfiliate: reasonToNotAfiliate.value,
-      callComentsOfCalling: commentsOfCalling.value
-    }
-
-    google.script.run
-      .withSuccessHandler(result => {
-
-        loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
-        const createModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
-        createModal.hide();
-        handleSaveAlert('Tipificación creada exitosamente!', 'success')
-        formValuesComentsCall.reset()
-      })
-      .addComentsCall(form)
-
-    if (checkboxSendRequestToCredit.checked) {
-
-      const info = {
-        clientName: userName.value,
-        clientLastName: userLastName.value,
-        clientDni: userDni.value,
-        clientPhone: userPhone.value,
-        callAgentName: agentName.value,
-        commentsToEval: comentsOfRequestToCredit.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
-        slackUserName: localStorage.getItem("slackUserName")
-      }
-
-      sendRequestToCreditDepartment(info)
-    }
-
-  }
-
-
-  // Funcion que guarda las solucitudes de evaluacion al area de creditos
-  function sendRequestToCreditDepartment(info) {
-
-    google.script.run
-      .withSuccessHandler(result => {
-      })
-      .saveRequestToCredit(info)
-
-    google.script.run
-      .sendSlackMessage(info)
-  }
-
-  // Funcion que maneja el envio de la solicitud para la evaluacion de un cliente
-  function handleSendRequestToCredit(event) {
-    event.preventDefault()
-
-    if (sentRequestAgentName.value === "") {
-      sentRequestAgentName.classList = "form-control invalid-input"
-      errorMessageSentRequestAgentName.classList = "invalid-message"
-    } else if (sendRequestComents.value === "") {
-      sendRequestComents.classList = "form-control invalid-input"
-      errorMessageSendRequestComents.classList = "invalid-message"
-    } else {
-      sentRequestAgentName.classList = "form-control"
-      sendRequestComents.classList = "form-control"
-      errorMessageSentRequestAgentName.classList = "d-none"
-      errorMessageSendRequestComents.classList = "d-none"
-
-      const info = {
-        clientName: userName.value,
-        clientLastName: userLastName.value,
-        clientDni: userDni.value,
-        clientPhone: userPhone.value,
-        callAgentName: sentRequestAgentName.value,
-        commentsToEval: sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
-        slackUserName: localStorage.getItem("slackUserName")
-      }
-
-      sendRequestToCreditDepartment(info)
-
-      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
-      secondaryModal.hide();
-    }
-  }
-
-  function handleSendRequestToEvaluation() {
-    const primaryModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-    const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
-    primaryModal.hide();
-    secondaryModal.show();
-
-    sentRequestAgentName.addEventListener("keyup", (event) => {
-      if (event.target.value === "") {
-        sentRequestAgentName.classList = "form-control invalid-input"
-        errorMessageSentRequestAgentName.classList = "invalid-message"
-      } else {
-        errorMessageSentRequestAgentName.classList = "d-none"
-        sentRequestAgentName.classList = "form-control"
-      }
-    })
-
-    sendRequestComents.addEventListener("keyup", (event) => {
-      if (event.target.value === "") {
-        sendRequestComents.classList = "form-control invalid-input"
-        errorMessageSendRequestComents.classList = "invalid-message"
-      } else {
-        errorMessageSendRequestComents.classList = "d-none"
-        sendRequestComents.classList = "form-control"
-      }
-    })
-
   }
 
   // Funcion que muestra las solicitudes de creditos en una tabla
   function showRequestsCreditsInTable() {
 
-    requestSendedByClientTable.innerHTML =
+    requestTableModal.requestSendedByClientTable.innerHTML =
       `<tr>
         <td colspan="9">
         <div class="d-flex justify-content-center mt-5 mb-3" id="loadingResquestToCredit">
@@ -770,22 +103,25 @@
           </div>
         </div>
       </td>
-     </tr>
+    </tr>
     `
 
-    notificateToTheAgent.classList = "d-none"
+    requestTableModal.notificateToTheAgent.classList = "d-none"
 
     google.script.run
       .withSuccessHandler(requestData => {
 
-        requestSendedByClientTable.innerHTML = ""
+        requestTableModal.requestSendedByClientTable.innerHTML = ""
 
         if (requestData.length > 0) {
           setRequestDataTable(requestData)
           infoResultOfTheRequest.requestId = requestData[requestData.length - 1][0]
-          notificateToTheAgent.classList = "btn btn-primary"
+
+          if (localStorage.getItem("role") !== "agent") {
+            requestTableModal.notificateToTheAgent.classList = "btn btn-primary"
+          }
         } else {
-          requestSendedByClientTable.innerHTML =
+          requestTableModal.requestSendedByClientTable.innerHTML =
             `
           <tr style="text-align: center;">
             <td colspan="9">
@@ -797,357 +133,36 @@
 
 
       })
-      .readRequestToCreditByClient(userPhone.value)
+      .getAllRequestsByPhoneClient(userInputs.userPhone.value)
 
   }
 
   function handleSendNotificationResult() {
 
-    errorMessageSendResultComents.classList = "d-none"
-    errorAgentSendResult.classList = "d-none"
+    requestTableModal.errorMessageSendResultComents.classList = "d-none"
+    requestTableModal.errorAgentSendResult.classList = "d-none"
 
-    sentNotificacionToAgent.addEventListener("keyup", (event) => {
+    requestTableModal.sentNotificacionToAgent.addEventListener("keyup", (event) => {
       if (event.target.value === "") {
-        sentNotificacionToAgent.classList = "form-control invalid-input"
-        errorAgentSendResult.classList = "invalid-message"
+        requestTableModal.sentNotificacionToAgent.classList = "form-control invalid-input"
+        requestTableModal.errorAgentSendResult.classList = "invalid-message"
       } else {
-        errorAgentSendResult.classList = "d-none"
-        sentNotificacionToAgent.classList = "form-control"
+        requestTableModal.errorAgentSendResult.classList = "d-none"
+        requestTableModal.sentNotificacionToAgent.classList = "form-control"
       }
     })
 
-    sendRequestResultComents.addEventListener("keyup", (event) => {
+    requestTableModal.sendRequestResultComents.addEventListener("keyup", (event) => {
       if (event.target.value === "") {
-        sendRequestResultComents.classList = "form-control invalid-input"
-        errorMessageSendResultComents.classList = "invalid-message"
+        requestTableModal.sendRequestResultComents.classList = "form-control invalid-input"
+        requestTableModal.errorMessageSendResultComents.classList = "invalid-message"
       } else {
-        errorMessageSendResultComents.classList = "d-none"
-        sendRequestResultComents.classList = "form-control"
+        requestTableModal.errorMessageSendResultComents.classList = "d-none"
+        requestTableModal.sendRequestResultComents.classList = "form-control"
       }
     })
 
   }
-
-  // Funcion que llena la tabla con los valores recibidos
-  function setRequestDataTable(data) {
-
-    let templateContent = rowTemplateRequestToCredit.content;
-
-    data.forEach(user => {
-      const tr = templateContent.cloneNode(true)
-
-      const id = tr.querySelector(".template-id");
-      const nameCol = tr.querySelector(".template-name");
-      const lastNameCol = tr.querySelector(".template-lastName");
-      const phoneCol = tr.querySelector(".template-phone");
-      const dniCol = tr.querySelector(".template-dni");
-      const dateOfRequest = tr.querySelector(".template-dateOfRequest");
-      const timeOfRequest = tr.querySelector(".template-timeOfRequest")
-      const agentOfTheCase = tr.querySelector(".template-agentOfTheCase")
-      const comentsOfAgenteToCredits = tr.querySelector(".template-comentsOfAgenteToCredits")
-      const resultOfCredits = tr.querySelector(".template-resultOfCredits");
-
-      id.value = user[0]
-      nameCol.textContent = user[1]
-      lastNameCol.textContent = user[2]
-      dniCol.textContent = user[3]
-      phoneCol.textContent = user[4]
-      dateOfRequest.textContent = user[5]
-      timeOfRequest.textContent = user[6]
-      agentOfTheCase.textContent = user[7]
-      comentsOfAgenteToCredits.textContent = user[8]
-      resultOfCredits.textContent = !user[9] ? "Sin respuesta" : user[9]
-
-      requestSendedByClientTable.appendChild(tr);
-    })
-  }
-
-  // Funcion que guarda la respuesta de creditos y envia el mensaje al canal de slack para continuar con el proceso
-  function handleResultOfCreditRequest() {
-
-    infoResultOfTheRequest.comentsByCredit = sendRequestResultComents.value
-
-
-    if (sentNotificacionToAgent.value === "") {
-      sentNotificacionToAgent.classList = "form-control invalid-input"
-      errorAgentSendResult.classList = "invalid-message"
-    } else if (sendRequestResultComents.value === "") {
-      sendRequestResultComents.classList = "form-control invalid-input"
-      errorMessageSendResultComents.classList = "invalid-message"
-    } else {
-
-      const createModal = bootstrap.Modal.getOrCreateInstance('#fifthModal');
-      loadingResultOfCreditRequest.classList.remove("d-none")
-      sendResultOfCreditRequestBtn.classList.add("d-none")
-
-      const info = {
-        clientName: userName.value,
-        clientLastName: userLastName.value,
-        clientPhone: userPhone.value,
-        clientDni: userDni.value,
-        //agent: agentName.value,
-        //comentsAgent: comentsOfRequestToCredit.value,
-        slackUserNameAgent: "@Andres Marquez",
-        slackUserNameCredit: "@Andres Marquez",
-        creditos: "Martin",
-        commentsCredits: sendRequestResultComents.value
-      }
-
-      google.script.run
-        .withSuccessHandler(result => {
-          if (Array.isArray(result)) {
-            info.agent = result[result.length - 1][7]
-            info.comentsAgent = result[result.length - 1][8]
-
-            google.script.run
-              .withSuccessHandler(result => {
-                sentNotificacionToAgent.classList = "form-control"
-                sendRequestResultComents.classList = "form-control"
-                errorMessageSendResultComents.classList = "d-none"
-                errorAgentSendResult.classList = "d-none"
-                loadingResultOfCreditRequest.classList.add("d-none")
-                sendResultOfCreditRequestBtn.classList.remove("d-none")
-
-                google.script.run
-                  .sendSlackMessageOfResult(info)
-
-                createModal.hide();
-              })
-              .updateResultOfRequest(infoResultOfTheRequest)
-          } else {
-            console.log("Error")
-          }
-        })
-        .readRequestToCreditByClient(userPhone.value)
-
-
-
-
-    }
-
-  }
-
-
-  // Funcion que maneja las acciones cuando se guardan las tipificaciones
-  function handleSaveComentsCall(event) {
-
-    event.preventDefault()
-
-    if (agentName.value === "") {
-      agentName.classList = "form-select invalid-input"
-      errorAgentName.classList = "invalid-message"
-    } else if (viaOfCalling.value === "") {
-      viaOfCalling.classList = "form-select invalid-input"
-      errorCallViaOfCalling.classList = "invalid-message"
-    } else if (resultOfCalling.value === "") {
-      resultOfCalling.classList = "form-select invalid-input"
-      errorCallResults.classList = "invalid-message"
-    } else if (statusClient.value === "") {
-      statusClient.classList = "form-select invalid-input"
-      errorCallStatusClient.classList = "invalid-message"
-    } else if (commentsOfCalling.value === "") {
-      commentsOfCalling.classList = "form-control invalid-input"
-      errorCallComentsOfCalling.classList = "invalid-message"
-    } else if (comentsOfRequestToCredit.value === "") {
-      comentsOfRequestToCredit.classList = "form-control invalid-input"
-      errorComentsOfRequestToCredit.classList = "invalid-message"
-    } else {
-      agentName.classList = "form-control"
-      viaOfCalling.classList = "form-select"
-      resultOfCalling.classList = "form-select"
-      statusClient.classList = "form-select"
-      commentsOfCalling.classList = "form-control"
-      comentsOfRequestToCredit.classList = "form-control"
-      errorAgentName.classList = "d-none"
-      errorCallViaOfCalling.classList = "d-none"
-      errorCallResults.classList = "d-none"
-      errorCallStatusClient.classList = "d-none"
-      errorCallComentsOfCalling.classList = "d-none"
-      errorComentsOfRequestToCredit.classList = "d-none"
-
-      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
-      const confirmCommentsCallModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
-      secondaryModal.hide();
-      confirmCommentsCallModal.show();
-
-    }
-
-  }
-
-  // Buscador
-
-  // Funcion que busca y muestra las informacion de un cliente
-  function handleFindClientByValue(event) {
-
-    event.preventDefault()
-
-    findClientByValue(target.value)
-  }
-
-  function findClientByValue(target) {
-
-    document.getElementById("searchClientInputBtn").setAttribute("disabled", "")
-
-    tableBody.innerHTML = ''
-
-    searchloader.classList.remove("d-none")
-
-    navPagesContgainer.classList = "d-none"
-
-    google.script.run
-      .withSuccessHandler(userData => {
-
-        let templateContent = template.content;
-
-        searchloader.classList = "d-none"
-        navPagesContgainer.classList = "position-static bottom-0 start-50"
-
-        getNumberOfPages(userData)
-
-        totalData = userData.reverse()
-
-        setDataTable()
-
-        document.getElementById("searchClientInputBtn").removeAttribute("disabled")
-      })
-      .findUserByValue(target)
-  }
-
-  // Paginacion
-
-  function getNumberOfPages(usersList) {
-    const listOfPages = document.getElementById("listOfPages")
-    totalPages = Math.ceil((usersList.length / itemsPerPage))
-
-    let listOfPagesBtn = ""
-
-    for (let i = 0; i < totalPages; i++) {
-
-      listOfPagesBtn +=
-        `<li class="page-item ${currentPage === i ? "active" : ""}"><a class="page-link" role="button" page-index=${i + 1}>${i + 1}</a></li>`
-
-    }
-
-    listOfPages.innerHTML =
-      ` <li class="page-item">
-        <li class="page-item disabled" id="prevPageBtn">
-          <a class="page-link rounded-start"  role="button">Anterior</a>
-        </li>
-        ${listOfPagesBtn}
-        <li class="page-item" id="nextPageBtn">
-          <a class="page-link" role="button">Siguiente</a>
-      </li>
-      `
-
-    document.querySelectorAll(".page-link").forEach(pageLink => {
-      const pageIndex = Number(pageLink.getAttribute("page-index"))
-
-      if (pageIndex) {
-        pageLink.addEventListener("click", () => {
-          setCurrentPage(pageIndex - 1)
-        })
-      }
-    })
-
-    const prevPageBtn = document.getElementById("prevPageBtn")
-    const nextPageBtn = document.getElementById("nextPageBtn")
-
-    prevPageBtn.addEventListener("click", () => {
-      if (currentPage !== 0) {
-        setCurrentPage(currentPage - 1)
-      }
-    })
-    nextPageBtn.addEventListener("click", () => {
-      if (currentPage + 1 !== totalPages) {
-        setCurrentPage(currentPage + 1)
-      }
-    })
-  }
-
-  function setCurrentPage(pageIndex) {
-    currentPage = pageIndex
-    tableBody.innerHTML = ''
-    setDataTable()
-    setCurrentPageStyles()
-    turnOnOffPrevNextButtons()
-  }
-
-  function setCurrentPageStyles() {
-    const prevActivePage = document.querySelector("li.page-item.active")
-    prevActivePage.classList.remove("active")
-
-    document.querySelectorAll(".page-link").forEach(pageLinkElement => {
-      const pageNewIndex = Number(pageLinkElement.getAttribute("page-index"));
-      if (pageNewIndex == currentPage + 1) {
-        const newActivePage = pageLinkElement.parentElement;
-        newActivePage.classList.add('active')
-      }
-    })
-  }
-
-  function turnOnOffPrevNextButtons() {
-    const prevPageBtn = document.getElementById("prevPageBtn")
-    const nextPageBtn = document.getElementById("nextPageBtn")
-    if (currentPage === 0) {
-      prevPageBtn.classList.add("disabled")
-    } else {
-      prevPageBtn.classList.remove("disabled")
-    }
-
-    if (currentPage + 1 === totalPages) {
-      nextPageBtn.classList.add("disabled")
-    } else {
-      nextPageBtn.classList.remove("disabled")
-    }
-  }
-
-  // LLenar la tabla con los datos
-
-  function setDataTable() {
-
-    let templateContent = template.content;
-
-    let start = currentPage * itemsPerPage
-    let end = start + itemsPerPage
-
-    const dataPerPage = totalData.slice(start, end)
-
-    dataPerPage.forEach(user => {
-      const tr = templateContent.cloneNode(true)
-
-      const nameCol = tr.querySelector(".template-name");
-      const lastNameCol = tr.querySelector(".template-lastName");
-      const countryCol = tr.querySelector(".template-country");
-      const phoneCol = tr.querySelector(".template-phone");
-      const dniCol = tr.querySelector(".template-dni");
-      const codCol = tr.querySelector(".template-cod");
-      const referenteCol = tr.querySelector(".template-referent");
-      const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
-      const statusWebCol = tr.querySelector(".template-statusWeb");
-      const productCol = tr.querySelector(".template-product");
-      const statusRiskCol = tr.querySelector(".template-statusRisk");
-
-      const actionCol = tr.querySelector(".template-actions");
-      const editButton = tr.querySelector(".button-edit");
-
-      countryCol.textContent = user[1]
-      nameCol.textContent = user[2]
-      lastNameCol.textContent = user[3]
-      phoneCol.textContent = user[4]
-      dniCol.textContent = user[5]
-      codCol.textContent = user[6]
-      referenteCol.textContent = user[7]
-      dateOfFirstContactCol.textContent = user[8]
-      statusWebCol.textContent = user[9]
-      productCol.textContent = user[10]
-      statusRiskCol.textContent = user[11]
-
-      editButton.dataset.usuarioId = user[0]
-
-      tableBody.appendChild(tr);
-    })
-  }
-
 
 
 </script>
