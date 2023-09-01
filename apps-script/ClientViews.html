@@ -71,6 +71,7 @@
     const statusWeb = tableRow.cells[8].innerHTML;
     const product = tableRow.cells[9].innerHTML;
     const statusRisk = tableRow.cells[10].innerHTML;
+    const departmentAssignedName = tableRow.cells[11].innerHTML;
 
     const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
     createModal.show()
@@ -87,6 +88,13 @@
     userInputs.userCountry.value = country;
     userInputs.userProduct.value = product;
     userInputs.userStatusRisk.value = statusRisk;
+    clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
+
+    if(departmentAssignedName === "Call-Center"){
+      clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #E9F5FF; color: black; font-weight: normal;"
+    } else {
+      clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #FFF1E9; color: black; font-weight: normal;"
+    }
 
     // Estilos de los botones y labels
     clientMainModal.comentsCallsContainer.classList.remove("d-none")
@@ -318,6 +326,8 @@
     google.script.run
       .withSuccessHandler(usersData => {
 
+        console.log(usersData)
+
         homePage.searchloader.classList = "d-none"
         homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
 
@@ -531,6 +541,7 @@
       const statusWebCol = tr.querySelector(".template-statusWeb");
       const productCol = tr.querySelector(".template-product");
       const statusRiskCol = tr.querySelector(".template-statusRisk");
+      const departmentAssigned = tr.querySelector(".template-departmentAssigned");
 
       const actionCol = tr.querySelector(".template-actions");
       const editButton = tr.querySelector(".button-edit");
@@ -546,6 +557,7 @@
       statusWebCol.textContent = user[9]
       productCol.textContent = user[10]
       statusRiskCol.textContent = user[11]
+      departmentAssigned.textContent = user[12]
 
       editButton.dataset.usuarioId = user[0]
 

@@ -1,6 +1,6 @@
 // Obtenemos los valores del rango seleccionando solo los datos del cliente
 function readUsers() {
-  const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 12).getDisplayValues();
+  const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 13).getDisplayValues();
   if (userData.length === 0) {
     return "No hay registros para mostrar"
   }

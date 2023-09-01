@@ -26,7 +26,8 @@ function addUser(form) {
     dateOfFirstContact,
     statusWeb,
     product,
-    statusRisk
+    statusRisk,
+    "Call-Center"
   ]);
 
   let clientFolderImages = DriveApp.getFolderById("1afzW-Hw2-hZYD-DMZz2LQlL9w7HHWUE3")
@@ -34,7 +35,7 @@ function addUser(form) {
   const linkToFolder = `https://drive.google.com/drive/folders/${subClientFolderImages.getId()}`
 
   const fila = searchRow(id, sheetsObFallidos);
-  sheetsObFallidos.getRange(fila, 26, 1, 1).setValues([[
+  sheetsObFallidos.getRange(fila, 27, 1, 1).setValues([[
     linkToFolder
   ]])
 

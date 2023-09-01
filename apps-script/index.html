@@ -98,6 +98,7 @@
             <td>Estaus Web</td>
             <td>Producto</td>
             <td>Estatus Riesgo</td>
+            <td>En Gestion</td>
             <td>Acciones</td>
           </tr>
         </thead>
@@ -132,6 +133,7 @@
       <td class="template-statusWeb"></td>
       <td class="template-product"></td>
       <td class="template-statusRisk"></td>
+      <td class="template-departmentAssigned"></td>
       <td class="template-actions text-center">
         <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="handleUpdateUserInfo(this)">
         </i>
@@ -144,6 +146,8 @@
     aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+        <span class="position-absolute start-50 translate-middle-x badge rounded-pill" id="labelDepartmentAssigned"></span>
+        <span class="badge rounded-pill text-bg-primary"></span>
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="createModalLabel">🪪 Cliente</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
