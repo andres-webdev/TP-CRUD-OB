@@ -311,7 +311,7 @@
     }
   }
 
-  // Buscamos los datos de la tabla y lo mostramos en un template predefinido para posteriormente mostralos
+  // Buscamos los datos de la tabla y lo mostramos en un template predefinido
   function searchData() {
 
     homePage.updateDataTableBtn.setAttribute("disabled", "")
@@ -321,12 +321,10 @@
 
     homePage.searchloader.classList.remove("d-none")
 
-    currentPage = 0
+    currentPage = 0 // Error en el Buscador
 
     google.script.run
       .withSuccessHandler(usersData => {
-
-        console.log(usersData)
 
         homePage.searchloader.classList = "d-none"
         homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
@@ -566,5 +564,42 @@
   }
 
 
+  // Filtrado
+  // Fecha
+  filterElements.inputDateForSearchingBtn.addEventListener("click", () => {
+
+    const date = filterElements.inputDateForSearching.value
+
+    homePage.updateDataTableBtn.setAttribute("disabled", "")
+    filterElements.inputDateForSearchingBtn.setAttribute("disabled", "")
+
+    homePage.tableBody.innerHTML = ''
+    homePage.navPagesContgainer.classList = "d-none"
+
+    homePage.searchloader.classList.remove("d-none")
+
+    currentPage = 0 // Error en el Buscador
+
+    google.script.run
+      .withSuccessHandler(usersData => {
+
+        console.log(usersData)
+
+        homePage.searchloader.classList = "d-none"
+        homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+
+        getNumberOfPages(usersData)
+
+        totalData = usersData.reverse()
+
+        setDataTable()
+
+        homePage.updateDataTableBtn.removeAttribute("disabled")
+        filterElements.inputDateForSearchingBtn.removeAttribute("disabled")
+
+      })
+      .getAllClientsByDate(date)
+
+  })
 
 </script>

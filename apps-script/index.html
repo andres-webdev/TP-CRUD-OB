@@ -18,27 +18,6 @@
               src="https://res.cloudinary.com/dp3chx1yj/image/upload/v1692842604/Tienda%20Pago/tp-logo_cmtnqw.png"
               alt="Logogtipo-Tienda-Pago" />
           </a>
-          <!--  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
-            aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button> 
-          <div class="btn-group mx-4 dropdown-toggle show" id="navbarNavDarkDropdown">
-            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Drives
-            </button>
-            <ul class="dropdown-menu dropdown-menu-light">
-              <li>
-                <a class="dropdown-item py-2 pe-5 ps-3" href="#">OB-Completado</a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2 pe-5 ps-3" href="#">OB-Fallido</a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2 pe-5 ps-3" href="#">Otros...</a>
-              </li>
-            </ul>
-          </div>-->
-
         </div>
         <p class="mt-3 p-0 fs-5 fw-bold text-primary-emphasis" id="titleDrive">OB
           Fallidos</p>
@@ -56,18 +35,216 @@
           data-bs-target="#createModal" onclick="handleShowModalUser()"><i class="bi bi-plus-lg"></i> Agregar</button>
 
         <!-- Filtros de la tabla -->
-        <div class="btn-group">
-          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-            aria-expanded="false">
+        <div class="dropdown">
+          <button
+            type="button"
+            class="btn btn-outline-success dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            data-bs-auto-close="outside"
+          >
             Filtros
           </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Fecha</a></li>
-            <li><a class="dropdown-item" href="#">Pais</a></li>
-            <li><a class="dropdown-item" href="#">Estatus web</a></li>
-            <li><a class="dropdown-item" href="#">Estatus riesgo</a></li>
-            <li><a class="dropdown-item" href="#">Producto</a></li>
-          </ul>
+          <div class="dropdown-menu p-4" style="width:220px;">
+            <ul
+              class="d-flex flex-column gap-1 p-0 m-0 align-center"
+              style="list-style: none; padding: 0; gap: 0.4rem"
+            >
+              <li>
+                <p class="d-inline-flex">
+                  <a
+                    class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="collapse"
+                    href="#sortByDateField"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="sortByDateField"
+                  >
+                    Fecha
+                  </a>
+                </p>
+                <div
+                  class="collapse mb-4"
+                  id="sortByDateField"
+                >
+                  <div class="d-flex flex-column justify-content-center">
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="inputDateForSearching"
+                      name="inputDateForSearching"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3"
+                      id="inputDateForSearchingBtn"
+                      style="
+                        --bs-btn-padding-y: 0.15rem;
+                        --bs-btn-padding-x: 0.25rem;
+                        --bs-btn-font-size: 0.75rem;
+                      "
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a
+                    class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="collapse"
+                    href="#sortByCountryField"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="sortByCountryField"
+                  >
+                    Pais
+                  </a>
+                </p>
+                <div
+                  class="collapse mb-4"
+                  id="sortByCountryField"
+                >
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByCountryField" name="inputSortByCountryField">
+                      <option selected disabled value="">Selecciona un pais</option>
+                      <option value="PE">PE</option>
+                      <option value="MX">MX</option>
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3"
+                      id="inputSortByCountryFieldBtn"
+                      style="
+                        --bs-btn-padding-y: 0.15rem;
+                        --bs-btn-padding-x: 0.25rem;
+                        --bs-btn-font-size: 0.75rem;
+                      "
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a
+                    class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="collapse"
+                    href="#sortByStatusRiskField"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="sortByStatusRiskField"
+                  >
+                    Estatus riesgo
+                  </a>
+                </p>
+                <div
+                  class="collapse mb-4"
+                  id="sortByStatusRiskField"
+                >
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByStatusRiskField" name="inputSortByStatusRiskField">
+                      <option selected disabled value="NULL">Estatus Riesgo</option>
+                      <option value="DNI y Docs">DNI y Docs</option>
+                      <option value="Califica">Califica</option>
+                      <option value="No califica">No califica</option>
+                      <option value="Por terminar OBWeb">Por terminar OBWeb</option>
+                      <option value="Cliente afiliado">Cliente afiliado</option>
+                      <option value="Cliente Prueba">Cliente Prueba</option>
+                      <option value="CURP Inválido">CURP Inválido</option>
+                      <option value="OB_web_cul">OB_web_cul</option>
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3"
+                      id="inputSortByStatusRiskFieldBtn"
+                      style="
+                        --bs-btn-padding-y: 0.15rem;
+                        --bs-btn-padding-x: 0.25rem;
+                        --bs-btn-font-size: 0.75rem;
+                      "
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a
+                    class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="collapse"
+                    href="#sortByProductField"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="sortByProductField"
+                  >
+                    Producto
+                  </a>
+                </p>
+                <div class="collapse mb-4" id="sortByProductField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByProductField" name="inputSortByProductField">
+                      <option selected disabled value="NULL">Producto</option>
+                      <option value="P7">P7</option>
+                      <option value="Prestamo Personal">Prestamo Personal</option>
+                      <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
+                      <option value="Servicios Digitales-PE">Servicios Digitales-PE</option>
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3"
+                      id="inputSortByProductFieldBtn"
+                      style="
+                        --bs-btn-padding-y: 0.15rem;
+                        --bs-btn-padding-x: 0.25rem;
+                        --bs-btn-font-size: 0.75rem;
+                      "
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a
+                    class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="collapse"
+                    href="#sortByGestionField"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="sortByGestionField"
+                  >
+                    En Gestion
+                  </a>
+                </p>
+                <div class="collapse" id="sortByGestionField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Department" id="inputSortByGestionField" name="inputSortByGestionField">
+                      <option selected disabled value="">En gestion con</option>
+                      <option value="Call-Center">Call-Center</option>
+                      <option value="Creditos">Creditos</option>
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-3"
+                      id="inputSortByGestionFieldBtn"
+                      style="
+                        --bs-btn-padding-y: 0.15rem;
+                        --bs-btn-padding-x: 0.25rem;
+                        --bs-btn-font-size: 0.75rem;
+                      "
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <button type="button" class="btn btn-outline-secondary" onclick="handleRefreshTable()"
