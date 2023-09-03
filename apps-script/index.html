@@ -36,117 +36,55 @@
 
         <!-- Filtros de la tabla -->
         <div class="dropdown">
-          <button
-            type="button"
-            class="btn btn-outline-success dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            data-bs-auto-close="outside"
-          >
+          <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false" data-bs-auto-close="outside" onclick="handleFilterModalBtn()" id="filtersModalBtn">
             Filtros
           </button>
-          <div class="dropdown-menu p-4" style="width:220px;">
-            <ul
-              class="d-flex flex-column gap-1 p-0 m-0 align-center"
-              style="list-style: none; padding: 0; gap: 0.4rem"
-            >
+          <div class="dropdown-menu p-4" style="width:220px;" id="filtersModal">
+            <ul class="d-flex flex-column gap-1 p-0 m-0 align-center" style="list-style: none; padding: 0; gap: 0.4rem">
               <li>
                 <p class="d-inline-flex">
-                  <a
-                    class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="collapse"
-                    href="#sortByDateField"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="sortByDateField"
-                  >
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByDateField"
+                    role="button" aria-expanded="true" aria-controls="sortByDateField">
                     Fecha
                   </a>
                 </p>
-                <div
-                  class="collapse mb-4"
-                  id="sortByDateField"
-                >
+                <div class="collapse mb-4" id="sortByDateField">
                   <div class="d-flex flex-column justify-content-center">
-                    <input
-                      type="date"
-                      class="form-control"
-                      id="inputDateForSearching"
-                      name="inputDateForSearching"
-                    />
-                    <button
-                      type="button"
-                      class="btn btn-primary mt-3"
-                      id="inputDateForSearchingBtn"
-                      style="
-                        --bs-btn-padding-y: 0.15rem;
-                        --bs-btn-padding-x: 0.25rem;
-                        --bs-btn-font-size: 0.75rem;
-                      "
-                    >
-                      Filtrar
-                    </button>
+                    <input type="date" class="form-control" id="inputDateForSearching" name="inputDateForSearching" />
                   </div>
                 </div>
               </li>
               <li>
                 <p class="d-inline-flex">
-                  <a
-                    class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="collapse"
-                    href="#sortByCountryField"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="sortByCountryField"
-                  >
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByCountryField"
+                    role="button" aria-expanded="true" aria-controls="sortByCountryField">
                     Pais
                   </a>
                 </p>
-                <div
-                  class="collapse mb-4"
-                  id="sortByCountryField"
-                >
+                <div class="collapse mb-4" id="sortByCountryField">
                   <div class="d-flex flex-column justify-content-center">
-                    <select class="form-select" aria-label="Sort by Country" id="inputSortByCountryField" name="inputSortByCountryField">
-                      <option selected disabled value="">Selecciona un pais</option>
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByCountryField"
+                      name="inputSortByCountryField">
+                      <option selected value="">Selecciona un pais</option>
                       <option value="PE">PE</option>
                       <option value="MX">MX</option>
                     </select>
-                    <button
-                      type="button"
-                      class="btn btn-primary mt-3"
-                      id="inputSortByCountryFieldBtn"
-                      style="
-                        --bs-btn-padding-y: 0.15rem;
-                        --bs-btn-padding-x: 0.25rem;
-                        --bs-btn-font-size: 0.75rem;
-                      "
-                    >
-                      Filtrar
-                    </button>
                   </div>
                 </div>
               </li>
               <li>
                 <p class="d-inline-flex">
-                  <a
-                    class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="collapse"
-                    href="#sortByStatusRiskField"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="sortByStatusRiskField"
-                  >
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByStatusRiskField"
+                    role="button" aria-expanded="true" aria-controls="sortByStatusRiskField">
                     Estatus riesgo
                   </a>
                 </p>
-                <div
-                  class="collapse mb-4"
-                  id="sortByStatusRiskField"
-                >
+                <div class="collapse mb-4" id="sortByStatusRiskField">
                   <div class="d-flex flex-column justify-content-center">
-                    <select class="form-select" aria-label="Sort by Country" id="inputSortByStatusRiskField" name="inputSortByStatusRiskField">
-                      <option selected disabled value="NULL">Estatus Riesgo</option>
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByStatusRiskField"
+                      name="inputSortByStatusRiskField">
+                      <option selected value="">Estatus Riesgo</option>
                       <option value="DNI y Docs">DNI y Docs</option>
                       <option value="Califica">Califica</option>
                       <option value="No califica">No califica</option>
@@ -156,94 +94,61 @@
                       <option value="CURP Inválido">CURP Inválido</option>
                       <option value="OB_web_cul">OB_web_cul</option>
                     </select>
-                    <button
-                      type="button"
-                      class="btn btn-primary mt-3"
-                      id="inputSortByStatusRiskFieldBtn"
-                      style="
-                        --bs-btn-padding-y: 0.15rem;
-                        --bs-btn-padding-x: 0.25rem;
-                        --bs-btn-font-size: 0.75rem;
-                      "
-                    >
-                      Filtrar
-                    </button>
                   </div>
                 </div>
               </li>
               <li>
                 <p class="d-inline-flex">
-                  <a
-                    class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="collapse"
-                    href="#sortByProductField"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="sortByProductField"
-                  >
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByProductField"
+                    role="button" aria-expanded="true" aria-controls="sortByProductField">
                     Producto
                   </a>
                 </p>
                 <div class="collapse mb-4" id="sortByProductField">
                   <div class="d-flex flex-column justify-content-center">
-                    <select class="form-select" aria-label="Sort by Country" id="inputSortByProductField" name="inputSortByProductField">
-                      <option selected disabled value="NULL">Producto</option>
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByProductField"
+                      name="inputSortByProductField">
+                      <option selected value="">Producto</option>
                       <option value="P7">P7</option>
                       <option value="Prestamo Personal">Prestamo Personal</option>
                       <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
                       <option value="Servicios Digitales-PE">Servicios Digitales-PE</option>
                     </select>
-                    <button
-                      type="button"
-                      class="btn btn-primary mt-3"
-                      id="inputSortByProductFieldBtn"
-                      style="
-                        --bs-btn-padding-y: 0.15rem;
-                        --bs-btn-padding-x: 0.25rem;
-                        --bs-btn-font-size: 0.75rem;
-                      "
-                    >
-                      Filtrar
-                    </button>
                   </div>
                 </div>
               </li>
               <li>
                 <p class="d-inline-flex">
-                  <a
-                    class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="collapse"
-                    href="#sortByGestionField"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="sortByGestionField"
-                  >
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByGestionField"
+                    role="button" aria-expanded="true" aria-controls="sortByGestionField">
                     En Gestion
                   </a>
                 </p>
                 <div class="collapse" id="sortByGestionField">
                   <div class="d-flex flex-column justify-content-center">
-                    <select class="form-select" aria-label="Sort by Department" id="inputSortByGestionField" name="inputSortByGestionField">
-                      <option selected disabled value="">En gestion con</option>
+                    <select class="form-select" aria-label="Sort by Department" id="inputSortByGestionField"
+                      name="inputSortByGestionField">
+                      <option selected value="">En gestion con</option>
                       <option value="Call-Center">Call-Center</option>
                       <option value="Creditos">Creditos</option>
                     </select>
-                    <button
-                      type="button"
-                      class="btn btn-primary mt-3"
-                      id="inputSortByGestionFieldBtn"
-                      style="
-                        --bs-btn-padding-y: 0.15rem;
-                        --bs-btn-padding-x: 0.25rem;
-                        --bs-btn-font-size: 0.75rem;
-                      "
-                    >
-                      Filtrar
-                    </button>
                   </div>
                 </div>
               </li>
             </ul>
+            <button type="button" class="btn btn-primary mt-3 w-100" id="inputFiltersBtn" style="
+                --bs-btn-padding-y: 0.15rem;
+                --bs-btn-padding-x: 0.25rem;
+                --bs-btn-font-size: 0.75rem;
+              ">
+              Filtrar
+            </button>
+            <button type="button" class="btn btn-light mt-2 w-100" id="resetFiltersBtn" onclick="handleResetFilters()"
+              style="
+              --bs-btn-padding-y: 0.10rem;
+              --bs-btn-padding-x: 0.20rem;
+              --bs-btn-font-size: 0.70rem;
+            ">Restaurar filtros</button>
           </div>
         </div>
 
@@ -323,7 +228,8 @@
     aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <span class="position-absolute start-50 translate-middle-x badge rounded-pill" id="labelDepartmentAssigned"></span>
+        <span class="position-absolute start-50 translate-middle-x badge rounded-pill"
+          id="labelDepartmentAssigned"></span>
         <span class="badge rounded-pill text-bg-primary"></span>
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="createModalLabel">🪪 Cliente</h1>
@@ -439,8 +345,8 @@
             </ul>
           </div>
 
-          <p class="fw-normal text-info-emphasis d-flex justify-content-center mt-1 mb-3 d-none" style="font-size: 0.85rem;"
-            id="noRequestsToCredit">Sin solicitudes</p><!-- NADA -->
+          <p class="fw-normal text-info-emphasis d-flex justify-content-center mt-1 mb-3 d-none"
+            style="font-size: 0.85rem;" id="noRequestsToCredit">Sin solicitudes</p><!-- NADA -->
           <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingRequestHistory">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Cargando tipificaciones...</span>
@@ -454,11 +360,11 @@
             id="noComentsCall">No hay
             tipificaciones
             registradas</p>
-            <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
-              <div class="spinner-border" role="status">
-                <span class="visually-hidden">Cargando tipificaciones...</span>
-              </div>
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
             </div>
+          </div>
 
           <!-- Seccion de tipificaciones -->
           <div class="accordion mt-0 mb-3" id="comentsCallsContainer">
@@ -692,7 +598,8 @@
           <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
             Volver
           </button>
-          <button class="btn btn-primary" type="submit" id="confirmRequestToEvalBtn" onclick="handleSendRequestToCredit(event)">Confirmar</button>
+          <button class="btn btn-primary" type="submit" id="confirmRequestToEvalBtn"
+            onclick="handleSendRequestToCredit(event)">Confirmar</button>
         </div>
       </div>
     </div>
@@ -700,7 +607,8 @@
 
   <!-- Confirmacion de la solicitud de evaluacion -->
 
-  <div class="modal fade" id="confirmSendRequestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="confirmSendRequestModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class=" modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -712,7 +620,7 @@
           <button type="button" class="btn btn-secondary" data-bs-target="#ternaryModal"
             data-bs-toggle="modal">Volver</button>
           <button type="button" class="btn btn-primary" id="saveCommentsCallBtn"
-          onclick="confirmSendRequestToCredit()">Guardar</button>
+            onclick="confirmSendRequestToCredit()">Guardar</button>
           <button class="btn btn-primary d-none" id="loadingButtonSendRequest" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Guardando...</span>

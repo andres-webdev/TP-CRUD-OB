@@ -21,7 +21,7 @@
     clientMainModal.notificateToTheAgentBtn.classList.add("d-none")
     clientMainModal.uploadImagesModalBtn.classList.add("d-none")
     clientMainModal.comentCallTitle.classList.add("d-none")
-    clientMainModal.comentCallTitleHistory.classList.add("d-none")    
+    clientMainModal.comentCallTitleHistory.classList.add("d-none")
     clientMainModal.generalRequestsToCredit.classList.add("d-none")
     clientMainModal.noRequestsToCredit.classList.add("d-none")
 
@@ -90,7 +90,7 @@
     userInputs.userStatusRisk.value = statusRisk;
     clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
 
-    if(departmentAssignedName === "Call-Center"){
+    if (departmentAssignedName === "Call-Center") {
       clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #E9F5FF; color: black; font-weight: normal;"
     } else {
       clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #FFF1E9; color: black; font-weight: normal;"
@@ -214,7 +214,7 @@
 
         })
 
-        if(item === ""){
+        if (item === "") {
           clientMainModal.noRequestsToCredit.classList.remove("d-none")
           clientMainModal.generalRequestsToCredit.classList.add("d-none")
         } else {
@@ -525,81 +525,218 @@
 
     const dataPerPage = totalData.slice(start, end)
 
-    dataPerPage.forEach(user => {
-      const tr = templateContent.cloneNode(true)
+    if (dataPerPage.length > 0) {
+      dataPerPage.forEach(user => {
+        const tr = templateContent.cloneNode(true)
 
-      const nameCol = tr.querySelector(".template-name");
-      const lastNameCol = tr.querySelector(".template-lastName");
-      const countryCol = tr.querySelector(".template-country");
-      const phoneCol = tr.querySelector(".template-phone");
-      const dniCol = tr.querySelector(".template-dni");
-      const codCol = tr.querySelector(".template-cod");
-      const referenteCol = tr.querySelector(".template-referent");
-      const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
-      const statusWebCol = tr.querySelector(".template-statusWeb");
-      const productCol = tr.querySelector(".template-product");
-      const statusRiskCol = tr.querySelector(".template-statusRisk");
-      const departmentAssigned = tr.querySelector(".template-departmentAssigned");
+        const nameCol = tr.querySelector(".template-name");
+        const lastNameCol = tr.querySelector(".template-lastName");
+        const countryCol = tr.querySelector(".template-country");
+        const phoneCol = tr.querySelector(".template-phone");
+        const dniCol = tr.querySelector(".template-dni");
+        const codCol = tr.querySelector(".template-cod");
+        const referenteCol = tr.querySelector(".template-referent");
+        const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+        const statusWebCol = tr.querySelector(".template-statusWeb");
+        const productCol = tr.querySelector(".template-product");
+        const statusRiskCol = tr.querySelector(".template-statusRisk");
+        const departmentAssigned = tr.querySelector(".template-departmentAssigned");
 
-      const actionCol = tr.querySelector(".template-actions");
-      const editButton = tr.querySelector(".button-edit");
+        const actionCol = tr.querySelector(".template-actions");
+        const editButton = tr.querySelector(".button-edit");
 
-      countryCol.textContent = user[1]
-      nameCol.textContent = user[2]
-      lastNameCol.textContent = user[3]
-      phoneCol.textContent = user[4]
-      dniCol.textContent = user[5]
-      codCol.textContent = user[6]
-      referenteCol.textContent = user[7]
-      dateOfFirstContactCol.textContent = user[8]
-      statusWebCol.textContent = user[9]
-      productCol.textContent = user[10]
-      statusRiskCol.textContent = user[11]
-      departmentAssigned.textContent = user[12]
+        countryCol.textContent = user[1]
+        nameCol.textContent = user[2]
+        lastNameCol.textContent = user[3]
+        phoneCol.textContent = user[4]
+        dniCol.textContent = user[5]
+        codCol.textContent = user[6]
+        referenteCol.textContent = user[7]
+        dateOfFirstContactCol.textContent = user[8]
+        statusWebCol.textContent = user[9]
+        productCol.textContent = user[10]
+        statusRiskCol.textContent = user[11]
+        departmentAssigned.textContent = user[12]
 
-      editButton.dataset.usuarioId = user[0]
+        editButton.dataset.usuarioId = user[0]
 
-      homePage.tableBody.appendChild(tr);
+        homePage.tableBody.appendChild(tr);
+      })
+    } else {
+      const tr = `<tr><td colspan="13" class="text-center py-5">No se encontro ningun cliente</td></tr>`
+      homePage.tableBody.innerHTML = tr
+    }
+  }
+
+  // Filtrado
+
+  function handleFilterModalBtn() {
+
+    if (
+      filterElements.inputDateForSearching.value === "" &&
+      filterElements.inputSortByCountryField.value === "" &&
+      filterElements.inputSortByStatusRiskField.value === "" &&
+      filterElements.inputSortByProductField.value === "" &&
+      filterElements.inputSortByGestionField.value === ""
+    ) {
+      filterElements.inputFiltersBtn.setAttribute("disabled", "")
+      filterElements.resetFiltersBtn.setAttribute("disabled", "")
+    }
+
+    filterElements.inputDateForSearching.addEventListener("change", () => {
+      if (filterElements.inputDateForSearching.value !== "" || filterElements.inputDateForSearching.value !== "NULL") {
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      }
     })
+
+    filterElements.inputSortByCountryField.addEventListener("change", () => {
+      if (filterElements.inputSortByCountryField.value !== "" || filterElements.inputSortByCountryField.value !== "NULL") {
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      }
+    })
+
+    filterElements.inputSortByStatusRiskField.addEventListener("change", () => {
+      if (filterElements.inputSortByStatusRiskField.value !== "" || filterElements.inputSortByStatusRiskField.value !== "NULL") {
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      }
+    })
+
+    filterElements.inputSortByProductField.addEventListener("change", () => {
+      if (filterElements.inputSortByProductField.value !== "" || filterElements.inputSortByProductField.value !== "NULL") {
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      }
+    })
+
+    filterElements.inputSortByGestionField.addEventListener("change", () => {
+      if (filterElements.inputSortByGestionField.value !== "" || filterElements.inputSortByGestionField.value !== "NULL") {
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      }
+    })
+
+  }
+
+  // Filtros por fecha, pais, producto, estatus de riesgo y gestion
+  filterElements.inputFiltersBtn.addEventListener("click", () => {
+
+    const dateFilter = filterElements.inputDateForSearching.value
+    const countryFilter = filterElements.inputSortByCountryField.value
+    const statusRiskFilter = filterElements.inputSortByStatusRiskField.value
+    const productFilter = filterElements.inputSortByProductField.value
+    const gestionFilter = filterElements.inputSortByGestionField.value
+
+
+    if (
+      dateFilter !== "" ||
+      countryFilter !== "" ||
+      statusRiskFilter !== "" ||
+      productFilter !== "" ||
+      gestionFilter !== ""
+    ) {
+
+      homePage.updateDataTableBtn.setAttribute("disabled", "")
+      filterElements.inputFiltersBtn.setAttribute("disabled", "")
+
+      homePage.tableBody.innerHTML = ''
+      homePage.navPagesContgainer.classList = "d-none"
+
+      homePage.searchloader.classList.remove("d-none")
+
+      currentPage = 0 // Error en el Buscador
+
+      google.script.run
+        .withSuccessHandler(usersData => {
+
+          homePage.searchloader.classList = "d-none"
+          homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+
+          let filtertUsersData = []
+
+          let filterFlag = false
+
+          if (dateFilter.length > 0) {
+
+            if (filtertUsersData.length === 0 && filterFlag === false) {
+              filtertUsersData = usersData.filter(client => client[8] === dateFilter)
+              filterFlag = true
+            } else {
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[8] === dateFilter)
+            }
+          }
+
+          if (countryFilter.length > 0 && countryFilter !== "NULL") {
+
+            if (filtertUsersData.length === 0 && filterFlag === false) {
+              filtertUsersData = usersData.filter(client => client[1] === countryFilter)
+              filterFlag = true
+            } else {
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[1] === countryFilter)
+            }
+          }
+
+          if (statusRiskFilter.length > 0 && statusRiskFilter !== "NULL") {
+            if (filtertUsersData.length === 0 && filterFlag === false) {
+              filtertUsersData = usersData.filter(client => client[11] === statusRiskFilter)
+              filterFlag = true
+            } else {
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[11] === statusRiskFilter)
+            }
+          }
+
+          if (productFilter.length > 0 && productFilter !== "NULL") {
+            if (filtertUsersData.length === 0 && filterFlag === false) {
+              filtertUsersData = usersData.filter(client => client[10] === productFilter)
+              filterFlag = true
+            } else {
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[10] === productFilter)
+            }
+          }
+
+          if (gestionFilter.length > 0 && gestionFilter !== "NULL") {
+            if (filtertUsersData.length === 0 && filterFlag === false) {
+              filtertUsersData = usersData.filter(client => client[12] === gestionFilter)
+              filterFlag = true
+            } else {
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[12] === gestionFilter)
+            }
+          }
+
+          getNumberOfPages(filtertUsersData)
+
+          totalData = filtertUsersData.reverse()
+
+          setDataTable()
+
+          homePage.updateDataTableBtn.removeAttribute("disabled")
+          filterElements.inputFiltersBtn.removeAttribute("disabled")
+
+          filterElements.filtersModal.classList.remove("show")
+          filterElements.filtersModalBtn.classList.remove("show")
+
+        })
+        .readUsers()
+
+    }
+  })
+
+  // Reseteo de los filtros
+  function handleResetFilters() {
+    filterElements.inputDateForSearching.value = ""
+    filterElements.inputSortByCountryField.value = ""
+    filterElements.inputSortByStatusRiskField.value = ""
+    filterElements.inputSortByProductField.value = ""
+    filterElements.inputSortByGestionField.value = ""
+
+    filterElements.filtersModal.classList.remove("show")
+    filterElements.filtersModalBtn.classList.remove("show")
+
+    handleRefreshTable()
   }
 
 
-  // Filtrado
-  // Fecha
-  filterElements.inputDateForSearchingBtn.addEventListener("click", () => {
-
-    const date = filterElements.inputDateForSearching.value
-
-    homePage.updateDataTableBtn.setAttribute("disabled", "")
-    filterElements.inputDateForSearchingBtn.setAttribute("disabled", "")
-
-    homePage.tableBody.innerHTML = ''
-    homePage.navPagesContgainer.classList = "d-none"
-
-    homePage.searchloader.classList.remove("d-none")
-
-    currentPage = 0 // Error en el Buscador
-
-    google.script.run
-      .withSuccessHandler(usersData => {
-
-        console.log(usersData)
-
-        homePage.searchloader.classList = "d-none"
-        homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
-
-        getNumberOfPages(usersData)
-
-        totalData = usersData.reverse()
-
-        setDataTable()
-
-        homePage.updateDataTableBtn.removeAttribute("disabled")
-        filterElements.inputDateForSearchingBtn.removeAttribute("disabled")
-
-      })
-      .getAllClientsByDate(date)
-
-  })
 
 </script>

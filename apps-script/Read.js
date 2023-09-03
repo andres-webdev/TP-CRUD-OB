@@ -71,11 +71,11 @@ function getAllRequestsByPhoneClient(phone) {
   return requestsAndResultsByPhone
 }
 
-// Buscamos los clientes que correspondan a la fecha de creacion
+/* // Buscamos los clientes que correspondan a la fecha de creacion
 function getAllClientsByDate(date){
   const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 13).getDisplayValues();
   if (userData.length === 0) {
     return "No hay registros para mostrar"
   }
   return userData.filter(client => client[8] === date)
-}
+} */
