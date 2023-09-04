@@ -301,7 +301,8 @@
         clientPhone: userInputs.userPhone.value,
         callAgentName: comentsCallFormModal.agentName.value,
         commentsToEval: comentsCallFormModal.comentsOfRequestToCredit.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
-        slackUserName: localStorage.getItem("slackUserName")
+        slackUserName: localStorage.getItem("slackUserName"),
+        clientCod: userInputs.userCod.value
       }
 
       sendRequestToCreditDepartment(info)
@@ -357,7 +358,8 @@
         clientPhone: userInputs.userPhone.value,
         callAgentName: requestFormModal.sentRequestAgentName.value,
         commentsToEval: requestFormModal.sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
-        slackUserName: localStorage.getItem("slackUserName")
+        slackUserName: localStorage.getItem("slackUserName"),
+        clientCod: userInputs.userCod.value
       }
 
       sendRequestToCreditDepartment(info)

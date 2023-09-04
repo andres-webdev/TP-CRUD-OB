@@ -189,9 +189,10 @@ function saveResponseOfCredit(infoResquest) {
 }
 
 // Enviar mensaje a Slack de solicitud de evaluacion
-async function sendSlackMessage(info) {
 
-  const url = ""
+const url = ""
+
+async function sendSlackMessage(info) {
 
   const params = {
     method: "post",
@@ -202,35 +203,21 @@ async function sendSlackMessage(info) {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": ":incoming_envelope: Solicitud de Evaluación Crediticia:"
+            "text": "Solicitud de Evaluación Crediticia:"
           }
-        },
-        {
-          "type": "section",
-          "fields": [
-            {
-              "type": "mrkdwn",
-              "text": `*:pushpin: Nombre del cliente:*\n        • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:iphone: Teléfono:*\n        • ${info.clientPhone}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:identification_card: Documento de identidad:*\n        • ${info.clientDni === "" ? "Sin registro" : info.clientDni}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:large_blue_diamond: Asesor:*\n        • ${info.callAgentName} - ${info.slackUserName}`
-            }
-          ]
         },
         {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:page_with_curl: Comentarios:*\n        • ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
+            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*:page_with_curl: Asesor y Comentarios:*\n\t • ${info.callAgentName} / ${info.slackUserName} - ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
           }
         }
       ]
@@ -246,8 +233,6 @@ async function sendSlackMessage(info) {
 // Enviar mensaje a Slack
 async function sendSlackMessageOfResult(info) {
 
-  const url = ""
-
   const params = {
     method: "post",
     contentType: "application/json",
@@ -257,46 +242,21 @@ async function sendSlackMessageOfResult(info) {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": ":ticket: Resultado de la Evaluación Crediticia:"
-          }
-        },
-        {
-          "type": "section",
-          "fields": [
-            {
-              "type": "mrkdwn",
-              "text": `*:pushpin: Nombre del cliente:*\n        • ${info.clientName} ${info.clientLastName}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:large_blue_diamond: Asesor:*\n        • ${info.agent} - ${info.slackUserNameAgent}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:iphone: Teléfono:*\n        • ${info.clientPhone}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:large_orange_diamond: Creditos:*\n        • ${info.creditos} - ${info.slackUserNameCredit}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `*:identification_card: Documento de identidad:*\n        • ${info.clientDni}`
-            }
-          ]
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `*:page_with_curl: Comentarios del asesor:*\n        • ${info.comentsAgent}`
+            "text": "Resultado de la Evaluación Crediticia:"
           }
         },
         {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:classical_building: Resultado:*\n        • ${info.commentsCredits}`
+            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*:classical_building: Resultado:* Evaluador y Comentarios:*\n\t • ${info.creditos} - ${info.slackUserNameCredit} - ${info.commentsCredits === "" ? "Sin registro" : info.commentsCredits}`
           }
         }
       ]

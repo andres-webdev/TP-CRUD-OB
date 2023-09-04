@@ -149,12 +149,13 @@
         clientLastName: userInputs.userLastName.value,
         clientPhone: userInputs.userPhone.value,
         clientDni: userInputs.userDni.value,
-        agent: "agentName.value",
+       /*  agent: "agentName.value",
         comentsAgent: "comentsOfRequestToCredit.value",
-        slackUserNameAgent: "@Andres Marquez",
-        slackUserNameCredit: "@Andres Marquez",
-        creditos: "Martin",
-        commentsCredits: requestTableModal.sendRequestResultComents.value
+        slackUserNameAgent: "@Andres Marquez", */
+        slackUserNameCredit: localStorage.getItem("slackUserName"),
+        creditos: requestTableModal.sentNotificacionToAgent.value,
+        commentsCredits: requestTableModal.sendRequestResultComents.value,
+        clientCod: userInputs.userCod.value
       }
 
       const infoResquest = {
@@ -731,6 +732,7 @@
     filterElements.inputSortByProductField.value = ""
     filterElements.inputSortByGestionField.value = ""
 
+    filterElements.resetFiltersBtn.classList.remove("show")
     filterElements.filtersModal.classList.remove("show")
     filterElements.filtersModalBtn.classList.remove("show")
 
