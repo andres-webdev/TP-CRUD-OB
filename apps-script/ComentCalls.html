@@ -302,7 +302,7 @@
         callAgentName: comentsCallFormModal.agentName.value,
         commentsToEval: comentsCallFormModal.comentsOfRequestToCredit.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
         slackUserName: localStorage.getItem("slackUserName"),
-        clientCod: userInputs.userCod.value
+        clientCod: userInputs.userCod.value,
       }
 
       sendRequestToCreditDepartment(info)
@@ -319,6 +319,12 @@
       .withSuccessHandler(result => {
         
         loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
+
+        google.script.run
+          .withSuccessHandler(() => {
+            searchData()
+          })
+          .updateStatusOfClient({ userId: userInputs.userId.value, statusOfClient: "Creditos" })
 
       })
       .saveRequestToCredit(info)

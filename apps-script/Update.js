@@ -55,3 +55,13 @@ function searchRow(id = '1', sheet) {
   return "Request Edited"
 }
  */
+
+// Editar la gestion en la que se encuentra el cliente
+function updateStatusOfClient(info){
+
+  const fila = searchRow(info.userId, sheetsObFallidos);
+
+  sheetsObFallidos.getRange(fila, 13, 1, 1).setValues([[
+    info.statusOfClient
+  ]])
+}

@@ -45,23 +45,17 @@
 
   // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
   function handleSaveAlert(message, type) {
-    const alertPlaceholder = homePage.liveAlertPlaceholder
-    const appendAlert = (message, type) => {
-      const wrapper = document.createElement('div')
-      wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
-
-      alertPlaceholder.append(wrapper)
-    }
-
-    const alertTrigger = clientMainModal.createUserOBF
-    if (alertTrigger) {
-      appendAlert(message, type)
-    }
+    const alertContainer = homePage.alertContainerWithMessage
+    
+    alertContainer.innerHTML = 
+        `
+        <div class="toast fade d-flex flex-column align-middle justify-content-between px-3 text-bg-primary show" style="width: 250px; position: fixed; right: 20px; top: 80%;" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex py-3 align-middle justify-content-between">
+            <h6>${message}</h6>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+        `
   }
 
   // Solicitudes de Evaluacion

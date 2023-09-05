@@ -183,8 +183,17 @@
 
           google.script.run
             .sendSlackMessageOfResult(infoSlack)
+          
+          google.script.run
+            .withSuccessHandler(() => {
+              
+              searchData()
 
-          createModal.hide();
+              createModal.hide();
+            })
+            .updateStatusOfClient({ userId: userInputs.userId.value, statusOfClient: "Call-Center" })
+
+          
 
         })
         .saveResponseOfCredit(infoResquest)
@@ -337,6 +346,7 @@
         setDataTable()
 
         homePage.updateDataTableBtn.removeAttribute("disabled")
+        homePage.alertContainerWithMessage.innerHTML = ""
 
       })
       .readUsers()
