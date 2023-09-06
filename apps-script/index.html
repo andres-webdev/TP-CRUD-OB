@@ -740,30 +740,32 @@
           <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
         </div>
         <div class="modal-body">
-          <form name="uploadImageForm" id="uploadImageForm" class="needs-validation" novalidate>
+          <form name="uploadImageForm" id="uploadImageForm" class="needs-validation" novalidate
+            onsubmit="sendImages(this)">
             <div class="row mb-3">
               <div class="col">
                 <div class="form-floating">
                   <!-- Subir Imagen -->
-                  <input type="text" class="form-control" id="inputUploadImage" placeholder="Nombre" />
-                  <label for="inputUploadImage">Cargar Imagen</label>
-                  <div class="invalid-message d-none" id="error-message-inputUploadImage">
-                    Por favor, subir imagen.
+                  <p>Todas las fotos</p>
+                  <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Puedes subir varios archivos</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="formFileMultiple" multiple="">
                   </div>
                 </div>
               </div>
             </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
+                Volver
+              </button>
+              <button class="btn btn-primary" type="submit">Subir</button>
+            </div>
           </form>
-        </div>
-        <div class="modal-footer d-flex justify-content-between">
-          <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
-            Volver
-          </button>
-          <button class="btn btn-primary" type="submit">Subir</button>
         </div>
       </div>
     </div>
   </div>
+
 
   <div id="alertContainerWithMessage"></div>
 

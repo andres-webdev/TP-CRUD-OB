@@ -267,3 +267,29 @@ async function sendSlackMessageOfResult(info) {
   let respCode = sendMsg.getResponseCode()
   console.log(respCode)
 }
+
+function uploadImages(form) {
+
+  const infoImg = {
+    folderId: "1y-kx9PoRYRQNVM9kl0vRKXaGBEnK52i8",
+    /* images: [
+      
+    ] */
+  }
+  const folder = DriveApp.getFolderById(infoImg.folderId)
+
+  //const file = folder.createFile(form.formFileMultiple)
+
+  if (form.formFileMultiple.multiple) {
+    // Loop fileInput.files
+    for (const file of form.formFileMultiple) {
+      // Perform action on one file
+      const files = folder.createFile(form.formFileMultiple[file])
+    }
+    // Only one file available
+  } else {
+    const files = folder.createFile(form.formFileMultiple[file])
+  }
+
+  return "dfsdfdf"
+}

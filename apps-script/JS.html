@@ -46,9 +46,9 @@
   // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
   function handleSaveAlert(message, type) {
     const alertContainer = homePage.alertContainerWithMessage
-    
-    alertContainer.innerHTML = 
-        `
+
+    alertContainer.innerHTML =
+      `
         <div class="toast fade d-flex flex-column align-middle justify-content-between px-3 text-bg-primary show" style="width: 250px; position: fixed; right: 20px; top: 80%;" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="d-flex py-3 align-middle justify-content-between">
             <h6>${message}</h6>
@@ -156,6 +156,29 @@
       }
     })
 
+  }
+
+  // Save images in folder on Google Drive
+
+  function sendImages(form) {
+    event.preventDefault()
+
+    /* const button = document.getElementById("btn-submit")
+*/
+    //btn.disable = true
+
+    //const form = document.getElementById("formFileMultiple")
+
+    console.log("file", form.formFileMultiple.files)
+    console.log("files", form.formFileMultiple.file)
+    console.log("value", form.formFileMultiple.value)
+    console.log("mul", form.formFileMultiple.multiple)
+
+
+    google.script.run
+      .withSuccessHandler()
+      .withFailureHandler()
+      .uploadImages(form)
   }
 
 
