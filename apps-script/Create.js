@@ -268,19 +268,24 @@ async function sendSlackMessageOfResult(info) {
   console.log(respCode)
 }
 
+let folderDrive
+
+function folderDriveFn(urlID) {
+  folder = DriveApp.getFolderById(urlID)
+}
+
 function uploadImages(form) {
 
-  const infoImg = {
-    folderId: "1y-kx9PoRYRQNVM9kl0vRKXaGBEnK52i8",
-    /* images: [
-      
-    ] */
-  }
-  const folder = DriveApp.getFolderById(infoImg.folderId)
+  /*  const infoImg = {
+     folderId: "1y-kx9PoRYRQNVM9kl0vRKXaGBEnK52i8",
+     /* images: [
+       
+     ]
+   } */
 
   //const file = folder.createFile(form.formFileMultiple)
 
-  if (form.formFileMultiple.multiple) {
+  /* if (form.formFileMultiple.multiple) {
     // Loop fileInput.files
     for (const file of form.formFileMultiple) {
       // Perform action on one file
@@ -289,7 +294,9 @@ function uploadImages(form) {
     // Only one file available
   } else {
     const files = folder.createFile(form.formFileMultiple[file])
-  }
+  } */
 
-  return "dfsdfdf"
+  const files = folderDrive.createFile(form.formFileMultiple)
+
+  return files.getUrl()
 }

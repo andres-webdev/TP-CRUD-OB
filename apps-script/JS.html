@@ -163,21 +163,22 @@
   function sendImages(form) {
     event.preventDefault()
 
-    /* const button = document.getElementById("btn-submit")
-*/
-    //btn.disable = true
+    google.script.run
+      .withSuccessHandler(async (url) => {
 
-    //const form = document.getElementById("formFileMultiple")
+        const urlID = url.slice(39,)
 
-    console.log("file", form.formFileMultiple.files)
-    console.log("files", form.formFileMultiple.file)
-    console.log("value", form.formFileMultiple.value)
-    console.log("mul", form.formFileMultiple.multiple)
+        await folderDriveFn(urlID)
 
+        saveImageInFolderClient(form)
+
+      })
+      .readFolderIdOfImages(userInputs.userPhone.value)
+  }
+
+  function saveImageInFolderClient(form) {
 
     google.script.run
-      .withSuccessHandler()
-      .withFailureHandler()
       .uploadImages(form)
   }
 

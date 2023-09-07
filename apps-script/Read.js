@@ -79,3 +79,12 @@ function getAllClientsByDate(date){
   }
   return userData.filter(client => client[8] === date)
 } */
+
+function readFolderIdOfImages(phone) {
+  const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, sheetsObFallidos.getLastColumn()).getDisplayValues();
+  if (userData.length === 0) {
+    return "No hay registros para mostrar"
+  }
+
+  return userData.find(elem => elem[4] === phone)[26]
+}
