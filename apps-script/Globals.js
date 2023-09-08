@@ -28,6 +28,14 @@ function validateCredentials(email, password) {
 
   const currentDate = new Date()
 
+  let dataClient = {
+    authorization: "400",
+    name: "",
+    email: "",
+    role: "",
+    slackUserName: ""
+  }
+
   for (let i = 0; i < dataSheetAdmins.length; i++) {
     if (dataSheetAdmins[i][1] === email && dataSheetAdmins[i][2] === password) {
       const nameUser = dataSheetAdmins[i][0]
@@ -43,7 +51,7 @@ function validateCredentials(email, password) {
         roleUser
       ])
 
-      return {
+      dataClient = {
         authorization: "200",
         name: nameUser,
         email: emailUser,
@@ -51,15 +59,18 @@ function validateCredentials(email, password) {
         slackUserName: userName
       }
 
+      break
     }
   }
 
-  return {
-    authorization: "400",
-    name: null,
-    email: null,
-    role: null,
-    slackUserName: null,
+  if (dataClient.authorization === "200") {
+    const urlPage = ScriptApp.getService().getUrl()
+    return { dataClient, urlPage }
+  } else {
+
+    const urlPage = undefined
+    return { dataClient, urlPage }
+
   }
 
 }
