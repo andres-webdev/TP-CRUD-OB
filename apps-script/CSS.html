@@ -9,4 +9,107 @@
   .table-responsive {
     max-width: 1400px;
   }
+
+  #comentsCallsConatiner {
+    display: none;
+  }
+
+  #error-message-phone,
+  #error-message-country,
+  #error-message-agentName,
+  #error-message-callViaOfCalling,
+  #error-message-callResults,
+  #error-message-callStatusClient,
+  #error-message-callReasonToNotAfiliate,
+  #error-message-callComentsOfCalling,
+  #error-message-comentsOfRequestToCredit,
+  #error-message-sentRequestAgentName,
+  #error-message-sendRequestComents,
+  #error-message-sendRequestResultComents,
+  #error-message-sentNotificacionToAgent {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: var(--bs-form-invalid-color);
+  }
+
+  .form-control.invalid-input,
+  .form-select.invalid-input {
+    border-color: var(--bs-form-invalid-border-color);
+  }
+
+  #inputSearchClient {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  #searchClientInputBtn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  #searchClientLoader {
+    position: absolute;
+    top: 50%;
+    left: calc(50% - 35px);
+  }
+
+  .container-fluid {
+    --bs-gutter-x: 0;
+  }
+
+  #titleDrive {
+    top: 20px;
+  }
+
+  .headerLogout {
+    width: 310px;
+    justify-content: end;
+  }
+
+  .comentsOfRequestToCreditContainer {
+    transition: ease-in-out 0.3ms;
+  }
+
+  @media (max-width: 767px) {
+
+    .actionContainer {
+      flex-direction: column;
+    }
+
+    .actionContainerBtn {
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .searchBarConatiner {
+      width: 100%;
+    }
+
+    .logoBrandImage {
+      width: 210px;
+      height: 50px;
+    }
+
+    .headerNavContainer {
+      flex-direction: column;
+      margin: 0 auto;
+    }
+
+    .headerLogout {
+      margin: 1rem auto;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    #searchClientLoader {
+      position: absolute;
+      top: 90%;
+      left: calc(50% - 20px);
+    }
+
+    #comentsCallDetailsCointainer {
+      flex-direction: column;
+    }
+  }
 </style>

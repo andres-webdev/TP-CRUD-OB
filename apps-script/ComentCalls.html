@@ -1,0 +1,450 @@
+<script>
+
+  // Tipificaciones
+
+  // Funcion que muestra todas la tipificaciones realizadas tanto del drive reciente con del antigua, como historial para no perder datos
+  function getDataComentCalls(target) {
+
+    clientMainModal.loadingComenstCall.classList.toggle("d-none")
+    clientMainModal.comentsCallsContainer.innerHTML = ""
+
+    google.script.run
+      .withSuccessHandler(({ newComentsCall, oldComentsCall }) => {
+        clientMainModal.loadingComenstCall.classList.toggle("d-none")
+        clientMainModal.comentCallTitle.classList.remove("d-none")
+
+        let filterComentsCalls = newComentsCall
+          .filter(comentCall => comentCall[2] === target)
+          .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
+
+        const templateItem = clientMainModal.comentsCallTemplate.content;
+
+        filterComentsCalls.forEach((call, index) => {
+          const comentCallItem = templateItem.cloneNode(true)
+
+          const headerCallItem = comentCallItem.querySelector(".accordion-button")
+          const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+          // Configuracion del acodion donde se muestran los comentarios de la llamada
+          headerCallItem.dataset.bsTarget = `#panel-${index}`
+          headerCallItem.setAttribute("aria-controls", `panel-${index}`)
+
+          /* if (index === 0) {
+            headerCallItem.classList = "accordion-button"
+            headerCallItem.setAttribute("aria-expanded", "true")
+            bodyCallItem.parentNode.classList = "accordion-collapse collapse show"
+          } */
+
+          bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
+
+
+          // Contenedor del comentario de la llamada
+          headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
+
+          // Informacion adicional de la llamada
+          bodyCallItem.innerHTML =
+            `<div class="d-flex flex-column gap-2">
+              <div class="bg-transparent d-flex justify-content-between p-3" id="comentsCallDetailsCointainer">
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Medio de contacto: </p>
+                  <p class="fw-normal">${call[1] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Fecha: </p>
+                  <p class="fw-normal">${call[3]}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <p class="fw-bolder">Hora: </p>
+                  <p class="fw-normal">${call[4]}</p>
+                </div>
+              </div>
+              <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+                <div class="d-flex gap-2 px-2">
+                  <p class="fw-bolder">Resultado:</p>
+                  <p class="fw-normal">${call[5] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 px-2">
+                  <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+                  <p class="fw-normal">${call[7] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+                  <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+                  <p class="fw-normal">${call[8] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+                  <p class="fw-bolder text-wrap">Comentarios: </p>
+                  <p class="fw-normal">${call[6] || "NULL"}</p>
+                </div>
+                <div class="d-flex gap-2 mt-3 justify-content-center">
+                  <p class="fw-bolder text-wrap">Asesor: </p>
+                  <p class="fw-normal">${call[9] || "NULL"}</p>
+                </div>
+              </div>
+            </div>`
+
+          clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
+        })
+
+        generateOldComentsCall(templateItem, oldComentsCall, target)
+        
+
+        // Aplicar estilos a las etiquelas para mayor informacion al usuario
+        if (filterComentsCalls.length > 0) {
+          clientMainModal.comentsCallsContainer.classList = "accordion mt-0 mb-3"
+          clientMainModal.noComentsCall.classList = "d-none"
+          clientMainModal.comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+        }
+
+        clientMainModal.comentsCallsContainer.style.display = "block"
+
+      })
+      .readComentsCall()
+  }
+
+  // Funcion que muestra las tipificaciones creadas en el antiguio formulario y que se muestra como historial
+  function generateOldComentsCall(templateItem, oldComentsCall, target) {
+    const comentCallItem = templateItem.cloneNode(true)
+
+    const headerCallItem = comentCallItem.querySelector(".accordion-button")
+    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+    headerCallItem.dataset.bsTarget = `#panel-old`
+    headerCallItem.setAttribute("aria-controls", `panel-old`)
+
+    bodyCallItem.parentNode.setAttribute("id", `panel-old`)
+
+    headerCallItem.textContent = "Tipificaciones antiguas"
+
+    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target)
+
+    let sliceRowOldComentsCall = -1
+
+
+    if(rowOldComentsCall){
+      sliceRowOldComentsCall = rowOldComentsCall.slice(13,26)
+    }
+
+    if (sliceRowOldComentsCall.every(elem => elem === "") || sliceRowOldComentsCall === -1) {
+      clientMainModal.comentsCallsContainer.classList.toggle("d-none")
+      clientMainModal.noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
+      clientMainModal.comentCallTitle.classList = "d-none"
+    } else {
+      clientMainModal.comentsCallsContainer.classList = "accordion mt-0 mb-3"
+      let counterCalls = ""
+      sliceRowOldComentsCall.forEach((comentsCall, index) => {
+
+        if ((index + 1) % 3 === 0 && (index + 1) < 10) {
+          counterCalls +=
+            `
+            <div class="row my-0">
+              <div class="col-5 bg-transparent border border-0">
+                <p><strong>${Math.ceil(index / 3)}° Llamada - Fecha:</strong> ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p>
+              </div>
+              <div class="col bg-transparent border border-0">
+                <p><strong>Medio:</strong> ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p>
+              </div>
+              <div class="col-4 bg-transparent border border-0">
+                <p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
+              </div>
+            </div>
+            `
+        }
+      })
+
+      bodyCallItem.innerHTML =
+        `
+          <div class="d-flex flex-column px-3 mt-5 mb-2">
+            ${counterCalls}
+          </div>
+          <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+            <div class="d-flex gap-2 px-2">
+              <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+              <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[11] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+              <p class="fw-bolder text-wrap">Comentarios: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[9] || "Sin registro"}</p>
+            </div>
+            <div class="d-flex gap-2 mt-3 justify-content-center">
+              <p class="fw-bolder text-wrap">Asesor: </p>
+              <p class="fw-normal">${sliceRowOldComentsCall[12] || "Sin registro"}</p>
+            </div>
+          </div>
+        `
+
+      clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
+    }
+  }
+
+  // Funcion que maneja y controla cada elemento del formulario
+  function handleModalComentsCall() {
+
+    comentsCallFormModal.agentName.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.agentName.classList = "form-control invalid-input"
+        comentsCallFormModal.errorAgentName.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorAgentName.classList = "d-none"
+        comentsCallFormModal.agentName.classList = "form-control"
+      }
+    })
+
+    comentsCallFormModal.viaOfCalling.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.viaOfCalling.classList = "form-select invalid-input"
+        comentsCallFormModal.errorCallViaOfCalling.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorCallViaOfCalling.classList = "d-none"
+        comentsCallFormModal.viaOfCalling.classList = "form-select"
+      }
+    })
+
+    comentsCallFormModal.resultOfCalling.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.resultOfCalling.classList = "form-select invalid-input"
+        comentsCallFormModal.errorCallResults.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorCallResults.classList = "d-none"
+        comentsCallFormModal.resultOfCalling.classList = "form-select"
+      }
+    })
+
+    comentsCallFormModal.statusClient.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.statusClient.classList = "form-select invalid-input"
+        comentsCallFormModal.errorCallStatusClient.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorCallStatusClient.classList = "d-none"
+        comentsCallFormModal.statusClient.classList = "form-select"
+      }
+    })
+
+    comentsCallFormModal.commentsOfCalling.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.commentsOfCalling.classList = "form-control invalid-input"
+        comentsCallFormModal.errorCallComentsOfCalling.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorCallComentsOfCalling.classList = "d-none"
+        comentsCallFormModal.commentsOfCalling.classList = "form-control"
+      }
+    })
+
+    comentsCallFormModal.checkboxSendRequestToCredit.addEventListener('click', () => {
+      if (comentsCallFormModal.checkboxSendRequestToCredit.checked) {
+        comentsCallFormModal.comentsOfRequestToCreditContainer.classList.remove('d-none');
+      } else {
+        comentsCallFormModal.comentsOfRequestToCreditContainer.classList.add('d-none');
+      }
+    });
+
+    comentsCallFormModal.comentsOfRequestToCredit.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control invalid-input"
+        comentsCallFormModal.errorComentsOfRequestToCredit.classList = "invalid-message"
+      } else {
+        comentsCallFormModal.errorComentsOfRequestToCredit.classList = "d-none"
+        comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control"
+      }
+    })
+
+    comentsCallFormModal.agentName.classList = "form-control"
+    comentsCallFormModal.viaOfCalling.classList = "form-select"
+    comentsCallFormModal.resultOfCalling.classList = "form-select"
+    comentsCallFormModal.statusClient.classList = "form-select"
+    comentsCallFormModal.reasonToNotAfiliate.classList = "form-select"
+    comentsCallFormModal.commentsOfCalling.classList = "form-control"
+    comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control"
+    comentsCallFormModal.errorAgentName.classList = "d-none"
+    comentsCallFormModal.errorCallViaOfCalling.classList = "d-none"
+    comentsCallFormModal.errorCallResults.classList = "d-none"
+    comentsCallFormModal.errorCallStatusClient.classList = "d-none"
+    comentsCallFormModal.errorCallComentsOfCalling.classList = "d-none"
+
+  }
+
+  // Funcion que muestra un modal para ingresar y guarda los datos de la tificacio, ademas muestra un alerta cuando se realiza correctamente
+  function addComentsCallHandler() {
+
+    loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
+
+    const form = {
+      clientPhone: userInputs.userPhone.value,
+      callViaOfCalling: comentsCallFormModal.viaOfCalling.value,
+      callAgentName: comentsCallFormModal.agentName.value,
+      callResults: comentsCallFormModal.resultOfCalling.value,
+      callStatusClient: comentsCallFormModal.statusClient.value,
+      callReasonToNotAfiliate: comentsCallFormModal.reasonToNotAfiliate.value,
+      callComentsOfCalling: comentsCallFormModal.commentsOfCalling.value
+    }
+
+    google.script.run
+      .withSuccessHandler(result => {
+
+        loadingBtnOnOff("saveCommentsCallBtn", "loadingButtonCommentsCall")
+        const createModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
+        createModal.hide();
+        handleSaveAlert('Tipificación creada exitosamente!', 'success')
+        comentsCallFormModal.formValuesComentsCall.reset()
+      })
+      .addComentsCall(form)
+
+    if (comentsCallFormModal.checkboxSendRequestToCredit.checked) {
+
+      const info = {
+        clientName: userInputs.userName.value,
+        clientLastName: userInputs.userLastName.value,
+        clientDni: userInputs.userDni.value,
+        clientPhone: userInputs.userPhone.value,
+        callAgentName: comentsCallFormModal.agentName.value,
+        commentsToEval: comentsCallFormModal.comentsOfRequestToCredit.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
+        slackUserName: localStorage.getItem("slackUserName"),
+        clientCod: userInputs.userCod.value,
+      }
+
+      sendRequestToCreditDepartment(info)
+    }
+
+  }
+
+  // Funcion que guarda las solucitudes de evaluacion al area de creditos
+  function sendRequestToCreditDepartment(info) {
+
+    loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
+
+    google.script.run
+      .withSuccessHandler(result => {
+        
+        loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
+
+        google.script.run
+          .withSuccessHandler(() => {
+            searchData()
+          })
+          .updateStatusOfClient({ userId: userInputs.userId.value, statusOfClient: "Creditos" })
+
+      })
+      .saveRequestToCredit(info)
+
+    google.script.run
+      .sendSlackMessage(info)
+  }
+
+  // Funcion que maneja el envio de la solicitud para la evaluacion de un cliente
+  function handleSendRequestToCredit(event) {
+    event.preventDefault()
+
+    if (requestFormModal.sentRequestAgentName.value === "") {
+      requestFormModal.sentRequestAgentName.classList = "form-control invalid-input"
+      requestFormModal.errorMessageSentRequestAgentName.classList = "invalid-message"
+    } else if (requestFormModal.sendRequestComents.value === "") {
+      requestFormModal.sendRequestComents.classList = "form-control invalid-input"
+      requestFormModal.errorMessageSendRequestComents.classList = "invalid-message"
+    } else {
+      requestFormModal.sentRequestAgentName.classList = "form-control"
+      requestFormModal.sendRequestComents.classList = "form-control"
+      requestFormModal.errorMessageSentRequestAgentName.classList = "d-none"
+      requestFormModal.errorMessageSendRequestComents.classList = "d-none"
+
+      const ternaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
+      const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
+      ternaryModal.hide();
+      confirmSendRequestModal.show();
+    }
+  }
+
+  function confirmSendRequestToCredit(){
+    const info = {
+        clientName: userInputs.userName.value,
+        clientLastName: userInputs.userLastName.value,
+        clientDni: userInputs.userDni.value,
+        clientPhone: userInputs.userPhone.value,
+        callAgentName: requestFormModal.sentRequestAgentName.value,
+        commentsToEval: requestFormModal.sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
+        slackUserName: localStorage.getItem("slackUserName"),
+        clientCod: userInputs.userCod.value
+      }
+
+      sendRequestToCreditDepartment(info)
+
+      const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
+      confirmSendRequestModal.hide();
+  }
+
+  function handleSendRequestToEvaluation() {
+    const primaryModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+    const secondaryModal = bootstrap.Modal.getOrCreateInstance('#ternaryModal');
+    primaryModal.hide();
+    secondaryModal.show();
+
+    requestFormModal.sentRequestAgentName.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        requestFormModal.sentRequestAgentName.classList = "form-control invalid-input"
+        requestFormModal.errorMessageSentRequestAgentName.classList = "invalid-message"
+      } else {
+        requestFormModal.errorMessageSentRequestAgentName.classList = "d-none"
+        requestFormModal.sentRequestAgentName.classList = "form-control"
+      }
+    })
+
+    requestFormModal.sendRequestComents.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        requestFormModal.sendRequestComents.classList = "form-control invalid-input"
+        requestFormModal.errorMessageSendRequestComents.classList = "invalid-message"
+      } else {
+        requestFormModal.errorMessageSendRequestComents.classList = "d-none"
+        requestFormModal.sendRequestComents.classList = "form-control"
+      }
+    })
+  }
+
+  // Funcion que maneja las acciones cuando se guardan las tipificaciones
+  function handleSaveComentsCall(event) {
+
+    event.preventDefault()
+
+    if (comentsCallFormModal.agentName.value === "") {
+      comentsCallFormModal.agentName.classList = "form-select invalid-input"
+      comentsCallFormModal.errorAgentName.classList = "invalid-message"
+    } else if (comentsCallFormModal.viaOfCalling.value === "") {
+      comentsCallFormModal.viaOfCalling.classList = "form-select invalid-input"
+      comentsCallFormModal.errorCallViaOfCalling.classList = "invalid-message"
+    } else if (comentsCallFormModal.resultOfCalling.value === "") {
+      comentsCallFormModal.resultOfCalling.classList = "form-select invalid-input"
+      comentsCallFormModal.errorCallResults.classList = "invalid-message"
+    } else if (comentsCallFormModal.statusClient.value === "") {
+      comentsCallFormModal.statusClient.classList = "form-select invalid-input"
+      comentsCallFormModal.errorCallStatusClient.classList = "invalid-message"
+    } else if (comentsCallFormModal.commentsOfCalling.value === "") {
+      comentsCallFormModal.commentsOfCalling.classList = "form-control invalid-input"
+      comentsCallFormModal.errorCallComentsOfCalling.classList = "invalid-message"
+    } else if (comentsCallFormModal.checkboxSendRequestToCredit.checked === true && comentsCallFormModal.comentsOfRequestToCredit.value === "") {
+      comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control invalid-input"
+      comentsCallFormModal.errorComentsOfRequestToCredit.classList = "invalid-message"
+    } else {
+      comentsCallFormModal.agentName.classList = "form-control"
+      comentsCallFormModal.viaOfCalling.classList = "form-select"
+      comentsCallFormModal.resultOfCalling.classList = "form-select"
+      comentsCallFormModal.statusClient.classList = "form-select"
+      comentsCallFormModal.commentsOfCalling.classList = "form-control"
+      comentsCallFormModal.comentsOfRequestToCredit.classList = "form-control"
+      comentsCallFormModal.errorAgentName.classList = "d-none"
+      comentsCallFormModal.errorCallViaOfCalling.classList = "d-none"
+      comentsCallFormModal.errorCallResults.classList = "d-none"
+      comentsCallFormModal.errorCallStatusClient.classList = "d-none"
+      comentsCallFormModal.errorCallComentsOfCalling.classList = "d-none"
+      comentsCallFormModal.errorComentsOfRequestToCredit.classList = "d-none"
+
+      const secondaryModal = bootstrap.Modal.getOrCreateInstance('#secondaryModal');
+      const confirmCommentsCallModal = bootstrap.Modal.getOrCreateInstance('#confirmSaveModal');
+      secondaryModal.hide();
+      confirmCommentsCallModal.show();
+
+    }
+
+  }
+
+</script>

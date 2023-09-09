@@ -2,223 +2,185 @@
   integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script>
 
-  window.addEventListener('load', searchData)
+  // OB - Fallido --> Clientes
 
-  function validarFormulario() {
-    loadingOnOff()
-
-    const formValues = document.getElementById('createUser');
-
-    const form = {
-      userId: document.getElementById('userId').value,
-      userName: document.getElementById('userName').value,
-      userLastName: document.getElementById('userLastName').value,
-      userPhone: document.getElementById('userPhone').value,
-      userDni: document.getElementById('userDni').value,
-      userCod: document.getElementById('userCod').value,
-      userReferent: document.getElementById('userReferent').value,
-      userDateOfFirstContact: document.getElementById('userDateOfFirstContact').value,
-      userStatusWeb: document.getElementById('userStatusWeb').value,
-      userCountry: document.getElementById('userCountry').value,
-      userProduct: document.getElementById('userProduct').value,
-      userStatusRisk: document.getElementById('userStatusRisk').value,
-    }
-
-    console.log(form)
-    const id = form.userId;
-
-    if (id === '') {
-      //Create
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingOnOff()
-          searchData()
-          formValues.reset();
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert()
-        })
-        .addUser(form);
-    } else {
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingOnOff()
-          searchData()
-          formValues.reset()
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert()
-        })
-        .editUser(form)
-    }
+  let infoResultOfTheRequest = {
+    requestId: '',
+    comentsByCredit: ''
   }
 
-  function searchData() {
+  //Logging
+
+  window.addEventListener('load', () => {
+    searchData()
+    userLogin.userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
+    if (localStorage.getItem("role") === "agent") {
+      homePage.createClientModalBtn.classList.add("d-none")
+      userInputs.userId.setAttribute("disabled", "")
+      userInputs.userName.setAttribute("disabled", "")
+      userInputs.userLastName.setAttribute("disabled", "")
+      userInputs.userPhone.setAttribute("disabled", "")
+      userInputs.userDni.setAttribute("disabled", "")
+      userInputs.userCod.setAttribute("disabled", "")
+      userInputs.userReferent.setAttribute("disabled", "")
+      userInputs.userStatusWeb.setAttribute("disabled", "")
+      userInputs.userCountry.setAttribute("disabled", "")
+      userInputs.userProduct.setAttribute("disabled", "")
+      userInputs.userStatusRisk.setAttribute("disabled", "")
+      userInputs.userDateOfFirstContact.setAttribute("disabled", "")
+      clientMainModal.createUserOBF.classList.add("d-none")
+    }
+  })
+
+  function handleLogOutSession() {
+    window.open("https://script.google.com/a/tiendapago.com/macros/s/AKfycbwt3v6tBcGZ8svjd66vAk-X6jm3FygBgbIpZrqBijg/dev", '_top');
+    localStorage.clear();
+  }
+
+  // Function que activa y desactiva el loader de los identificadores de los elementos
+  function loadingBtnOnOff(btn, loader) {
+    document.querySelector(`#${btn}`).classList.toggle("d-none")
+    document.querySelector(`#${loader}`).classList.toggle("d-none")
+  }
+
+  // Funcion que muestra una alerta si se registra, actualiza o se crea una nueva tipificacion
+  function handleSaveAlert(message, type) {
+    const alertContainer = homePage.alertContainerWithMessage
+
+    alertContainer.innerHTML =
+      `
+        <div class="toast fade d-flex flex-column align-middle justify-content-between px-3 text-bg-primary show" style="width: 250px; position: fixed; right: 20px; top: 80%;" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex py-3 align-middle justify-content-between">
+            <h6>${message}</h6>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+        `
+  }
+
+  // Solicitudes de Evaluacion
+  // Funcion que llena la tabla con los valores recibidos
+  function setRequestDataTable(data) {
+
+    let templateContent = requestTableModal.rowTemplateRequestToCredit.content;
+
+    data.forEach(user => {
+      const tr = templateContent.cloneNode(true)
+
+      const id = tr.querySelector(".template-id");
+      const dateOfRequest = tr.querySelector(".template-dateOfRequest");
+      const timeOfRequest = tr.querySelector(".template-timeOfRequest")
+      const agentOfTheCase = tr.querySelector(".template-agentOfTheCase")
+      const comentsOfAgenteToCredits = tr.querySelector(".template-comentsOfAgenteToCredits")
+      const area = tr.querySelector(".template-area")
+
+      id.value = user[0]
+      dateOfRequest.textContent = user[5]
+      timeOfRequest.textContent = user[6]
+      agentOfTheCase.textContent = user[7]
+      comentsOfAgenteToCredits.textContent = user[8]
+      area.textContent = user[9]
+
+      requestTableModal.requestSendedByClientTable.appendChild(tr);
+    })
+  }
+
+  // Funcion que muestra las solicitudes de creditos en una tabla
+  function showRequestsCreditsInTable() {
+
+    requestTableModal.requestSendedByClientTable.innerHTML =
+      `<tr>
+        <td colspan="9">
+        <div class="d-flex justify-content-center mt-5 mb-3" id="loadingResquestToCredit">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando solicitudes...</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+    `
+
+    requestTableModal.notificateToTheAgent.classList = "d-none"
 
     google.script.run
-      .withSuccessHandler(usersData => {
-        let tableBody = document.getElementById('tableBody-users');
-        let template = document.getElementById('rowTemplate')
-        let templateContent = template.content;
+      .withSuccessHandler(requestData => {
 
-        tableBody.innerHTML = ''
+        requestTableModal.requestSendedByClientTable.innerHTML = ""
 
-        usersData.reverse().forEach(user => {
-          const tr = templateContent.cloneNode(true)
+        if (requestData.length > 0) {
+          setRequestDataTable(requestData)
+          infoResultOfTheRequest.requestId = requestData[requestData.length - 1][0]
 
-          const nameCol = tr.querySelector(".template-name");
-          const lastNameCol = tr.querySelector(".template-lastName");
-          const countryCol = tr.querySelector(".template-country");
-          const phoneCol = tr.querySelector(".template-phone");
-          const dniCol = tr.querySelector(".template-dni");
-          const codCol = tr.querySelector(".template-cod");
-          const referenteCol = tr.querySelector(".template-referent");
-          const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
-          const statusWebCol = tr.querySelector(".template-statusWeb");
-          const productCol = tr.querySelector(".template-product");
-          const statusRiskCol = tr.querySelector(".template-statusRisk");
+          if (localStorage.getItem("role") !== "agent") {
+            requestTableModal.notificateToTheAgent.classList = "btn btn-primary"
+          }
+        } else {
+          requestTableModal.requestSendedByClientTable.innerHTML =
+            `
+          <tr style="text-align: center;">
+            <td colspan="9">
+              <p>No hay solicicitudes realizadas</p>
+            </td>
+          </tr>
+          `
+        }
 
-          const actionCol = tr.querySelector(".template-actions");
-          const editButton = tr.querySelector(".button-edit");
 
-          countryCol.textContent = user[1]
-          nameCol.textContent = user[2]
-          lastNameCol.textContent = user[3]
-          phoneCol.textContent = user[4]
-          dniCol.textContent = user[5]
-          codCol.textContent = user[6]
-          referenteCol.textContent = user[7]
-          dateOfFirstContactCol.textContent = user[8]
-          statusWebCol.textContent = user[9]
-          productCol.textContent = user[10]
-          statusRiskCol.textContent = user[11]
-
-          editButton.dataset.usuarioId = user[0]
-
-          tableBody.appendChild(tr);
-        })
       })
-      .readUsers()
+      .getAllRequestsByPhoneClient(userInputs.userPhone.value)
 
   }
 
-  function handleUpdateUserInfo(button) {
-    const tableRow = button.parentNode.parentNode;
+  function handleSendNotificationResult() {
 
-    const id = button.dataset.usuarioId;
+    requestTableModal.errorMessageSendResultComents.classList = "d-none"
+    requestTableModal.errorAgentSendResult.classList = "d-none"
 
-    const country = tableRow.cells[0].innerHTML;
-    const name = tableRow.cells[1].innerHTML;
-    const lastName = tableRow.cells[2].innerHTML;
-    const phone = tableRow.cells[3].innerHTML;
-    const dni = tableRow.cells[4].innerHTML;
-    const cod = tableRow.cells[5].innerHTML;
-    const referent = tableRow.cells[6].innerHTML;
-    const dateOfFirstContact = tableRow.cells[7].innerHTML;
-    const statusWeb = tableRow.cells[8].innerHTML;
-    const product = tableRow.cells[9].innerHTML;
-    const statusRisk = tableRow.cells[10].innerHTML;
-
-    const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-    createModal.show()
-
-    document.getElementById('userId').value = id;
-    document.getElementById('userName').value = name;
-    document.getElementById('userLastName').value = lastName;
-    document.getElementById('userPhone').value = phone;
-    document.getElementById('userDni').value = dni;
-    document.getElementById('userCod').value = cod;
-    document.getElementById('userReferent').value = referent;
-    document.getElementById('userDateOfFirstContact').value = dateOfFirstContact;
-    document.getElementById('userStatusWeb').value = statusWeb;
-    document.getElementById('userCountry').value = country;
-    document.getElementById('userProduct').value = product;
-    document.getElementById('userStatusRisk').value = statusRisk;
-
-    getDataComentCalls(phone)
-
-  }
-
-  function handleSaveChanges() {
-
-    const phone = document.getElementById('userPhone')
-    const country = document.getElementById('userCountry')
-
-    let passInputValidation = validatePhoneNumber(phone.value) && country.value.length > 0
-
-    if (passInputValidation) {
-      validarFormulario()
-    }
-  }
-
-  function handleShowModalUser() {
-    document.getElementById('userId').value = '';
-    document.getElementById('userName').value = '';
-    document.getElementById('userLastName').value = '';
-    document.getElementById('userPhone').value = '';
-    document.getElementById('userDni').value = '';
-    document.getElementById('userCod').value = '';
-    document.getElementById('userReferent').value = '';
-    document.getElementById('userStatusWeb').value = '';
-    document.getElementById('userCountry').value = '';
-    document.getElementById('userProduct').value = '';
-    document.getElementById('userStatusRisk').value = '';
-
-  }
-
-  function validatePhoneNumber(phoneNumber) {
-
-    let phoneNumberTrim = phoneNumber.trim()
-
-    // Check if the phone number is nine digits long.
-    if (phoneNumberTrim.length < 9 || phoneNumberTrim.length > 10) {
-      return false;
-    }
-
-    // Check if the phone number only contains digits.
-    for (var i = 0; i < phoneNumberTrim.length; i++) {
-      if (phoneNumberTrim.charAt(i) !== "0" && phoneNumberTrim.charAt(i) !== "1" && phoneNumberTrim.charAt(i) !== "2" && phoneNumberTrim.charAt(i) !== "3" && phoneNumberTrim.charAt(i) !== "4" && phoneNumberTrim.charAt(i) !== "5" && phoneNumberTrim.charAt(i) !== "6" && phoneNumberTrim.charAt(i) !== "7" && phoneNumberTrim.charAt(i) !== "8" && phoneNumberTrim.charAt(i) !== "9") {
-        return false;
+    requestTableModal.sentNotificacionToAgent.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        requestTableModal.sentNotificacionToAgent.classList = "form-control invalid-input"
+        requestTableModal.errorAgentSendResult.classList = "invalid-message"
+      } else {
+        requestTableModal.errorAgentSendResult.classList = "d-none"
+        requestTableModal.sentNotificacionToAgent.classList = "form-control"
       }
-    }
-    // The phone number is valid.
-    return true;
+    })
+
+    requestTableModal.sendRequestResultComents.addEventListener("keyup", (event) => {
+      if (event.target.value === "") {
+        requestTableModal.sendRequestResultComents.classList = "form-control invalid-input"
+        requestTableModal.errorMessageSendResultComents.classList = "invalid-message"
+      } else {
+        requestTableModal.errorMessageSendResultComents.classList = "d-none"
+        requestTableModal.sendRequestResultComents.classList = "form-control"
+      }
+    })
+
   }
 
-  function loadingOnOff() {
-    document.querySelector('#createUserOBF').classList.toggle("d-none")
-    document.querySelector('#loadingButton').classList.toggle("d-none")
-  }
+  // Save images in folder on Google Drive
 
-  function handleSaveAlert() {
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-    const appendAlert = (message, type) => {
-      const wrapper = document.createElement('div')
-      wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
+  function sendImages(form) {
+    event.preventDefault()
 
-      alertPlaceholder.append(wrapper)
-    }
-
-    const alertTrigger = document.getElementById('createUserOBF')
-    if (alertTrigger) {
-      appendAlert('Usuario creado exitosamente!', 'success')
-
-    }
-  }
-
-  function getDataComentCalls(target) {
     google.script.run
-      .withSuccessHandler(comentsCalls => {
-        let sortComentsCalls = comentsCalls
-          .filter(comentCall => comentCall[2] === target)
-        console.log(sortComentsCalls)
+      .withSuccessHandler(async (url) => {
+
+        const urlID = url.slice(39,)
+
+        await folderDriveFn(urlID)
+
+        saveImageInFolderClient(form)
+
       })
-      .readComentsCall()
+      .readFolderIdOfImages(userInputs.userPhone.value)
   }
+
+  function saveImageInFolderClient(form) {
+
+    google.script.run
+      .uploadImages(form)
+  }
+
 
 </script>

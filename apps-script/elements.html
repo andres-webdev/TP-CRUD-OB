@@ -1,0 +1,113 @@
+<script>
+
+  const userLogin = {
+    userNameLogin: document.getElementById("userNameLogin")
+  }
+
+  // Inputs para crear y actualizar el cliente.
+  const userInputs = {
+    userId: document.getElementById('userId'),
+    userName: document.getElementById('userName'),
+    userLastName: document.getElementById('userLastName'),
+    userPhone: document.getElementById('userPhone'),
+    userDni: document.getElementById('userDni'),
+    userCod: document.getElementById('userCod'),
+    userReferent: document.getElementById('userReferent'),
+    userStatusWeb: document.getElementById('userStatusWeb'),
+    userCountry: document.getElementById('userCountry'),
+    userProduct: document.getElementById('userProduct'),
+    userStatusRisk: document.getElementById('userStatusRisk'),
+    userDateOfFirstContact: document.getElementById('userDateOfFirstContact')
+  }
+
+  // Elementos del modal principal
+  const clientMainModal = {
+    phoneMsgValidation: document.getElementById("error-message-phone"),
+    countryMsgValidation: document.getElementById("error-message-country"),
+    comentCallTitleHistory: document.getElementById("comentCallTitleHistory"), /* Titulos del historial de solicitudes */
+    generalRequestsToCredit: document.getElementById("generalRequestsToCredit"), /* Lista de solicitudes */
+    loadingComenstCall: document.querySelector('#loadingComenstCall'),
+    comentCallTitle: document.getElementById("comentCallTitle"),
+    noComentsCall: document.getElementById('noComentsCall'),
+    comentsCallsContainer: document.getElementById("comentsCallsContainer"),
+    comentsCallTemplate: document.getElementById("comentsCallTemplate"),
+    comentCallBtn: document.getElementById("comentCallBtn"),
+    sendRequestToEvalBtn: document.getElementById("sendToEvalToCreditsBtn"),
+    notificateToTheAgentBtn: document.getElementById("notificateToTheAgent"),
+    uploadImagesModalBtn: document.getElementById("uploadImagesModal"),
+    createUserOBF: document.getElementById("createUserOBF"),
+    formValues: document.getElementById('createUser'),
+    comentCallTitleHistory: document.getElementById('comentCallTitleHistory'),
+    generalRequestsToCreditList: document.getElementById('generalRequestsToCreditList'),
+    loadingRequestHistory: document.getElementById('loadingRequestHistory'),
+    noRequestsToCredit: document.getElementById('noRequestsToCredit'),
+    labelDepartmentAssigned: document.getElementById('labelDepartmentAssigned')
+  }
+
+  // Elementos del filtrado
+  const filterElements = {
+    inputDateForSearching: document.getElementById("inputDateForSearching"),
+    inputSortByCountryField: document.getElementById("inputSortByCountryField"),
+    inputSortByStatusRiskField: document.getElementById("inputSortByStatusRiskField"),
+    inputSortByProductField: document.getElementById("inputSortByProductField"),
+    inputSortByGestionField: document.getElementById("inputSortByGestionField"),
+    inputFiltersBtn: document.getElementById("inputFiltersBtn"),
+    filtersModal: document.getElementById("filtersModal"),
+    filtersModalBtn: document.getElementById("filtersModalBtn"),
+    resetFiltersBtn: document.getElementById("resetFiltersBtn"),
+  }
+
+  // Elementos de la pagina de inicio
+  const homePage = {
+    alertContainerWithMessage: document.getElementById('alertContainerWithMessage'),
+    createClientModalBtn: document.getElementById("createClientModalBtn"),
+    updateDataTableBtn: document.getElementById("updateDataTableBtn"),
+    target: document.getElementById("inputSearchClient"),
+    searchClientInputBtn: document.getElementById("searchClientInputBtn"),
+    tableBody: document.getElementById('tableBody-users'),
+    searchloader: document.getElementById("searchClientLoader"),
+    navPagesContgainer: document.getElementById("navPagesContgainer"),
+    listOfPages: document.getElementById("listOfPages"),
+    template: document.getElementById('rowTemplate'),
+  }
+
+  // Formulario de tipificacion por llamada y envio de solicitud de evaluacion
+  const comentsCallFormModal = {
+    formValuesComentsCall: document.getElementById('createComentsCall'),
+    agentName: document.getElementById("callAgentName"),
+    viaOfCalling: document.getElementById("callViaOfCalling"),
+    resultOfCalling: document.getElementById("callResults"),
+    statusClient: document.getElementById("callStatusClient"),
+    reasonToNotAfiliate: document.getElementById("callReasonToNotAfiliate"),
+    commentsOfCalling: document.getElementById("callComentsOfCalling"),
+    checkboxSendRequestToCredit: document.getElementById('chevkBoxEvalClient'),
+    comentsOfRequestToCredit: document.getElementById("comentsOfRequestToCredit"),
+    comentsOfRequestToCreditContainer: document.getElementById('comentsOfRequestToCreditContainer'),
+    errorAgentName: document.getElementById("error-message-agentName"),
+    errorCallViaOfCalling: document.getElementById("error-message-callViaOfCalling"),
+    errorCallResults: document.getElementById("error-message-callResults"),
+    errorCallStatusClient: document.getElementById("error-message-callStatusClient"),
+    errorCallComentsOfCalling: document.getElementById("error-message-callComentsOfCalling"),
+    errorComentsOfRequestToCredit: document.getElementById("error-message-comentsOfRequestToCredit"),
+  }
+
+  const requestFormModal = {
+    sentRequestAgentName: document.getElementById("sentRequestAgentName"),
+    errorMessageSentRequestAgentName: document.getElementById("error-message-sentRequestAgentName"),
+    sendRequestComents: document.getElementById("sendRequestComents"),
+    errorMessageSendRequestComents: document.getElementById("error-message-sendRequestComents"),
+  }
+
+  const requestTableModal = {
+    rowTemplateRequestToCredit: document.getElementById("rowTemplateRequestToCredit"),
+    requestSendedByClientTable: document.getElementById("requestSendedByClient"),
+    sendRequestResultComents: document.getElementById("sendRequestResultComents"),
+    sentNotificacionToAgent: document.getElementById("sentNotificacionToAgent"),
+    errorMessageSendResultComents: document.getElementById("error-message-sendRequestResultComents"),
+    errorAgentSendResult: document.getElementById("error-message-sentNotificacionToAgent"),
+    notificateToTheAgent: document.getElementById("notificateToTheAgentBtn"),
+    loadingResultOfCreditRequest: document.getElementById("loadingResultOfCreditRequest"),
+    sendResultOfCreditRequestBtn: document.getElementById("sendResultOfCreditRequestBtn")
+  }
+
+</script>

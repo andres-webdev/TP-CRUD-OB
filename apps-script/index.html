@@ -8,19 +8,164 @@
 
 <body>
   <main class="container">
-    <h1 class="mb-5">CRUD - OB Fallidos</h1>
-    <div id="liveAlertPlaceholder"></div>
-    <div class="d-flex justify-content-between mb-3">
-      <div class="col">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
-          onclick="handleShowModalUser()"><i class="bi bi-plus-lg"></i> Agregar</button>
+
+    <!-- Barra de navegacion -->
+    <nav class="navbar navbar-expand-lg navbar-light rounded mt-3 mb-4">
+      <div class="container-fluid headerNavContainer align-items-center justify-content-between">
+        <div class="d-flex mb-3">
+          <a href="#">
+            <img class="navbar-brand logoBrandImage" width="290px" height="68.74px"
+              src="https://res.cloudinary.com/dp3chx1yj/image/upload/v1692842604/Tienda%20Pago/tp-logo_cmtnqw.png"
+              alt="Logogtipo-Tienda-Pago" />
+          </a>
+        </div>
+        <p class="mt-3 p-0 fs-5 fw-bold text-primary-emphasis" id="titleDrive">OB
+          Fallidos</p>
+        <div class="d-flex align-items-center headerLogout">
+          <span class="fs-6 me-4" id="userNameLogin"></span>
+          <button type="button" class="btn btn-outline-danger" onclick="handleLogOutSession()">Salir</button>
+        </div>
       </div>
-      <div class="col-3">
-        <input type="text" class="form-control" id="buscarRegistro" placeholder="Buscar..." />
+    </nav>
+
+    <div id="liveAlertPlaceholder"></div>
+    <div class="d-flex justify-content-between mb-4 mt-3 actionContainer">
+      <div class="col d-flex gap-3 actionContainerBtn">
+        <button type="button" class="btn btn-primary" id="createClientModalBtn" data-bs-toggle="modal"
+          data-bs-target="#createModal" onclick="handleShowModalUser()"><i class="bi bi-plus-lg"></i> Agregar</button>
+
+        <!-- Filtros de la tabla -->
+        <div class="dropdown">
+          <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false" data-bs-auto-close="outside" onclick="handleFilterModalBtn()" id="filtersModalBtn">
+            Filtros
+          </button>
+          <div class="dropdown-menu p-4" style="width:220px;" id="filtersModal">
+            <ul class="d-flex flex-column gap-1 p-0 m-0 align-center" style="list-style: none; padding: 0; gap: 0.4rem">
+              <li>
+                <p class="d-inline-flex">
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByDateField"
+                    role="button" aria-expanded="true" aria-controls="sortByDateField">
+                    Fecha
+                  </a>
+                </p>
+                <div class="collapse mb-4" id="sortByDateField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <input type="date" class="form-control" id="inputDateForSearching" name="inputDateForSearching" />
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByCountryField"
+                    role="button" aria-expanded="true" aria-controls="sortByCountryField">
+                    Pais
+                  </a>
+                </p>
+                <div class="collapse mb-4" id="sortByCountryField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByCountryField"
+                      name="inputSortByCountryField">
+                      <option selected value="">Selecciona un pais</option>
+                      <option value="PE">PE</option>
+                      <option value="MX">MX</option>
+                    </select>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByStatusRiskField"
+                    role="button" aria-expanded="true" aria-controls="sortByStatusRiskField">
+                    Estatus riesgo
+                  </a>
+                </p>
+                <div class="collapse mb-4" id="sortByStatusRiskField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByStatusRiskField"
+                      name="inputSortByStatusRiskField">
+                      <option selected value="">Estatus Riesgo</option>
+                      <option value="DNI y Docs">DNI y Docs</option>
+                      <option value="Califica">Califica</option>
+                      <option value="No califica">No califica</option>
+                      <option value="Por terminar OBWeb">Por terminar OBWeb</option>
+                      <option value="Cliente afiliado">Cliente afiliado</option>
+                      <option value="Cliente Prueba">Cliente Prueba</option>
+                      <option value="CURP Inválido">CURP Inválido</option>
+                      <option value="OB_web_cul">OB_web_cul</option>
+                    </select>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByProductField"
+                    role="button" aria-expanded="true" aria-controls="sortByProductField">
+                    Producto
+                  </a>
+                </p>
+                <div class="collapse mb-4" id="sortByProductField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Country" id="inputSortByProductField"
+                      name="inputSortByProductField">
+                      <option selected value="">Producto</option>
+                      <option value="P7">P7</option>
+                      <option value="Prestamo Personal">Prestamo Personal</option>
+                      <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
+                      <option value="Servicios Digitales-PE">Servicios Digitales-PE</option>
+                    </select>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <p class="d-inline-flex">
+                  <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#sortByGestionField"
+                    role="button" aria-expanded="true" aria-controls="sortByGestionField">
+                    En Gestion
+                  </a>
+                </p>
+                <div class="collapse" id="sortByGestionField">
+                  <div class="d-flex flex-column justify-content-center">
+                    <select class="form-select" aria-label="Sort by Department" id="inputSortByGestionField"
+                      name="inputSortByGestionField">
+                      <option selected value="">En gestion con</option>
+                      <option value="Call-Center">Call-Center</option>
+                      <option value="Creditos">Creditos</option>
+                    </select>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <button type="button" class="btn btn-primary mt-3 w-100" id="inputFiltersBtn" style="
+                --bs-btn-padding-y: 0.15rem;
+                --bs-btn-padding-x: 0.25rem;
+                --bs-btn-font-size: 0.75rem;
+              ">
+              Filtrar
+            </button>
+            <button type="button" class="btn btn-light mt-2 w-100" id="resetFiltersBtn" onclick="handleResetFilters()"
+              style="
+              --bs-btn-padding-y: 0.10rem;
+              --bs-btn-padding-x: 0.20rem;
+              --bs-btn-font-size: 0.70rem;
+            ">Restaurar filtros</button>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary" onclick="handleRefreshTable()"
+          id="updateDataTableBtn">Actualizar tabla</button>
+      </div>
+      <div class="searchBarConatiner">
+        <form class="d-flex">
+          <input type="text" class="form-control" placeholder="Buscar por DNI, Telefono, Codigo"
+            aria-label="Recipient's username" aria-describedby="button-addon2" id="inputSearchClient">
+          <button class="btn btn-outline-secondary" type="submit" id="searchClientInputBtn"
+            onclick="handleFindClientByValue(event)">Buscar</button>
+        </form>
       </div>
     </div>
-
-    <div class="table-responsive">
+    <!-- Tabla de todos los clientes -->
+    <div class="table-responsive mb-3">
       <table class="table table-hover">
         <thead>
           <tr>
@@ -31,19 +176,30 @@
             <td>Nro doc</td>
             <td>Codigo</td>
             <td>Referente</td>
-            <td>Fecha</td>
+            <td style="min-width: 100px;">Fecha</td>
             <td>Estaus Web</td>
             <td>Producto</td>
             <td>Estatus Riesgo</td>
+            <td>En Gestion</td>
             <td>Acciones</td>
           </tr>
         </thead>
-        <tbody id="tableBody-users">
-
+        <tbody id="tableBody-users" class="table-group-divider">
         </tbody>
       </table>
     </div>
 
+    <div class="d-none" id="searchClientLoader">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <!-- Paginacion -->
+    <nav aria-label="Search result pages" class="position-static bottom-0 start-50" id="navPagesContgainer">
+      <ul class="pagination justify-content-center" id="listOfPages">
+        <!-- Numero de paginas -->
+      </ul>
+    </nav>
   </main>
 
   <template id="rowTemplate">
@@ -55,10 +211,11 @@
       <td class="template-dni"></td>
       <td class="template-cod"></td>
       <td class="template-referent"></td>
-      <td class="template-dateOfFirstContact"></td>
+      <td class="template-dateOfFirstContact" style="min-width: 100px;"></td>
       <td class="template-statusWeb"></td>
       <td class="template-product"></td>
       <td class="template-statusRisk"></td>
+      <td class="template-departmentAssigned"></td>
       <td class="template-actions text-center">
         <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="handleUpdateUserInfo(this)">
         </i>
@@ -66,17 +223,20 @@
     </tr>
   </template>
 
-  <!-- Modal Create -->
+  <!-- Modal to Create Client -->
   <div class="modal fade modal-lg modal-dialog-scrollable" id="createModal" tabindex="-1"
     aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
       <div class="modal-content">
+        <span class="position-absolute start-50 translate-middle-x badge rounded-pill"
+          id="labelDepartmentAssigned"></span>
+        <span class="badge rounded-pill text-bg-primary"></span>
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="createModalLabel">🪪 Crear Cliente</h1>
+          <h1 class="modal-title fs-5" id="createModalLabel">🪪 Cliente</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form name="createUser" id="createUser" class="needs-validation" novalidate>
+          <form name="createUser" id="createUser" class="needs-validation mb-3" novalidate>
             <div class="row mb-3">
               <div class="mb-3">
                 <input type="text" class="form-control" aria-label="userId" name="userId" id="userId" placeholder="#"
@@ -101,9 +261,9 @@
                 <div class="form-floating">
                   <input type="number" class="form-control" id="userPhone" name="userPhone" required
                     placeholder="Telefono" />
-                  <label for="userPhone">Telefono *</label>
-                  <div class="invalid-feedback">
-                    Por favor, ingresar un numero de telefono
+                  <label for="userPhone" class="form-label">Telefono *</label>
+                  <div class="invalid-message d-none" id="error-message-phone">
+                    Por favor, ingresar número de telefono entre 9 y 10 digitos.
                   </div>
                 </div>
               </div>
@@ -125,7 +285,7 @@
                 <div class="form-floating">
                   <input type="text" class="form-control" id="userStatusWeb" name="userStatusWeb"
                     placeholder="Estaus Web" />
-                  <label for="userStatusWeb">Estaus Web</label>
+                  <label for="userStatusWeb">Estatus Web</label>
                 </div>
               </div>
               <div class="col">
@@ -143,17 +303,17 @@
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userCountry" required
                   name="userCountry">
-                  <option selected value="">Pais *</option>
+                  <option selected disabled value="">Pais *</option>
                   <option value="PE">PE</option>
                   <option value="MX">MX</option>
                 </select>
-                <div class="invalid-feedback">
-                  Por favor, ingresar el pais
+                <div class="invalid-message d-none" id="error-message-country">
+                  Por favor, ingresar el pais.
                 </div>
               </div>
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userProduct" name="userProduct">
-                  <option selected value="">Producto</option>
+                  <option selected disabled value="NULL">Producto</option>
                   <option value="P7">P7</option>
                   <option value="Prestamo Personal">Prestamo Personal</option>
                   <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
@@ -163,7 +323,7 @@
               <div class="col">
                 <select class="form-select" aria-label="Default select example" id="userStatusRisk"
                   name="userStatusRisk">
-                  <option selected value="">Estatus Riesgo</option>
+                  <option selected disabled value="NULL">Estatus Riesgo</option>
                   <option value="DNI y Docs">DNI y Docs</option>
                   <option value="Califica">Califica</option>
                   <option value="No califica">No califica</option>
@@ -177,71 +337,75 @@
             </div>
           </form>
 
-          <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5">No hay tipificaciones
+          <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+            id="comentCallTitleHistory">Historico</p>
+
+          <div class="card" style="width: 100%;" id="generalRequestsToCredit">
+            <ul class="list-group list-group-flush" id="generalRequestsToCreditList">
+            </ul>
+          </div>
+
+          <p class="fw-normal text-info-emphasis d-flex justify-content-center mt-1 mb-3 d-none"
+            style="font-size: 0.85rem;" id="noRequestsToCredit">Sin solicitudes</p><!-- NADA -->
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingRequestHistory">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
+            </div>
+          </div>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+            id="comentCallTitle">Tipificaciones</p>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
+            id="noComentsCall">No hay
+            tipificaciones
             registradas</p>
-          <!-- <div class="accordion" id="accordionPanelsStayOpenExample">
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
+            </div>
+          </div>
+
+          <!-- Seccion de tipificaciones -->
+          <div class="accordion mt-0 mb-3" id="comentsCallsContainer">
+          </div>
+
+          <template id="comentsCallTemplate">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                  aria-controls="panelsStayOpen-collapseOne">
-                  Accordion Item #1
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=""
+                  aria-expanded="false" aria-controls="">
+                  <!-- Titulo de la tipificacion -->
                 </button>
               </h2>
-              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+              <div class="accordion-collapse collapse">
                 <div class="accordion-body">
-                  <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse
-                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
-                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-                  within the <code>.accordion-body</code>, though the transition does limit overflow.
+                  <!-- Informacion de la tipificacion -->
                 </div>
               </div>
             </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                  aria-controls="panelsStayOpen-collapseTwo">
-                  Accordion Item #2
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                  <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse
-                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
-                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-                  within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-                  aria-controls="panelsStayOpen-collapseThree">
-                  Accordion Item #3
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                  <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse
-                  plugin adds the appropriate classes that we use to style each element. These classes control the overall
-                  appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-                  custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-                  within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-          </div> -->
+          </template>
 
         </div>
         <div class="modal-footer d-flex justify-content-between">
-          <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal"
-            data-bs-toggle="modal">Tipificar</button>
+          <div>
+            <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
+              onclick="handleModalComentsCall()" data-bs-toggle="modal">Tipificar</button>
+            <button class="btn btn-outline-secondary" data-bs-target="#ternaryModal" id="sendToEvalToCreditsBtn"
+              onclick="handleSendRequestToEvaluation()" data-bs-toggle="modal">
+              Enviar a evaluar
+            </button>
+            <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
+              onclick="showRequestsCreditsInTable()" data-bs-toggle="modal">
+              Solicitudes
+            </button>
+            <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
+              data-bs-toggle="modal">
+              Subir Imagenes
+            </button>
+          </div>
           <button type="submit" class="btn btn-primary" id="createUserOBF"
-            onclick="handleSaveChanges()">Guardar</button>
+            onclick="handleSaveChanges(event)">Guardar</button>
           <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Guardando...</span>
@@ -256,24 +420,40 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Tipificaciones</h1>
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Tipificacion</h1>
           <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
         </div>
         <div class="modal-body">
-          <form name="createTipificacion" id="createTipificacion" class="needs-validation" novalidate>
+          <form name="createComentsCall" id="createComentsCall" class="needs-validation" novalidate>
             <div class="row mb-3">
               <div class="col">
-                <select class="form-select" aria-label="Medios de contacto">
-                  <option selected value="">Medio de contacto</option>
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="callAgentName" placeholder="Nombre">
+                  <label for="callAgentName">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-agentName">
+                    Por favor, ingresar nombre.
+                  </div>
+                </div>
+                <input type="text" class="form-control" aria-label="clientPhone" name="clientPhone" id="clientPhone"
+                  placeholder="#" hidden />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <select class="form-select" aria-label="Medios de contacto" id="callViaOfCalling">
+                  <option selected disabled value="">Medio de contacto</option>
                   <option value="XCALLY">XCALLY</option>
                   <option value="Dinamico">Dinamico</option>
                   <option value="Corporativo">Corporativo</option>
                   <option value="WhatsApp">WhatsApp</option>
                 </select>
+                <div class="invalid-message d-none" id="error-message-callViaOfCalling">
+                  Por favor, ingresar el medio de llamada.
+                </div>
               </div>
               <div class="col">
-                <select class="form-select" aria-label="Resultado de la llamada">
-                  <option selected value="">Resultado</option>
+                <select class="form-select" aria-label="Resultado de la llamada" id="callResults">
+                  <option selected disabled value="">Resultado</option>
                   <option value="Contestada">Contestada</option>
                   <option value="Buzon">Buzon</option>
                   <option value="Corta llamada">Corta llamada</option>
@@ -283,19 +463,165 @@
                   <option value="Timbra y no contesta">Timbra y no contesta</option>
                   <option value="Sin respuesta">Sin respuesta</option>
                 </select>
+                <div class="invalid-message d-none" id="error-message-callResults">
+                  Por favor, ingresar el resultado de la llamada.
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <select class="form-select" aria-label="Estatus de la Gestion" id="callStatusClient">
+                  <option selected disabled value="">Estatus de la Gestion</option>
+                  <option value="Afiliado">Afiliado</option>
+                  <option value="No afiliado">No afiliado</option>
+                  <option value="Pendientes de subsanar documentos - seguimiento">Pendientes de subsanar documentos -
+                    seguimiento</option>
+                  <option value="No afiliado - rubro no aplica">No afiliado - rubro no aplica</option>
+                  <option value="No afiliado - no tiene negocio">No afiliado - no tiene negocio</option>
+                  <option value="No afiliado - desacuerdo con terminos">No afiliado - desacuerdo con terminos</option>
+                  <option value="No afiliado - sin contacto">No afiliado - sin contacto</option>
+                  <option value="Sin contacto - Pendiente de regularizar">Sin contacto - Pendiente de regularizar
+                  </option>
+                  <option value="No afiliado - No califica">No afiliado - No califica</option>
+                </select>
+                <div class="invalid-message d-none" id="error-message-callStatusClient">
+                  Por favor, ingresar el estatus del cliente.
+                </div>
+              </div>
+              <div class="col">
+                <select class="form-select" aria-label="Motivos de no afiliacion" id="callReasonToNotAfiliate">
+                  <option selected disabled value="">Motivos de no afiliacion</option>
+                  <option value="Inconforme con cobros">Inconforme con cobros</option>
+                  <option value="Falta de documentos">Falta de documentos</option>
+                  <option value="Exede el limite de edad">Exede el limite de edad</option>
+                  <option value="DNI vencido">DNI vencido</option>
+                  <option value="No tiene boletas">No tiene boletas</option>
+                  <option value="Sin Negocio">Sin Negocio</option>
+                  <option value="Rubro no aplica">Rubro no aplica</option>
+                  <option value="No pasa evaluacion">No pasa evaluacion</option>
+                  <option value="No le interesa, no da mas razon">No le interesa, no da mas razon</option>
+                  <option value="Pago de comision o Intereses">Pago de comision o Intereses</option>
+                  <option value="Sin contacto">Sin contacto</option>
+                </select>
+                <div class="invalid-message d-none" id="error-message-callReasonToNotAfiliate">
+                  Por favor, ingresar la razon de no afiliación.
+                </div>
               </div>
             </div>
             <div class="form-floating">
-              <textarea class="form-control" placeholder="Comentarios de la llamada" id="comentsOfCalling"
-                style="height: 200px"></textarea>
+              <textarea class="form-control" placeholder="Comentarios de la llamada" id="callComentsOfCalling"
+                style="height: 150px"></textarea>
               <label for="comentsOfCalling">Cometarios</label>
+              <div class="invalid-message d-none" id="error-message-callComentsOfCalling">
+                Por favor, ingresar comentarios de la llamada.
+              </div>
+            </div>
+            <div class="form-check my-3">
+              <input class="form-check-input" type="checkbox" value="" id="chevkBoxEvalClient" />
+              <label class="form-check-label" for="chevkBoxEvalClient">
+                Enviar a evaluar al area de créditos
+              </label>
+            </div>
+            <div class="form-floating d-none" id="comentsOfRequestToCreditContainer">
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                id="comentsOfRequestToCredit" style="height: 150px"></textarea>
+              <label for="comentsOfRequestToCredit" class="text-wrap">Cometarios de la solicitud a creditos</label>
+              <div class="invalid-message d-none" id="error-message-comentsOfRequestToCredit">
+                Por favor, ingresar comentarios de la llamada.
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">Volver</button>
-          <button class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Guardar</button>
-          <button class="btn btn-primary d-none btnLoading" id="loadingButtonTipificacion" type="button" disabled>
+          <button class="btn btn-primary" type="submit" onclick="handleSaveComentsCall(event)">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmSaveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class=" modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">¿Esta seguro de guardar los cambios?</h1>
+          <button type="button" class="btn-close" data-bs-target="#secondaryModal" data-bs-toggle="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-target="#secondaryModal"
+            data-bs-toggle="modal">Volver</button>
+          <button type="button" class="btn btn-primary" id="saveCommentsCallBtn"
+            onclick="addComentsCallHandler()">Guardar</button>
+          <button class="btn btn-primary d-none" id="loadingButtonCommentsCall" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Enviar solicitud de Evaluacion al area de creditos -->
+  <div class="modal fade" id="ternaryModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Enviar a evaluar
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="sentRequestToCreditsForm" id="sentRequestToCreditsForm" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="sentRequestAgentName" placeholder="Nombre" />
+                  <label for="sentRequestAgentName">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-sentRequestAgentName">
+                    Por favor, ingresar nombre.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating" id="sendRequestComentsContainer">
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                id="sendRequestComents" style="height: 150px"></textarea>
+              <label for="sendRequestComents" class="text-wrap">Cometarios de la solicitud para creditos</label>
+              <div class="invalid-message d-none" id="error-message-sendRequestComents">
+                Por favor, ingresar comentarios de la solicitud.
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
+            Volver
+          </button>
+          <button class="btn btn-primary" type="submit" id="confirmRequestToEvalBtn"
+            onclick="handleSendRequestToCredit(event)">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmacion de la solicitud de evaluacion -->
+
+  <div class="modal fade" id="confirmSendRequestModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class=" modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">¿Esta seguro de enviar la solicitud?</h1>
+          <button type="button" class="btn-close" data-bs-target="#ternaryModal" data-bs-toggle="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-target="#ternaryModal"
+            data-bs-toggle="modal">Volver</button>
+          <button type="button" class="btn btn-primary" id="saveCommentsCallBtn"
+            onclick="confirmSendRequestToCredit()">Guardar</button>
+          <button class="btn btn-primary d-none" id="loadingButtonSendRequest" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Guardando...</span>
         </div>
@@ -304,7 +630,151 @@
   </div>
 
 
+  <!-- Modal para mostrar las solicitudes de evauluacion realizadas -->
+
+  <div class="modal fade modal-lg modal-dialog-scrollable" id="fourthModal" tabindex="-1" aria-labelledby="fourthModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitudes Realizadas</h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive mb-3">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <td>Fecha de solicitud</td>
+                  <td>Hora</td>
+                  <td>Asesor/Gestor</td>
+                  <td>Comentarios</td>
+                  <td>Area</td>
+                </tr>
+              </thead>
+              <tbody id="requestSendedByClient" class="table-group-divider">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-target="#createModal"
+            data-bs-toggle="modal">Atras</button>
+          <button type="button" class="btn btn-primary" data-bs-target="#fifthModal" data-bs-toggle="modal"
+            id="notificateToTheAgentBtn" onclick="handleSendNotificationResult()">Notificar al
+            asesor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <template id="rowTemplateRequestToCredit">
+    <tr>
+      <td class="template-id" hidden></td>
+      <td class="template-dateOfRequest" style="min-width: 100px;"></td>
+      <td class="template-timeOfRequest"></td>
+      <td class="template-agentOfTheCase"></td>
+      <td class="template-comentsOfAgenteToCredits"></td>
+      <td class="template-area"></td>
+    </tr>
+  </template>
+
+  <!-- Modal para enviar la notificacion haciendo mencion al agente -->
+
+  <div class="modal fade" id="fifthModal" aria-hidden="true" aria-labelledby="fifthModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Notificación
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#fourthModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="sentRequestToAgentToCall" id="sentRequestToAgentToCall" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="sentNotificacionToAgent" placeholder="Nombre" />
+                  <label for="sentNotificacionToAgent">Asesor</label>
+                  <div class="invalid-message d-none" id="error-message-sentNotificacionToAgent">
+                    Por favor, ingresar nombre.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating" id="sendRequestResultComentsContainer">
+              <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                id="sendRequestResultComents" style="height: 150px"></textarea>
+              <label for="sendRequestResultComents" class="text-wrap">Cometarios Adicionales</label>
+              <div class="invalid-message d-none" id="error-message-sendRequestResultComents">
+                Por favor, ingresar comentarios de la solicitud.
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" data-bs-toggle="modal">
+            Volver
+          </button>
+          <button class="btn btn-primary" type="submit" onclick="handleResultOfCreditRequest()"
+            id="sendResultOfCreditRequestBtn">Enviar</button>
+          <button class="btn btn-primary d-none" id="loadingResultOfCreditRequest" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal para subir imagen a la carpeta de google drive del cliente -->
+
+  <div class="modal fade" id="sixthModal" aria-hidden="true" aria-labelledby="sixthModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+            Subir Imagen
+          </h1>
+          <button type="button" class="btn-close" data-bs-target="#createModal" data-bs-toggle="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form name="uploadImageForm" id="uploadImageForm" class="needs-validation" novalidate
+            onsubmit="sendImages(this)">
+            <div class="row mb-3">
+              <div class="col">
+                <div class="form-floating">
+                  <!-- Subir Imagen -->
+                  <p>Todas las fotos</p>
+                  <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Puedes subir varios archivos</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="formFileMultiple" multiple="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <button class="btn btn-outline-secondary" data-bs-target="#createModal" data-bs-toggle="modal">
+                Volver
+              </button>
+              <button class="btn btn-primary" type="submit">Subir</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="alertContainerWithMessage"></div>
+
+  <?!= include('elements') ?>
+  <?!= include('ClientViews') ?>
+  <?!= include('ComentCalls') ?>
   <?!= include('JS') ?>
+
+
 </body>
 
 </html>
