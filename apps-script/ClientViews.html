@@ -6,47 +6,6 @@
   let totalData
   let totalPages
 
-  function handleShowModalUser() {
-    clientMainModal.formValues.reset()
-    clientMainModal.comentsCallsContainer.innerHTML = ""
-    clientMainModal.comentsCallsContainer.classList = "d-none"
-    clientMainModal.comentCallBtn.classList = "d-none"
-    clientMainModal.createUserOBF.parentNode.classList = "modal-footer d-flex justify-content-end"
-    clientMainModal.phoneMsgValidation.classList = "invalid-message d-none"
-    userInputs.userCountry.classList = "form-select"
-    clientMainModal.countryMsgValidation.classList = "d-none"
-    clientMainModal.noComentsCall.classList = "d-none"
-    clientMainModal.sendRequestToEvalBtn.classList = "d-none"
-    userInputs.userPhone.classList = "form-control"
-    clientMainModal.notificateToTheAgentBtn.classList.add("d-none")
-    clientMainModal.uploadImagesModalBtn.classList.add("d-none")
-    clientMainModal.comentCallTitle.classList.add("d-none")
-    clientMainModal.comentCallTitleHistory.classList.add("d-none")
-    clientMainModal.generalRequestsToCredit.classList.add("d-none")
-    clientMainModal.noRequestsToCredit.classList.add("d-none")
-
-    userInputs.userPhone.addEventListener("keyup", (event) => {
-      if (validatePhoneNumber(event.target.value)) {
-        clientMainModal.phoneMsgValidation.classList = "d-none"
-        userInputs.userPhone.classList = "form-control"
-      } else {
-        userInputs.userPhone.classList = "form-control invalid-input"
-        clientMainModal.phoneMsgValidation.classList = "invalid-message"
-      }
-    })
-
-    userInputs.userCountry.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        userInputs.userCountry.classList = "form-select invalid-input"
-        clientMainModal.countryMsgValidation.classList = "invalid-message"
-      } else {
-        clientMainModal.countryMsgValidation.classList = "d-none"
-        userInputs.userCountry.classList = "form-select"
-      }
-    })
-
-  }
-
   // Function que activa y desactiva el loader de los identificadores de los elementos
   function loadingBtnOnOff(btn, loader) {
     document.querySelector(`#${btn}`).classList.toggle("d-none")
@@ -68,10 +27,11 @@
     const cod = tableRow.cells[5].innerHTML;
     const referent = tableRow.cells[6].innerHTML;
     const dateOfFirstContact = tableRow.cells[7].innerHTML;
-    const statusWeb = tableRow.cells[8].innerHTML;
-    const product = tableRow.cells[9].innerHTML;
-    const statusRisk = tableRow.cells[10].innerHTML;
-    const departmentAssignedName = tableRow.cells[11].innerHTML;
+    const bytl = tableRow.cells[8].innerHTML;
+    const statusWeb = tableRow.cells[9].innerHTML;
+    const product = tableRow.cells[10].innerHTML;
+    const statusRisk = tableRow.cells[11].innerHTML;
+    const departmentAssignedName = tableRow.cells[12].innerHTML;
 
     const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
     createModal.show()
@@ -85,6 +45,7 @@
     userInputs.userReferent.value = referent;
     userInputs.userDateOfFirstContact.value = dateOfFirstContact;
     userInputs.userStatusWeb.value = statusWeb;
+    userInputs.userStatusBytl.value = bytl;
     userInputs.userCountry.value = country;
     userInputs.userProduct.value = product;
     userInputs.userStatusRisk.value = statusRisk;
@@ -116,7 +77,6 @@
     comentsCallFormModal.formValuesComentsCall.classList.remove("was-validated")
 
     clientMainModal.notificateToTheAgentBtn.classList.remove("d-none")
-    clientMainModal.uploadImagesModalBtn.classList.remove("d-none")
 
     clientMainModal.generalRequestsToCredit.classList.add("d-none")
     clientMainModal.noRequestsToCredit.classList.add("d-none")
@@ -125,6 +85,26 @@
 
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
+
+    userInputs.userPhone.addEventListener("keyup", (event) => {
+      if (validatePhoneNumber(event.target.value)) {
+        clientMainModal.phoneMsgValidation.classList = "d-none"
+        userInputs.userPhone.classList = "form-control"
+      } else {
+        userInputs.userPhone.classList = "form-control invalid-input"
+        clientMainModal.phoneMsgValidation.classList = "invalid-message"
+      }
+    })
+
+    userInputs.userCountry.addEventListener("change", (event) => {
+      if (event.target.value === "") {
+        userInputs.userCountry.classList = "form-select invalid-input"
+        clientMainModal.countryMsgValidation.classList = "invalid-message"
+      } else {
+        clientMainModal.countryMsgValidation.classList = "d-none"
+        userInputs.userCountry.classList = "form-select"
+      }
+    })
   }
 
   // Funcion que guarda la respuesta de creditos y envia el mensaje al canal de slack para continuar con el proceso
@@ -149,9 +129,9 @@
         clientLastName: userInputs.userLastName.value,
         clientPhone: userInputs.userPhone.value,
         clientDni: userInputs.userDni.value,
-       /*  agent: "agentName.value",
-        comentsAgent: "comentsOfRequestToCredit.value",
-        slackUserNameAgent: "@Andres Marquez", */
+        /*  agent: "agentName.value",
+         comentsAgent: "comentsOfRequestToCredit.value",
+         slackUserNameAgent: "@Andres Marquez", */
         slackUserNameCredit: localStorage.getItem("slackUserName"),
         creditos: requestTableModal.sentNotificacionToAgent.value,
         commentsCredits: requestTableModal.sendRequestResultComents.value,
@@ -183,17 +163,17 @@
 
           google.script.run
             .sendSlackMessageOfResult(infoSlack)
-          
+
           google.script.run
             .withSuccessHandler(() => {
-              
+
               searchData()
 
               createModal.hide();
             })
             .updateStatusOfClient({ userId: userInputs.userId.value, statusOfClient: "Call-Center" })
 
-          
+
 
         })
         .saveResponseOfCredit(infoResquest)
@@ -277,49 +257,34 @@
       userCod: userInputs.userCod.value,
       userReferent: userInputs.userReferent.value,
       userDateOfFirstContact: userInputs.userDateOfFirstContact.value,
+      userStatusBytl: userInputs.userStatusBytl.value,
       userStatusWeb: userInputs.userStatusWeb.value,
       userCountry: userInputs.userCountry.value,
       userProduct: userInputs.userProduct.value,
       userStatusRisk: userInputs.userStatusRisk.value,
     }
 
-    if (form.userId === '') {
-      //Create Client
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingBtnOnOff("createUserOBF", "loadingButton")
+    //Update Client
+    google.script.run
+      .withSuccessHandler(result => {
+        loadingBtnOnOff("createUserOBF", "loadingButton")
 
+
+        if (homePage.target.value === "") {
           searchData()
-          clientMainModal.formValues.reset();
-          homePage.target.value = ""
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert('Usuario creado exitosamente!', 'success')
-        })
-        .addUser(form);
-    } else {
-      //Update Client
-      google.script.run
-        .withSuccessHandler(result => {
-          loadingBtnOnOff("createUserOBF", "loadingButton")
+        } else {
+          findClientByValue(homePage.target.value)
+          homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
+        }
 
-
-          if (homePage.target.value === "") {
-            searchData()
-          } else {
-            findClientByValue(homePage.target.value)
-            getNumberOfPages(result)
-            homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
-          }
-
-          clientMainModal.formValues.reset()
-          const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
-          createModal.hide();
-          handleSaveAlert('Usuario actualizado exitosamente!', 'success')
-        })
-        .editUser(form)
-    }
+        clientMainModal.formValues.reset()
+        const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
+        createModal.hide();
+        handleSaveAlert('Usuario actualizado exitosamente!', 'success')
+      })
+      .editUser(form)
   }
+
 
   // Buscamos los datos de la tabla y lo mostramos en un template predefinido
   function searchData() {
@@ -548,6 +513,7 @@
         const codCol = tr.querySelector(".template-cod");
         const referenteCol = tr.querySelector(".template-referent");
         const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+        const statusBytl = tr.querySelector(".template-statusBytl");
         const statusWebCol = tr.querySelector(".template-statusWeb");
         const productCol = tr.querySelector(".template-product");
         const statusRiskCol = tr.querySelector(".template-statusRisk");
@@ -564,10 +530,11 @@
         codCol.textContent = user[6]
         referenteCol.textContent = user[7]
         dateOfFirstContactCol.textContent = user[8]
-        statusWebCol.textContent = user[9]
-        productCol.textContent = user[10]
-        statusRiskCol.textContent = user[11]
-        departmentAssigned.textContent = user[12]
+        statusBytl.textContent = user[9]
+        statusWebCol.textContent = user[10]
+        productCol.textContent = user[11]
+        statusRiskCol.textContent = user[12]
+        departmentAssigned.textContent = user[13]
 
         editButton.dataset.usuarioId = user[0]
 

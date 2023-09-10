@@ -12,8 +12,9 @@ function editUser(form) {
   const country = returnNullValue(form.userCountry)
   const product = returnNullValue(form.userProduct)
   const statusRisk = returnNullValue(form.userStatusRisk)
+  const statusBytl = returnNullValue(form.userStatusBytl)
 
-  sheetsObFallidos.getRange(fila, 2, 1, 11).setValues([[
+  sheetsObFallidos.getRange(fila, 2, 1, 12).setValues([[
     country,
     name,
     lastName,
@@ -22,6 +23,7 @@ function editUser(form) {
     cod,
     referent,
     form.userDateOfFirstContact,
+    statusBytl,
     statusWeb,
     product,
     statusRisk,
@@ -57,11 +59,11 @@ function searchRow(id = '1', sheet) {
  */
 
 // Editar la gestion en la que se encuentra el cliente
-function updateStatusOfClient(info){
+function updateStatusOfClient(info) {
 
   const fila = searchRow(info.userId, sheetsObFallidos);
 
-  sheetsObFallidos.getRange(fila, 13, 1, 1).setValues([[
+  sheetsObFallidos.getRange(fila, 14, 1, 1).setValues([[
     info.statusOfClient
   ]])
 }

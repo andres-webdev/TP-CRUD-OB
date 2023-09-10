@@ -1,48 +1,3 @@
-// Add client to the sheets of OB - Fallidos
-function addUser(form) {
-  const id = createId(sheetsObFallidos);
-
-  const name = returnNullValue(form.userName)
-  const lastName = returnNullValue(form.userLastName)
-  const phone = returnNullValue(form.userPhone)
-  const dni = returnNullValue(form.userDni)
-  const cod = returnNullValue(form.userCod)
-  const referent = returnNullValue(form.userReferent)
-  const dateOfFirstContact = currentDate()
-  const statusWeb = returnNullValue(form.userStatusWeb)
-  const country = returnNullValue(form.userCountry)
-  const product = returnNullValue(form.userProduct)
-  const statusRisk = returnNullValue(form.userStatusRisk)
-
-  sheetsObFallidos.appendRow([
-    id,
-    country,
-    name,
-    lastName,
-    phone,
-    dni,
-    cod,
-    referent,
-    dateOfFirstContact,
-    statusWeb,
-    product,
-    statusRisk,
-    "Call-Center"
-  ]);
-
-  let clientFolderImages = DriveApp.getFolderById("1afzW-Hw2-hZYD-DMZz2LQlL9w7HHWUE3")
-  let subClientFolderImages = clientFolderImages.createFolder(`Cliente_tlf_${phone}`)
-  const linkToFolder = `https://drive.google.com/drive/folders/${subClientFolderImages.getId()}`
-
-  const fila = searchRow(id, sheetsObFallidos);
-  sheetsObFallidos.getRange(fila, 27, 1, 1).setValues([[
-    linkToFolder
-  ]])
-
-  return "User created"
-
-}
-
 // Create a nuevo ID para el usuario y poder mapearlo
 function createId(sheets) {
   let id = 1;
@@ -268,7 +223,7 @@ async function sendSlackMessageOfResult(info) {
   console.log(respCode)
 }
 
-let folderDrive
+/* let folderDrive
 
 function folderDriveFn(urlID) {
   folder = DriveApp.getFolderById(urlID)
@@ -279,24 +234,24 @@ function uploadImages(form) {
   /*  const infoImg = {
      folderId: "1y-kx9PoRYRQNVM9kl0vRKXaGBEnK52i8",
      /* images: [
-       
+
      ]
    } */
 
   //const file = folder.createFile(form.formFileMultiple)
 
-  /* if (form.formFileMultiple.multiple) {
-    // Loop fileInput.files
-    for (const file of form.formFileMultiple) {
-      // Perform action on one file
-      const files = folder.createFile(form.formFileMultiple[file])
-    }
-    // Only one file available
-  } else {
+/* if (form.formFileMultiple.multiple) {
+  // Loop fileInput.files
+  for (const file of form.formFileMultiple) {
+    // Perform action on one file
     const files = folder.createFile(form.formFileMultiple[file])
-  } */
-
-  const files = folderDrive.createFile(form.formFileMultiple)
-
-  return files.getUrl()
+  }
+  // Only one file available
+} else {
+  const files = folder.createFile(form.formFileMultiple[file])
 }
+
+const files = folderDrive.createFile(form.formFileMultiple)
+
+return files.getUrl()
+} */

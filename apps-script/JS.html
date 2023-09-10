@@ -15,7 +15,6 @@
     searchData()
     userLogin.userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
     if (localStorage.getItem("role") === "agent") {
-      homePage.createClientModalBtn.classList.add("d-none")
       userInputs.userId.setAttribute("disabled", "")
       userInputs.userName.setAttribute("disabled", "")
       userInputs.userLastName.setAttribute("disabled", "")
@@ -159,28 +158,28 @@
   }
 
   // Save images in folder on Google Drive
-
-  function sendImages(form) {
-    event.preventDefault()
-
-    google.script.run
-      .withSuccessHandler(async (url) => {
-
-        const urlID = url.slice(39,)
-
-        await folderDriveFn(urlID)
-
-        saveImageInFolderClient(form)
-
-      })
-      .readFolderIdOfImages(userInputs.userPhone.value)
-  }
-
-  function saveImageInFolderClient(form) {
-
-    google.script.run
-      .uploadImages(form)
-  }
+  /* 
+    function sendImages(form) {
+      event.preventDefault()
+  
+      google.script.run
+        .withSuccessHandler(async (url) => {
+  
+          const urlID = url.slice(39,)
+  
+          await folderDriveFn(urlID)
+  
+          saveImageInFolderClient(form)
+  
+        })
+        .readFolderIdOfImages(userInputs.userPhone.value)
+    }
+  
+    function saveImageInFolderClient(form) {
+  
+      google.script.run
+        .uploadImages(form)
+    } */
 
 
 </script>

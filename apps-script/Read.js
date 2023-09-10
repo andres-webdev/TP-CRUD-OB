@@ -1,6 +1,6 @@
 // Obtenemos los valores del rango seleccionando solo los datos del cliente
 function readUsers() {
-  const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 13).getDisplayValues();
+  const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 14).getDisplayValues();
   if (userData.length === 0) {
     return "No hay registros para mostrar"
   }
@@ -20,7 +20,7 @@ function readComentsCall() {
 
 // Buscar la fila donde se encuentra el cliente en base a un dato, que puede ser Telefono, DNI, Codigo de cliente, Apellido y Nombre, respectivamente.
 function findUserByValue(target) {
-  const usersData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 12).getDisplayValues();
+  const usersData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 14).getDisplayValues();
   if (usersData.length === 0) {
     return "No hay registros para mostrar"
   } else if (target === "") {
