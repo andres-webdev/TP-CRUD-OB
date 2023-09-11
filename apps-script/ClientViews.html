@@ -59,7 +59,7 @@
     userInputs.userDepartmentAssigned.value = departmentAssignedName;
     clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
 
-    if (statusOboarding === "Ob. Culminado") {
+    /* if (statusOboarding === "Ob. Culminado") {
       userInputs.userStatusRiskCulminado.classList.remove("d-none")
       userInputs.userStatusRiskCulminado.value = statusRisk
       clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
@@ -67,7 +67,9 @@
       userInputs.userStatusRiskFallido.classList.remove("d-none")
       userInputs.userStatusRiskFallido.value = statusRisk
       clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
-    }
+    } */
+
+    handleInputsClient(statusOboarding, statusRisk)
 
     if (departmentAssignedName === "Call-Center") {
       clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #E9F5FF; color: black; font-weight: normal;"
@@ -104,6 +106,12 @@
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
 
+    
+  }
+
+  // Funcion que maneje los cambios de los eventos de los inputs
+  function handleInputsClient(statusOboarding, statusRisk){
+
     userInputs.userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
         clientMainModal.phoneMsgValidation.classList = "d-none"
@@ -123,6 +131,50 @@
         userInputs.userCountry.classList = "form-select"
       }
     })
+
+    if (statusOboarding === "Ob. Culminado") {
+      userInputs.userStatusRiskCulminado.classList.remove("d-none")
+      userInputs.userStatusRiskCulminado.value = statusRisk
+      userInputs.userStatusRiskFallido.value = "NULL"
+      clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
+    } else if (statusOboarding === "Ob. Fallido") {
+      userInputs.userStatusRiskFallido.classList.remove("d-none")
+      userInputs.userStatusRiskFallido.value = statusRisk
+      userInputs.userStatusRiskCulminado.value = "NULL"
+      clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
+    }
+
+
+    userInputs.userStatusOboarding.addEventListener("change", (event) => {
+
+      if(event.target.value === "Ob. Culminado"){
+
+        userInputs.userStatusRiskFallido.classList.add("d-none")
+        userInputs.userStatusRiskCulminado.classList.remove("d-none")
+        clientMainModal.labelUserStatusRiskFallido.classList.add("d-none")
+        clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
+
+      } else if(event.target.value === "Ob. Fallido"){
+
+        userInputs.userStatusRiskCulminado.classList.add("d-none")
+        userInputs.userStatusRiskFallido.classList.remove("d-none")
+        clientMainModal.labelUserStatusRiskCulminado.classList.add("d-none")
+        clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
+      }
+    })
+
+    userInputs.userStatusRiskCulminado.addEventListener("change", (event) => {
+     
+      userInputs.userStatusRiskCulminado.value = event.target.value
+      userInputs.userStatusRiskFallido.value = "NULL"
+    })
+
+    userInputs.userStatusRiskFallido.addEventListener("change", (event) => {
+
+      userInputs.userStatusRiskFallido.value = event.target.value
+      userInputs.userStatusRiskCulminado.value = "NULL"
+    })
+
   }
 
   // Funcion que guarda la respuesta de creditos y envia el mensaje al canal de slack para continuar con el proceso
@@ -267,9 +319,9 @@
     homePage.navPagesContgainer.classList = "d-none"
 
     let statusRiskUpdated = ""
-    if (!userInputs.userStatusRiskCulminado.value || userInputs.userStatusRiskCulminado.value === "NULL") {
+    if (userInputs.userStatusRiskCulminado.value === "NULL") {
       statusRiskUpdated = userInputs.userStatusRiskFallido.value
-    } else if (!userInputs.userStatusRiskFallido.value || userInputs.userStatusRiskFallido.value === "NULL") {
+    } else if (userInputs.userStatusRiskFallido.value === "NULL") {
       statusRiskUpdated = userInputs.userStatusRiskCulminado.value
     }
 
@@ -290,9 +342,6 @@
       userStatusOboarding: userInputs.userStatusOboarding.value,
       userDepartmentAssigned: userInputs.userDepartmentAssigned.value
     }
-
-    console.log(form)
-    console.log(statusRiskUpdated)
 
     //Update Client
     google.script.run
