@@ -180,6 +180,7 @@
             <td>Producto</td>
             <td>Estatus Riesgo</td>
             <td>En Gestion</td>
+            <td>Status Ob.</td>
             <td>Acciones</td>
           </tr>
         </thead>
@@ -216,6 +217,7 @@
       <td class="template-product"></td>
       <td class="template-statusRisk"></td>
       <td class="template-departmentAssigned"></td>
+      <td class="template-statusOboarding"></td>
       <td class="template-actions text-center">
         <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="handleUpdateUserInfo(this)">
         </i>
@@ -241,6 +243,8 @@
               <div class="mb-3">
                 <input type="text" class="form-control" aria-label="userId" name="userId" id="userId" placeholder="#"
                   hidden />
+                <input type="text" class="form-control" aria-label="departmentAssigned" name="departmentAssigned"
+                  id="departmentAssigned" placeholder="#" hidden />
               </div>
               <div class="col">
                 <div class="form-floating">
@@ -298,33 +302,7 @@
               <div id="userDateFirstContact">
                 <input type="date" id="userDateOfFirstContact" name="userDateOfFirstContact" />
               </div>
-              <div class="col" style="margin-top: -4px;">
-                <label for="userStatusBytl"
-                  style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
-                  Bytl</label>
-                <select class="form-select" aria-label="Default select example" id="userStatusBytl"
-                  name="userStatusBytl">
-                  <option selected disabled value="NULL">Bytl</option>
-                  <option value="Requiere validar afiliación orgánica">Requiere validar afiliación orgánica</option>
-                  <option value="Cliente Suspendido Por Analisis de Credito">Cliente Suspendido Por Analisis de Credito
-                  </option>
-                  <option value="Documentación Pendiente">Documentación Pendiente</option>
-                  <option value="Negocio no aplica">Negocio no aplica</option>
-                  <option value="Registro Repetido">Registro Repetido</option>
-                  <option value="No Puede Seguir">No Puede Seguir</option>
-                  <option value="Requiere validar afiliacion">Requiere validar afiliacion</option>
-                  <option value="Coincidencia en Lista de Persona Bloqueadas">Coincidencia en Lista de Persona
-                    Bloqueadas</option>
-                  <option value="No tiene negocio">No tiene negocio</option>
-                  <option value="Fallecido">Fallecido</option>
-                  <option value="Sin Uso del Servicio">Sin Uso del Servicio</option>
-                  <option value="Validación Fallida">Validación Fallida</option>
-                  <option value="Cuenta en Revisión">Cuenta en Revisión</option>
-                  <option value="Falta de Pago de Capital">Falta de Pago de Capital</option>
-                  <option value="Duplicado">Duplicado</option>
-                  <option value="Registro Duplicado">Registro Duplicado</option>
-                </select>
-              </div>
+
             </div>
             <div class="row mb-3">
               <div class="col">
@@ -352,6 +330,33 @@
                 </select>
               </div>
               <div class="col">
+                <label for="userStatusBytl"
+                  style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
+                  Bytl</label>
+                <select class="form-select" aria-label="Default select example" id="userStatusBytl"
+                  name="userStatusBytl">
+                  <option selected disabled value="NULL">Bytl</option>
+                  <option value="Requiere validar afiliación orgánica">Requiere validar afiliación orgánica</option>
+                  <option value="Cliente Suspendido Por Analisis de Credito">Cliente Suspendido Por Analisis de Credito
+                  </option>
+                  <option value="Documentación Pendiente">Documentación Pendiente</option>
+                  <option value="Negocio no aplica">Negocio no aplica</option>
+                  <option value="Registro Repetido">Registro Repetido</option>
+                  <option value="No Puede Seguir">No Puede Seguir</option>
+                  <option value="Requiere validar afiliacion">Requiere validar afiliacion</option>
+                  <option value="Coincidencia en Lista de Persona Bloqueadas">Coincidencia en Lista de Persona
+                    Bloqueadas</option>
+                  <option value="No tiene negocio">No tiene negocio</option>
+                  <option value="Fallecido">Fallecido</option>
+                  <option value="Sin Uso del Servicio">Sin Uso del Servicio</option>
+                  <option value="Validación Fallida">Validación Fallida</option>
+                  <option value="Cuenta en Revisión">Cuenta en Revisión</option>
+                  <option value="Falta de Pago de Capital">Falta de Pago de Capital</option>
+                  <option value="Duplicado">Duplicado</option>
+                  <option value="Registro Duplicado">Registro Duplicado</option>
+                </select>
+              </div>
+              <!-- <div class="col">
                 <label for="userStatusRisk"
                   style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
                   Riesgo</label>
@@ -367,6 +372,67 @@
                   <option value="CURP Inválido">CURP Inválido</option>
                   <option value="OB_web_cul">OB_web_cul</option>
                 </select>
+              </div> -->
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="userStatusOboarding"
+                  style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus Onboarding</label>
+                <select class="form-select" aria-label="Default select example" id="userStatusOboarding"
+                  name="userStatusOboarding">
+                  <option selected disabled value="NULL">Oboarding</option>
+                  <option value="Ob. Fallido">Ob. Fallido</option>
+                  <option value="Ob. Culminado">Ob. Culminado</option>
+                </select>
+              </div>
+              <div class="col">
+                <label for="userStatusRiskFallido" id="labelUserStatusRiskFallido"
+                  style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus Riesgo</label>
+                <select class="form-select" aria-label="Default select example" id="userStatusRiskFallido"
+                  name="userStatusRiskFallido">
+                  <option selected disabled value="NULL">Estatus Riego</option>
+                  <option value="Por terminar OBWeb">Por terminar OBWeb</option>
+                  <option value="OB_web_cul">OB_web_cul</option>
+                  <option value="No califica">No califica</option>
+                  <option value="DNI + Docs">DNI + Docs</option>
+                  <option value="Cliente afiliado">Cliente afiliado</option>
+                  <option value="No existe DNI">No existe DNI</option>
+                  <option value="Cliente Prueba">Cliente Prueba</option>
+                  <option value="CURP inválido">CURP inválido</option>
+                </select>
+
+                <label for="userStatusRiskCulminado" id="labelUserStatusRiskCulminado"
+                  style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus Riesgo</label>
+                <select class="form-select" aria-label="Default select example" id="userStatusRiskCulminado"
+                  name="userStatusRiskCulminado">
+                  <option selected disabled value="NULL">Estatus Riego</option>
+                  <!-- OB Culminado -->
+                  <option value="No califica Por Análisis de Crédito">No califica Por Análisis
+                    de Crédito</option>
+                  <option value="Por activar">Por activar</option>
+                  <option value="No se puede verificar la pertenencia del negocio">No se puede
+                    verificar la pertenencia del negocio</option>
+                  <option value="Negocio no aplica">Negocio no aplica</option>
+                  <option value="Tickets bajos">Tickets bajos</option>
+                  <option value="Ticket no válido">Ticket no válido</option>
+                  <option value="Repetido/No Califica">Repetido/No Califica</option>
+                  <option value="No tiene Negocio">No tiene Negocio</option>
+                  <option value="Registro repetido/No Califica">Registro repetido/No Califica
+                  </option>
+                  <option value="Cliente prueba">Cliente prueba</option>
+                  <option value="Registro repetido / Por activar">Registro repetido / Por
+                    activar</option>
+                  <option value="DNI invalido">DNI invalido</option>
+                  <option value="No cuenta con información para asignar línea">No cuenta con
+                    información para asignar línea</option>
+                  <option value="Coincidencia en Listas Negras">Coincidencia en Listas Negras
+                  </option>
+                  <option value="Selfie no corresponde al titular">Selfie no corresponde al
+                    titular</option>
+                </select>
+              </div>
+              <div class="col">
+
               </div>
             </div>
           </form>

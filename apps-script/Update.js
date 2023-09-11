@@ -13,8 +13,10 @@ function editUser(form) {
   const product = returnNullValue(form.userProduct)
   const statusRisk = returnNullValue(form.userStatusRisk)
   const statusBytl = returnNullValue(form.userStatusBytl)
+  const statusOboarding = returnNullValue(form.userStatusOboarding)
+  const departmentAssigned = returnNullValue(form.userDepartmentAssigned)
 
-  sheetsObFallidos.getRange(fila, 2, 1, 12).setValues([[
+  sheetsObFallidos.getRange(fila, 2, 1, 14).setValues([[
     country,
     name,
     lastName,
@@ -27,6 +29,8 @@ function editUser(form) {
     statusWeb,
     product,
     statusRisk,
+    departmentAssigned,
+    statusOboarding
   ]])
 
   return "User Edited"

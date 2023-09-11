@@ -32,9 +32,15 @@
     const product = tableRow.cells[10].innerHTML;
     const statusRisk = tableRow.cells[11].innerHTML;
     const departmentAssignedName = tableRow.cells[12].innerHTML;
+    const statusOboarding = tableRow.cells[13].innerHTML;
 
     const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
     createModal.show()
+
+    userInputs.userStatusRiskFallido.classList.add("d-none")
+    userInputs.userStatusRiskCulminado.classList.add("d-none")
+    clientMainModal.labelUserStatusRiskFallido.classList.add("d-none")
+    clientMainModal.labelUserStatusRiskCulminado.classList.add("d-none")
 
     userInputs.userId.value = id;
     userInputs.userName.value = name;
@@ -48,8 +54,20 @@
     userInputs.userStatusBytl.value = bytl;
     userInputs.userCountry.value = country;
     userInputs.userProduct.value = product;
-    userInputs.userStatusRisk.value = statusRisk;
+    //userInputs.userStatusRisk.value = statusRisk;
+    userInputs.userStatusOboarding.value = statusOboarding;
+    userInputs.userDepartmentAssigned.value = departmentAssignedName;
     clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
+
+    if (statusOboarding === "Ob. Culminado") {
+      userInputs.userStatusRiskCulminado.classList.remove("d-none")
+      userInputs.userStatusRiskCulminado.value = statusRisk
+      clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
+    } else if (statusOboarding === "Ob. Fallido") {
+      userInputs.userStatusRiskFallido.classList.remove("d-none")
+      userInputs.userStatusRiskFallido.value = statusRisk
+      clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
+    }
 
     if (departmentAssignedName === "Call-Center") {
       clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #E9F5FF; color: black; font-weight: normal;"
@@ -248,6 +266,13 @@
 
     homePage.navPagesContgainer.classList = "d-none"
 
+    let statusRiskUpdated = ""
+    if (!userInputs.userStatusRiskCulminado.value || userInputs.userStatusRiskCulminado.value === "NULL") {
+      statusRiskUpdated = userInputs.userStatusRiskFallido.value
+    } else if (!userInputs.userStatusRiskFallido.value || userInputs.userStatusRiskFallido.value === "NULL") {
+      statusRiskUpdated = userInputs.userStatusRiskCulminado.value
+    }
+
     const form = {
       userId: userInputs.userId.value,
       userName: userInputs.userName.value,
@@ -261,8 +286,13 @@
       userStatusWeb: userInputs.userStatusWeb.value,
       userCountry: userInputs.userCountry.value,
       userProduct: userInputs.userProduct.value,
-      userStatusRisk: userInputs.userStatusRisk.value,
+      userStatusRisk: statusRiskUpdated,
+      userStatusOboarding: userInputs.userStatusOboarding.value,
+      userDepartmentAssigned: userInputs.userDepartmentAssigned.value
     }
+
+    console.log(form)
+    console.log(statusRiskUpdated)
 
     //Update Client
     google.script.run
@@ -517,6 +547,7 @@
         const statusWebCol = tr.querySelector(".template-statusWeb");
         const productCol = tr.querySelector(".template-product");
         const statusRiskCol = tr.querySelector(".template-statusRisk");
+        const statusOboarding = tr.querySelector(".template-statusOboarding");
         const departmentAssigned = tr.querySelector(".template-departmentAssigned");
 
         const actionCol = tr.querySelector(".template-actions");
@@ -535,6 +566,7 @@
         productCol.textContent = user[11]
         statusRiskCol.textContent = user[12]
         departmentAssigned.textContent = user[13]
+        statusOboarding.textContent = user[14]
 
         editButton.dataset.usuarioId = user[0]
 
