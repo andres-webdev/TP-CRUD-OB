@@ -1,6 +1,10 @@
 // Obtenemos los valores del rango seleccionando solo los datos del cliente
 function readUsers() {
 
+  if(sheetsObFallidos.getRange(2,1).getValue() === ""){
+    return []
+  }
+
   const newData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
 
   return newData

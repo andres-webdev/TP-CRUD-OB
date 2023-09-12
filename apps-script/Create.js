@@ -2,7 +2,7 @@
 function createId(sheets) {
 
   let id = 1;
-  if (sheets.getRange(1, 1).getValue() === "" || sheets.getLastRow() === 1) {
+  if (sheets.getRange(2, 1).getValue() === "") {
     return id
   }
 
@@ -21,9 +21,9 @@ function createId(sheets) {
 
 // Carga los registros nuevos
 function uploadDataClient() {
-  const isEmpty = sheetsUserData.getRange(1, 1)
+  const isNotEmpty = sheetsUserData.getRange(1, 1)
 
-  if (isEmpty.getValue()) {
+  if (isNotEmpty.getValue()) {
 
     const userData = sheetsUserData.getRange(1, 1, sheetsUserData.getLastRow(), 11).getDisplayValues();
 
@@ -54,10 +54,32 @@ function uploadDataClient() {
 
     const presetFilterData = deleteSameNumber(userData)
 
-    for (let i = 0; i < presetFilterData.length; i++) {
-      const createNewId = createId(sheetsObFallidos)
-      sheetsObFallidos.appendRow([createNewId, ...presetFilterData[i]])
+    // Validar si la hoja de ob fallido no tiene los clientes que voy a agregar
+
+    let getClientObFallido = []
+
+    if(sheetsObFallidos.getRange(2, 1).getValue() !== ""){
+      getClientObFallido = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
     }
+
+    const delteSameClientFromObFallidoSheet = (arr) => {
+
+      const unicos = getClientObFallido;
+
+      for (var i = 0; i < arr.length; i++) {
+
+        const elemento = arr[i];
+
+        if (!unicos.find(elem => elem[5] === arr[i][5])) {
+          const createNewId = createId(sheetsObFallidos)
+          unicos.push([createNewId, ...elemento, "", "", ""]);
+          sheetsObFallidos.appendRow([createNewId, ...elemento, "", "", ""])
+        }
+      }
+
+    }
+
+    delteSameClientFromObFallidoSheet(presetFilterData)
 
     sheetsUserData.clear()
 
@@ -91,6 +113,7 @@ function uploadDataClient() {
 
     const fila = searchRow(filteredUserData[0][0], sheetsObFallidos);
     sheetsObFallidos.getRange(fila, 1, sheetsObFallidos.getLastRow() - fila + 1, sheetsObFallidos.getLastColumn()).setValues(presetMapUserData)
+
   } else {
     return
   }
