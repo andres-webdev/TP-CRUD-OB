@@ -1,7 +1,8 @@
 // Create a nuevo ID para el usuario y poder mapearlo
 function createId(sheets) {
+
   let id = 1;
-  if (sheets.getLastRow() === 1) {
+  if (sheets.getRange(1, 1).getValue() === "" || sheets.getLastRow() === 1) {
     return id
   }
 
@@ -16,6 +17,84 @@ function createId(sheets) {
   });
 
   return maxId + 1
+}
+
+// Carga los registros nuevos
+function uploadDataClient() {
+  const isEmpty = sheetsUserData.getRange(1, 1)
+
+  if (isEmpty.getValue()) {
+
+    const userData = sheetsUserData.getRange(1, 1, sheetsUserData.getLastRow(), 11).getDisplayValues();
+
+    if (userData.length === 0) {
+      return "No hay registros para mostrar"
+    }
+
+    for (let i = 0; i < userData.length; i++) {
+      const createNewId = createId(sheetsHistory)
+      sheetsHistory.appendRow([createNewId, ...userData[i]])
+    }
+
+    const deleteSameNumber = (arr) => {
+
+      const unicos = [];
+
+      for (var i = 0; i < arr.length; i++) {
+
+        const elemento = arr[i];
+
+        if (!unicos.find(elem => elem[4] === arr[i][4])) {
+          unicos.push(elemento);
+        }
+      }
+
+      return unicos;
+    }
+
+    const presetFilterData = deleteSameNumber(userData)
+
+    for (let i = 0; i < presetFilterData.length; i++) {
+      const createNewId = createId(sheetsObFallidos)
+      sheetsObFallidos.appendRow([createNewId, ...presetFilterData[i]])
+    }
+
+    sheetsUserData.clear()
+
+    const newUserData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
+
+    const filteredUserData = newUserData.filter((client) => {
+      if (client[13] === "" || client[14] === "" || client[15] === "") {
+        return client
+      }
+    })
+
+    if (filteredUserData.length === 0) return newUserData
+
+    const presetMapUserData = filteredUserData.map(client => {
+      if (client[12] === "") {
+        client[12] = "NULL"
+      }
+
+      if (client[13] === "") {
+        client[13] = "Call-Center"
+      }
+
+      if (client[14] === "" && (client[6] == "NULL" || client[6] == "")) {
+        client[14] = "Ob. Fallido"
+      } else {
+        client[14] = "Ob. Culminado"
+      }
+
+      return client
+    })
+
+    const fila = searchRow(filteredUserData[0][0], sheetsObFallidos);
+    sheetsObFallidos.getRange(fila, 1, sheetsObFallidos.getLastRow() - fila + 1, sheetsObFallidos.getLastColumn()).setValues(presetMapUserData)
+  } else {
+    return
+  }
+
 }
 
 // Retorna un string con el valor de Null si el string esta vacio

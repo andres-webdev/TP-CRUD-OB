@@ -1,6 +1,8 @@
 const DB_ID = '1-VUS_wGgb9OcZMc2nq2zuldwad9mhvmxnz1lC3_Y6LA'
 const SS = SpreadsheetApp.openById(DB_ID)
-const sheetsObFallidos = SS.getSheetByName('TP-CRUD')
+const sheetsObFallidos = SS.getSheetByName('TP_WEB')
+const sheetsUserData = SS.getSheetByName('Ingresar_Data')
+const sheetsHistory = SS.getSheetByName('Historico')
 
 const DB_LOGIN_ID = '1t87Zgidm6s4fE5yvO7P77sXoTw8QBLtU9ouCnux_YTM'
 const SSLOGIN = SpreadsheetApp.openById(DB_LOGIN_ID)

@@ -79,8 +79,8 @@
 
     // Estilos de los botones y labels
     clientMainModal.comentsCallsContainer.classList.remove("d-none")
-    userInputs.userCountry.classList = "form-select"
-    clientMainModal.countryMsgValidation.classList = "d-none"
+    //userInputs.userCountry.classList = "form-select"
+    //clientMainModal.countryMsgValidation.classList = "d-none"
     clientMainModal.noComentsCall.classList = "d-none"
     clientMainModal.comentCallTitle.classList.add("d-none")
     clientMainModal.comentCallBtn.classList = "btn btn-outline-secondary"
@@ -106,11 +106,11 @@
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
 
-    
+
   }
 
   // Funcion que maneje los cambios de los eventos de los inputs
-  function handleInputsClient(statusOboarding, statusRisk){
+  function handleInputsClient(statusOboarding, statusRisk) {
 
     userInputs.userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -122,7 +122,7 @@
       }
     })
 
-    userInputs.userCountry.addEventListener("change", (event) => {
+    /* userInputs.userCountry.addEventListener("change", (event) => {
       if (event.target.value === "") {
         userInputs.userCountry.classList = "form-select invalid-input"
         clientMainModal.countryMsgValidation.classList = "invalid-message"
@@ -130,7 +130,7 @@
         clientMainModal.countryMsgValidation.classList = "d-none"
         userInputs.userCountry.classList = "form-select"
       }
-    })
+    }) */
 
     if (statusOboarding === "Ob. Culminado") {
       userInputs.userStatusRiskCulminado.classList.remove("d-none")
@@ -147,14 +147,13 @@
 
     userInputs.userStatusOboarding.addEventListener("change", (event) => {
 
-      if(event.target.value === "Ob. Culminado"){
-
+      if (event.target.value === "Ob. Culminado") {
         userInputs.userStatusRiskFallido.classList.add("d-none")
         userInputs.userStatusRiskCulminado.classList.remove("d-none")
         clientMainModal.labelUserStatusRiskFallido.classList.add("d-none")
         clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
 
-      } else if(event.target.value === "Ob. Fallido"){
+      } else if (event.target.value === "Ob. Fallido") {
 
         userInputs.userStatusRiskCulminado.classList.add("d-none")
         userInputs.userStatusRiskFallido.classList.remove("d-none")
@@ -164,7 +163,7 @@
     })
 
     userInputs.userStatusRiskCulminado.addEventListener("change", (event) => {
-     
+
       userInputs.userStatusRiskCulminado.value = event.target.value
       userInputs.userStatusRiskFallido.value = "NULL"
     })
@@ -292,10 +291,10 @@
 
     e.preventDefault()
 
-    if (userInputs.userCountry.value === "") {
-      userInputs.userCountry.classList = "form-select invalid-input"
-      clientMainModal.countryMsgValidation.classList = "invalid-message"
-    }
+    /*  if (userInputs.userCountry.value === "") {
+       userInputs.userCountry.classList = "form-select invalid-input"
+       // clientMainModal.countryMsgValidation.classList = "invalid-message"
+     } */
 
     let passInputValidation = validatePhoneNumber(userInputs.userPhone.value) && userInputs.userCountry.value.length > 0
 
@@ -616,6 +615,11 @@
         statusRiskCol.textContent = user[12]
         departmentAssigned.textContent = user[13]
         statusOboarding.textContent = user[14]
+
+        dniCol.setAttribute("hidden", "")
+        codCol.setAttribute("hidden", "")
+        statusBytl.setAttribute("hidden", "")
+        statusWebCol.setAttribute("hidden", "")
 
         editButton.dataset.usuarioId = user[0]
 

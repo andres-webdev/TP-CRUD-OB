@@ -23,8 +23,6 @@
       userInputs.userCod.setAttribute("disabled", "")
       userInputs.userReferent.setAttribute("disabled", "")
       userInputs.userStatusWeb.setAttribute("disabled", "")
-      userInputs.userCountry.setAttribute("disabled", "")
-      userInputs.userProduct.setAttribute("disabled", "")
       userInputs.userStatusRisk.setAttribute("disabled", "")
       userInputs.userDateOfFirstContact.setAttribute("disabled", "")
       clientMainModal.createUserOBF.classList.add("d-none")
@@ -180,6 +178,23 @@
       google.script.run
         .uploadImages(form)
     } */
+
+  // Cargar la data de los clientes
+  function handleUploadData() {
+
+    homePage.tableBody.innerHTML = ''
+    homePage.searchloader.classList.remove("d-none")
+    homePage.uploadData.setAttribute("disabled", "")
+    homePage.navPagesContgainer.classList = "d-none"
+
+    google.script.run
+      .withSuccessHandler(() => {
+        searchData()
+        homePage.uploadData.removeAttribute("disabled")
+
+      })
+      .uploadDataClient()
+  }
 
 
 </script>
