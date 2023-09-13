@@ -1,10 +1,12 @@
 <script>
 
   //Paginacion
-  let currentPage = 0
+  let currentPage = 1
   let itemsPerPage = 10
   let totalData
   let totalPages
+  let pagesVisible = 7
+  let halfPosition = 3
 
   // Function que activa y desactiva el loader de los identificadores de los elementos
   function loadingBtnOnOff(btn, loader) {
@@ -374,7 +376,7 @@
 
     homePage.searchloader.classList.remove("d-none")
 
-    currentPage = 0 // Error en el Buscador
+    currentPage = 1
 
     google.script.run
       .withSuccessHandler(usersData => {
@@ -382,9 +384,11 @@
         homePage.searchloader.classList = "d-none"
         homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
 
-        getNumberOfPages(usersData)
+        //getNumberOfPages(usersData)
 
         totalData = usersData.reverse()
+
+        handlePagination()
 
         setDataTable()
 
@@ -468,13 +472,12 @@
         //let templateContent = template.content;/* IN */
 
         homePage.searchloader.classList = "d-none"
-        homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
 
-        getNumberOfPages(userData)
+        //getNumberOfPages(userData)
 
         totalData = userData.reverse()
 
-        setDataTable()
+        setDataTableForAClient()
 
         homePage.searchClientInputBtn.removeAttribute("disabled")
       })
@@ -483,7 +486,7 @@
 
   // Paginacion
 
-  function getNumberOfPages(usersList) {
+  /* function getNumberOfPages(usersList) {
     totalPages = Math.ceil((usersList.length / itemsPerPage))
 
     let listOfPagesBtn = ""
@@ -491,7 +494,7 @@
     for (let i = 0; i < totalPages; i++) {
 
       listOfPagesBtn +=
-        `<li class="page-item ${currentPage === i ? "active" : ""}"><a class="page-link" role="button" page-index=${i + 1}>${i + 1}</a></li>`
+        `<li class="page-item ${currentPage === i + 1 ? "active" : ""}"><a class="page-link" role="button" page-index=${i + 1}>${i + 1}</a></li>`
 
     }
 
@@ -506,12 +509,13 @@
       </li>
       `
 
-    document.querySelectorAll(".page-link").forEach(pageLink => {
+    homePage.listOfPages.querySelectorAll(".page-link").forEach(pageLink => {
       const pageIndex = Number(pageLink.getAttribute("page-index"))
 
       if (pageIndex) {
         pageLink.addEventListener("click", () => {
-          setCurrentPage(pageIndex - 1)
+          console.log("djfkldj")
+          setCurrentPage(pageIndex)
         })
       }
     })
@@ -529,33 +533,113 @@
         setCurrentPage(currentPage + 1)
       }
     })
-  }
+  } */
 
   function setCurrentPage(pageIndex) {
     currentPage = pageIndex
     homePage.tableBody.innerHTML = ''
     setDataTable()
+    handlePagination()
     setCurrentPageStyles()
     turnOnOffPrevNextButtons()
   }
 
   function setCurrentPageStyles() {
-    const prevActivePage = document.querySelector("li.page-item.active")
-    prevActivePage.classList.remove("active")
 
-    document.querySelectorAll(".page-link").forEach(pageLinkElement => {
+    homePage.listOfPages.querySelectorAll(".page-link").forEach(pageLinkElement => {
       const pageNewIndex = Number(pageLinkElement.getAttribute("page-index"));
-      if (pageNewIndex == currentPage + 1) {
+      if (pageNewIndex == currentPage) {
         const newActivePage = pageLinkElement.parentElement;
         newActivePage.classList.add('active')
+      } else {
+        pageLinkElement.parentElement.classList.remove("active")
       }
     })
+  }
+
+  // New Pagination
+  function handlePagination() {
+
+    totalPages = Math.ceil((totalData.length / itemsPerPage))
+
+    document.querySelectorAll(".page-link").forEach(pageLink => {
+      const pageIndex = pageLink.getAttribute("page-index")
+
+      if (pageIndex) {
+        pageLink.remove()
+      }
+    })
+
+    const pagesArray = []
+
+    let pagesLimitUp = pagesVisible
+
+    if (totalPages < pagesVisible) {
+      pagesLimitUp = totalPages
+    } else if (currentPage + halfPosition >= totalPages) {
+      pagesLimitUp = totalPages
+    } else if (currentPage > halfPosition) {
+      pagesLimitUp = currentPage + halfPosition
+    }
+
+    let pagesLimitDown = pagesLimitUp - pagesVisible <= 0 ? 0 : pagesLimitUp - pagesVisible
+
+    for (let i = 1; i < pagesVisible; i++) {
+      if ((pagesLimitDown + i) <= pagesLimitUp) {
+        pagesArray.push(pagesLimitDown + i)
+      }
+    }
+
+    let listOfPagesBtn = ""
+
+    for (let i = 0; i < pagesArray.length; i++) {
+
+      listOfPagesBtn +=
+        `<li class="page-item ${currentPage === i + 1 ? "active" : ""}"><a class="page-link" role="button" page-index=${pagesArray[i]}>${pagesArray[i]}</a></li>`
+
+    }
+
+    homePage.listOfPages.innerHTML =
+      ` <li class="page-item">
+        <li class="page-item disabled" id="prevPageBtn">
+          <a class="page-link rounded-start"  role="button">Anterior</a>
+        </li>
+        ${listOfPagesBtn}
+        <li class="page-item" id="nextPageBtn">
+          <a class="page-link" role="button">Siguiente</a>
+      </li>
+      `
+
+    homePage.listOfPages.querySelectorAll(".page-link").forEach(pageLink => {
+      const pageIndex = Number(pageLink.getAttribute("page-index"))
+
+      if (pageIndex) {
+        pageLink.addEventListener("click", () => {
+          setCurrentPage(pageIndex)
+        })
+      }
+    })
+
+    const prevPageBtn = document.getElementById("prevPageBtn")
+    const nextPageBtn = document.getElementById("nextPageBtn")
+
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1)
+      }
+    })
+    nextPageBtn.addEventListener("click", () => {
+      if (currentPage + 1 < totalPages) {
+        setCurrentPage(currentPage + 1)
+      }
+    })
+
   }
 
   function turnOnOffPrevNextButtons() {
     const prevPageBtn = document.getElementById("prevPageBtn")
     const nextPageBtn = document.getElementById("nextPageBtn")
-    if (currentPage === 0) {
+    if (currentPage === 1) {
       prevPageBtn.classList.add("disabled")
     } else {
       prevPageBtn.classList.remove("disabled")
@@ -574,7 +658,7 @@
 
     let templateContent = homePage.template.content;
 
-    let start = currentPage * itemsPerPage
+    let start = (currentPage - 1) * itemsPerPage
     let end = start + itemsPerPage
 
     const dataPerPage = totalData.slice(start, end)
@@ -630,6 +714,61 @@
       homePage.tableBody.innerHTML = tr
     }
   }
+
+  function setDataTableForAClient() {
+
+    if (totalData[0].length > 0) {
+
+      let templateContent = homePage.template.content;
+      const tr = templateContent.cloneNode(true)
+
+      const nameCol = tr.querySelector(".template-name");
+      const lastNameCol = tr.querySelector(".template-lastName");
+      const countryCol = tr.querySelector(".template-country");
+      const phoneCol = tr.querySelector(".template-phone");
+      const dniCol = tr.querySelector(".template-dni");
+      const codCol = tr.querySelector(".template-cod");
+      const referenteCol = tr.querySelector(".template-referent");
+      const dateOfFirstContactCol = tr.querySelector(".template-dateOfFirstContact");
+      const statusBytl = tr.querySelector(".template-statusBytl");
+      const statusWebCol = tr.querySelector(".template-statusWeb");
+      const productCol = tr.querySelector(".template-product");
+      const statusRiskCol = tr.querySelector(".template-statusRisk");
+      const statusOboarding = tr.querySelector(".template-statusOboarding");
+      const departmentAssigned = tr.querySelector(".template-departmentAssigned");
+
+      const actionCol = tr.querySelector(".template-actions");
+      const editButton = tr.querySelector(".button-edit");
+
+      countryCol.textContent = totalData[0][1]
+      nameCol.textContent = totalData[0][2]
+      lastNameCol.textContent = totalData[0][3]
+      phoneCol.textContent = totalData[0][4]
+      dniCol.textContent = totalData[0][5]
+      codCol.textContent = totalData[0][6]
+      referenteCol.textContent = totalData[0][7]
+      dateOfFirstContactCol.textContent = totalData[0][8]
+      statusBytl.textContent = totalData[0][9]
+      statusWebCol.textContent = totalData[0][10]
+      productCol.textContent = totalData[0][11]
+      statusRiskCol.textContent = totalData[0][12]
+      departmentAssigned.textContent = totalData[0][13]
+      statusOboarding.textContent = totalData[0][14]
+
+      dniCol.setAttribute("hidden", "")
+      codCol.setAttribute("hidden", "")
+      statusBytl.setAttribute("hidden", "")
+      statusWebCol.setAttribute("hidden", "")
+
+      editButton.dataset.usuarioId = totalData[0][0]
+
+      homePage.tableBody.appendChild(tr);
+    } else {
+      const tr = `<tr><td colspan="13" class="text-center py-5">No se encontro ningun cliente</td></tr>`
+      homePage.tableBody.innerHTML = tr
+    }
+  }
+
 
   // Filtrado
 
@@ -709,7 +848,7 @@
 
       homePage.searchloader.classList.remove("d-none")
 
-      currentPage = 0 // Error en el Buscador
+      currentPage = 1
 
       google.script.run
         .withSuccessHandler(usersData => {
@@ -768,9 +907,11 @@
             }
           }
 
-          getNumberOfPages(filtertUsersData)
+          //getNumberOfPages(filtertUsersData)
 
           totalData = filtertUsersData.reverse()
+
+          handlePagination()
 
           setDataTable()
 
