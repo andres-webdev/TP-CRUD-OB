@@ -31,11 +31,6 @@ function uploadDataClient() {
       return "No hay registros para mostrar"
     }
 
-    for (let i = 0; i < userData.length; i++) {
-      const createNewId = createId(sheetsHistory)
-      sheetsHistory.appendRow([createNewId, ...userData[i]])
-    }
-
     const deleteSameNumber = (arr) => {
 
       const unicos = [];
@@ -44,7 +39,7 @@ function uploadDataClient() {
 
         const elemento = arr[i];
 
-        if (!unicos.find(elem => elem[4] === arr[i][4])) {
+        if (!unicos.find(elem => elem[3] === arr[i][3])) {
           unicos.push(elemento);
         }
       }
@@ -58,22 +53,28 @@ function uploadDataClient() {
 
     let getClientObFallido = []
 
-    if(sheetsObFallidos.getRange(2, 1).getValue() !== ""){
+    if (sheetsObFallidos.getRange(2, 1).getValue() !== "") {
       getClientObFallido = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
     }
 
     const delteSameClientFromObFallidoSheet = (arr) => {
 
-      const unicos = getClientObFallido;
-
-      for (var i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
 
         const elemento = arr[i];
 
-        if (!unicos.find(elem => elem[5] === arr[i][5])) {
-          const createNewId = createId(sheetsObFallidos)
-          unicos.push([createNewId, ...elemento, "", "", ""]);
-          sheetsObFallidos.appendRow([createNewId, ...elemento, "", "", ""])
+        const findCliente = getClientObFallido.find(elem => elem[4] === arr[i][3])
+
+        if (findCliente === undefined) {
+          const getClientObFallidoIndex = getClientObFallido.length + 1
+
+          let statusOboarding = (elemento[5] == "NULL" || elemento[5] == "") ? "Ob. Fallido" : "Ob. Culminado"
+
+          getClientObFallido.push(
+            [getClientObFallidoIndex, ...elemento, "NULL", "Call-Center", statusOboarding]);
+
+          sheetsObFallidos.appendRow(
+            [getClientObFallidoIndex, ...elemento, "NULL", "Call-Center", statusOboarding])
         }
       }
 
@@ -83,39 +84,8 @@ function uploadDataClient() {
 
     sheetsUserData.clear()
 
-    const newUserData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
-
-    const filteredUserData = newUserData.filter((client) => {
-      if (client[13] === "" || client[14] === "" || client[15] === "") {
-        return client
-      }
-    })
-
-    if (filteredUserData.length === 0) return newUserData
-
-    const presetMapUserData = filteredUserData.map(client => {
-      if (client[12] === "") {
-        client[12] = "NULL"
-      }
-
-      if (client[13] === "") {
-        client[13] = "Call-Center"
-      }
-
-      if (client[14] === "" && (client[6] == "NULL" || client[6] == "")) {
-        client[14] = "Ob. Fallido"
-      } else {
-        client[14] = "Ob. Culminado"
-      }
-
-      return client
-    })
-
-    const fila = searchRow(filteredUserData[0][0], sheetsObFallidos);
-    sheetsObFallidos.getRange(fila, 1, sheetsObFallidos.getLastRow() - fila + 1, sheetsObFallidos.getLastColumn()).setValues(presetMapUserData)
-
   } else {
-    return
+    return "Sin data"
   }
 
 }
@@ -340,7 +310,7 @@ function uploadImages(form) {
      ]
    } */
 
-  //const file = folder.createFile(form.formFileMultiple)
+//const file = folder.createFile(form.formFileMultiple)
 
 /* if (form.formFileMultiple.multiple) {
   // Loop fileInput.files
