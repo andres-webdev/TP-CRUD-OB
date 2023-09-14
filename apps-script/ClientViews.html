@@ -5,7 +5,6 @@
   let itemsPerPage = 10
   let totalData
   let totalPages
-  let totalRiskData
   let pagesVisible = 7
   let halfPosition = 3
 
@@ -37,14 +36,6 @@
     const departmentAssignedName = tableRow.cells[12].innerHTML;
     const statusOboarding = tableRow.cells[13].innerHTML;
 
-    const dateRisk = tableRow.cells[15].innerHTML;
-    const riskDocs = tableRow.cells[16].innerHTML;
-    const sentinel = tableRow.cells[17].innerHTML;
-    const business = tableRow.cells[18].innerHTML;
-    const test = tableRow.cells[19].innerHTML;
-    const comentsOfEval = tableRow.cells[20].innerHTML;
-
-
     const createModal = bootstrap.Modal.getOrCreateInstance('#createModal');
     createModal.show()
 
@@ -65,26 +56,10 @@
     userInputs.userStatusBytl.value = bytl;
     userInputs.userCountry.value = country;
     userInputs.userProduct.value = product;
-    //userInputs.userStatusRisk.value = statusRisk;
     userInputs.userStatusOboarding.value = statusOboarding;
     userInputs.userDepartmentAssigned.value = departmentAssignedName;
     clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
-    userInputs.userDocsForEvaluation.value = riskDocs
-    userInputs.userSentinelEval.value = sentinel
-    userInputs.userSectorOfBusiness.value = business
-    userInputs.userTestCredit.value = test
-    userInputs.comentsOfEval.value = comentsOfEval
 
-
-    /* if (statusOboarding === "Ob. Culminado") {
-      userInputs.userStatusRiskCulminado.classList.remove("d-none")
-      userInputs.userStatusRiskCulminado.value = statusRisk
-      clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
-    } else if (statusOboarding === "Ob. Fallido") {
-      userInputs.userStatusRiskFallido.classList.remove("d-none")
-      userInputs.userStatusRiskFallido.value = statusRisk
-      clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
-    } */
 
     handleInputsClient(statusOboarding, statusRisk)
 
@@ -96,8 +71,6 @@
 
     // Estilos de los botones y labels
     clientMainModal.comentsCallsContainer.classList.remove("d-none")
-    //userInputs.userCountry.classList = "form-select"
-    //clientMainModal.countryMsgValidation.classList = "d-none"
     clientMainModal.noComentsCall.classList = "d-none"
     clientMainModal.comentCallTitle.classList.add("d-none")
     clientMainModal.comentCallBtn.classList = "btn btn-outline-secondary"
@@ -139,40 +112,22 @@
       }
     })
 
-    /* userInputs.userCountry.addEventListener("change", (event) => {
-      if (event.target.value === "") {
-        userInputs.userCountry.classList = "form-select invalid-input"
-        clientMainModal.countryMsgValidation.classList = "invalid-message"
-      } else {
-        clientMainModal.countryMsgValidation.classList = "d-none"
-        userInputs.userCountry.classList = "form-select"
-      }
-    }) */
-
     if (statusOboarding === "Ob. Culminado") {
       userInputs.userStatusRiskCulminado.classList.remove("d-none")
       userInputs.userStatusRiskCulminado.value = statusRisk
       userInputs.userStatusRiskFallido.value = "NULL"
       clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
+      clientMainModal.inputFieldEvalCredit.classList.remove("d-none")
+      clientMainModal.userStatusOboardingContainer.classList.remove("d-none")
+
     } else if (statusOboarding === "Ob. Fallido") {
       userInputs.userStatusRiskFallido.classList.remove("d-none")
       userInputs.userStatusRiskFallido.value = statusRisk
       userInputs.userStatusRiskCulminado.value = "NULL"
       clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
-    }
-
-    if (statusOboarding === "Ob. Culminado") {
-
-      clientMainModal.inputFieldEvalCredit.classList.remove("d-none")
-      clientMainModal.userStatusOboardingContainer.classList.remove("d-none")
-
-    } else if (statusOboarding === "Ob. Fallido") {
-
       clientMainModal.inputFieldEvalCredit.classList.add("d-none")
       clientMainModal.userStatusOboardingContainer.classList.add("d-none")
-
     }
-
 
     userInputs.userStatusOboarding.addEventListener("change", (event) => {
 
@@ -327,11 +282,6 @@
 
     e.preventDefault()
 
-    /*  if (userInputs.userCountry.value === "") {
-       userInputs.userCountry.classList = "form-select invalid-input"
-       // clientMainModal.countryMsgValidation.classList = "invalid-message"
-     } */
-
     let passInputValidation = validatePhoneNumber(userInputs.userPhone.value) && userInputs.userCountry.value.length > 0
 
     if (validatePhoneNumber(userInputs.userPhone.value)) {
@@ -341,29 +291,7 @@
       userInputs.userPhone.classList = "form-control invalid-input"
       clientMainModal.phoneMsgValidation.classList = "invalid-message"
     }
-    /* 
-
-      Culminado --
-      Codigo cliente	
-      Telefono	
-      Onboarding	
-      Estatus de Riesgo	
-      Fecha	
-      Doc para verificar la pertenencia	
-      Sentinel	
-      Tipo de negocio	
-      Prueba	
-      Comentarios
     
-      Fallido --
-      Codigo cliente	
-      Telefono	
-      Onboarding	
-      Estatus de Riesgo	
-      Fecha	
-      Comentarios
-    */
-
     let statusRiskUpdated = ""
     if (userInputs.userStatusRiskCulminado.value === "NULL") {
       statusRiskUpdated = userInputs.userStatusRiskFallido.value
@@ -477,7 +405,7 @@
     currentPage = 1
 
     google.script.run
-      .withSuccessHandler(([usersData, riskData]) => {
+      .withSuccessHandler((usersData) => {
 
         homePage.searchloader.classList = "d-none"
         homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
@@ -485,8 +413,6 @@
         //getNumberOfPages(usersData)
 
         totalData = usersData.reverse()
-
-        totalRiskData = riskData
 
         handlePagination()
 
@@ -807,31 +733,6 @@
 
         editButton.dataset.usuarioId = user[0]
 
-        const dateRisk = tr.querySelector(".template-dateRisk");
-        const riskDocs = tr.querySelector(".template-riskDocs");
-        const sentinel = tr.querySelector(".template-sentinel");
-        const business = tr.querySelector(".template-business");
-        const test = tr.querySelector(".template-test");
-        const comentsOfEval = tr.querySelector(".template-comentsOfEval");
-
-        const findDataRiskByPhone = totalRiskData.find(elem => elem[2] === user[4])
-
-        if (findDataRiskByPhone) {
-          dateRisk.textContent = findDataRiskByPhone[5]
-          riskDocs.textContent = findDataRiskByPhone[6]
-          sentinel.textContent = findDataRiskByPhone[7]
-          business.textContent = findDataRiskByPhone[8]
-          test.textContent = findDataRiskByPhone[9]
-          comentsOfEval.textContent = findDataRiskByPhone[10]
-        }
-
-        dateRisk.setAttribute("hidden", "")
-        riskDocs.setAttribute("hidden", "")
-        sentinel.setAttribute("hidden", "")
-        business.setAttribute("hidden", "")
-        test.setAttribute("hidden", "")
-        comentsOfEval.setAttribute("hidden", "")
-
         homePage.tableBody.appendChild(tr);
       })
     } else {
@@ -976,7 +877,7 @@
       currentPage = 1
 
       google.script.run
-        .withSuccessHandler(([usersData, riskData]) => {
+        .withSuccessHandler(usersData => {
 
           homePage.searchloader.classList = "d-none"
           homePage.navPagesContgainer.classList = "position-static bottom-0 start-50"
@@ -1032,11 +933,7 @@
             }
           }
 
-          //getNumberOfPages(filtertUsersData)
-
           totalData = filtertUsersData.reverse()
-
-          totalRiskData = riskData
 
           handlePagination()
 

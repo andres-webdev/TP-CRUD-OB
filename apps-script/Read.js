@@ -7,9 +7,9 @@ function readUsers() {
 
   const newData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 15).getDisplayValues();
 
-  const riskData = sheetsRiskData.getRange(2, 1, sheetsRiskData.getLastRow() - 1, 11).getDisplayValues();
+  //const riskData = sheetsRiskData.getRange(2, 1, sheetsRiskData.getLastRow() - 1, 11).getDisplayValues();
 
-  return [newData, riskData]
+  return newData
 }
 
 // Obtenemos todas las tipificaciones tanto de las antiguas creadas en el drive como las nuevas generadas
