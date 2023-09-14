@@ -47,6 +47,57 @@ function searchRow(id = '1', sheet) {
   return row
 }
 
+// Editar los datos del cliente, exceptuando el DNI
+function updateRiskEval(info) {
+
+  const riskData = sheetsRiskData.getRange(2, 1, sheetsRiskData.getLastRow() - 1, 11).getDisplayValues();
+
+  const findClient = riskData.find(elem => elem[2] === info.userPhone)
+
+  if (findClient) {
+
+    const fila = searchRow(findClient[0], sheetsRiskData);
+
+    const date = currentDate()
+
+    sheetsRiskData.getRange(fila, 2, 1, 11).setValues([[
+      info.userCod,
+      info.userPhone,
+      info.userStatusOboarding,
+      info.userStatusRisk,
+      date,
+      info.userDocsForEvaluation,
+      info.userSentinelEval,
+      info.userSectorOfBusiness,
+      info.userTestCredit,
+      info.comentsOfEval,
+    ]])
+
+  } else {
+
+    const date = currentDate()
+
+    sheetsRiskData.appendRow(
+      [
+        riskData.length + 1,
+        info.userCod,
+        info.userPhone,
+        info.userStatusOboarding,
+        info.userStatusRisk,
+        date,
+        info.userDocsForEvaluation,
+        info.userSentinelEval,
+        info.userSectorOfBusiness,
+        info.userTestCredit,
+        info.comentsOfEval,
+      ]
+    )
+  }
+
+
+  return "Solicitud agregada"
+}
+
 // Editar la respuesta del area de creditos a la solicitud
 /* function updateResultOfRequest(info) {
 

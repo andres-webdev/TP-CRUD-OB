@@ -224,6 +224,14 @@
         <i class="bi bi-pencil-square button-edit me-3" role="button" onclick="handleUpdateUserInfo(this)">
         </i>
       </td>
+      <!-- Risk -->
+
+      <td class="template-dateRisk"></td>
+      <td class="template-riskDocs"></td>
+      <td class="template-sentinel"></td>
+      <td class="template-business"></td>
+      <td class="template-test"></td>
+      <td class="template-comentsOfEval"></td>
     </tr>
   </template>
 
@@ -439,7 +447,7 @@
                         titular</option>
                     </select>
                   </div>
-                  <div class="col">
+                  <div class="col d-none" id="userStatusOboardingContainer">
                     <label for="userDocsForEvaluation"
                       style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Doc para
                       verificar la
@@ -457,7 +465,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 d-none" id="inputFieldEvalCredit">
                   <div class="col" style="margin-block-start: -4px;">
                     <label for="userSentinelEval"
                       style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Sentinel</label>
@@ -484,99 +492,94 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <input class="form-check-input" type="checkbox" value="" id="chevkBoxEvalClient" />
-                  <label class="form-check-label" for="chevkBoxEvalClient">
-                    Enviar a evaluar al area de créditos
-                  </label>
-                </div>
-                <div class="form-floating d-none" id="comentsOfRequestToCreditContainer">
-                  <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
-                    id="comentsOfRequestToCredit" style="height: 150px"></textarea>
-                  <label for="comentsOfRequestToCredit" class="text-wrap">Cometarios de la solicitud a creditos</label>
-                  <div class="invalid-message d-none" id="error-message-comentsOfRequestToCredit">
-                    Por favor, ingresar comentarios de la llamada.
+                <div id="comentsOfEvalOfCreditContainer">
+                  <div class="form-floating mt-2" id="comentsOfEvalOfCredit">
+                    <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                      id="comentsOfEval" style="height: 80px"></textarea>
+                    <label for="comentsOfEval" class="text-wrap">Cometarios de la evaluación</label>
+                    <!-- <div class="invalid-message d-none" id="error-message-comentsOfEvalOfCredit">
+                      Ingresar comentarios
+                    </div> -->
                   </div>
                 </div>
               </div>
             </div>
-        </div>
+          </form>
 
 
-        </form>
+          <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+            id="comentCallTitleHistory">Historico</p>
 
-        <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
-          id="comentCallTitleHistory">Historico</p>
-
-        <div class="card" style="width: 100%;" id="generalRequestsToCredit">
-          <ul class="list-group list-group-flush" id="generalRequestsToCreditList">
-          </ul>
-        </div>
-
-        <p class="fw-normal text-info-emphasis d-flex justify-content-center mt-1 mb-3 d-none"
-          style="font-size: 0.85rem;" id="noRequestsToCredit">Sin solicitudes</p><!-- NADA -->
-        <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingRequestHistory">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Cargando tipificaciones...</span>
+          <div class="card" style="width: 100%;" id="generalRequestsToCredit">
+            <ul class="list-group list-group-flush" id="generalRequestsToCreditList">
+            </ul>
           </div>
-        </div>
 
-        <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
-          id="comentCallTitle">Tipificaciones</p>
-
-        <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
-          id="noComentsCall">No hay
-          tipificaciones
-          registradas</p>
-        <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Cargando tipificaciones...</span>
-          </div>
-        </div>
-
-        <!-- Seccion de tipificaciones -->
-        <div class="accordion mt-0 mb-3" id="comentsCallsContainer">
-        </div>
-
-        <template id="comentsCallTemplate">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=""
-                aria-expanded="false" aria-controls="">
-                <!-- Titulo de la tipificacion -->
-              </button>
-            </h2>
-            <div class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <!-- Informacion de la tipificacion -->
-              </div>
+          <p class="fw-normal text-info-emphasis d-flex justify-content-center mt-1 mb-3 d-none"
+            style="font-size: 0.85rem;" id="noRequestsToCredit">Sin solicitudes</p><!-- NADA -->
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingRequestHistory">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
             </div>
           </div>
-        </template>
 
-      </div>
-      <div class="modal-footer d-flex justify-content-between">
-        <div>
-          <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
-            onclick="handleModalComentsCall()" data-bs-toggle="modal">Tipificar</button>
-          <button class="btn btn-outline-secondary" data-bs-target="#ternaryModal" id="sendToEvalToCreditsBtn"
-            onclick="handleSendRequestToEvaluation()" data-bs-toggle="modal">
-            Enviar a evaluar
-          </button>
-          <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
-            onclick="showRequestsCreditsInTable()" data-bs-toggle="modal">
-            Solicitudes
-          </button>
-          <!-- <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
-              data-bs-toggle="modal">
-              Subir Imagenes
-            </button> -->
+          <p class="fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+            id="comentCallTitle">Tipificaciones</p>
+
+          <p class="fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3 d-none"
+            id="noComentsCall">No hay
+            tipificaciones
+            registradas</p>
+          <div class="d-flex justify-content-center d-none mt-5 mb-3" id="loadingComenstCall">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando tipificaciones...</span>
+            </div>
+          </div>
+
+          <!-- Seccion de tipificaciones -->
+          <div class="accordion mt-0 mb-3" id="comentsCallsContainer">
+          </div>
+
+          <template id="comentsCallTemplate">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=""
+                  aria-expanded="false" aria-controls="">
+                  <!-- Titulo de la tipificacion -->
+                </button>
+              </h2>
+              <div class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <!-- Informacion de la tipificacion -->
+                </div>
+              </div>
+            </div>
+          </template>
+
         </div>
-        <button type="submit" class="btn btn-primary" id="createUserOBF"
-          onclick="handleSaveChanges(event)">Guardar</button>
-        <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-          <span role="status">Guardando...</span>
+        <div class="modal-footer d-flex justify-content-between">
+          <div>
+            <button class="btn btn-outline-secondary" data-bs-target="#secondaryModal" id="comentCallBtn"
+              onclick="handleModalComentsCall()" data-bs-toggle="modal">Tipificar</button>
+            <button class="btn btn-outline-secondary" data-bs-target="#ternaryModal" id="sendToEvalToCreditsBtn"
+              onclick="handleSendRequestToEvaluation()" data-bs-toggle="modal">
+              Enviar a evaluar
+            </button>
+            <button class="btn btn-outline-secondary" data-bs-target="#fourthModal" id="notificateToTheAgent"
+              onclick="showRequestsCreditsInTable()" data-bs-toggle="modal">
+              Solicitudes
+            </button>
+            <!-- <button class="btn btn-outline-secondary" data-bs-target="#sixthModal" id="uploadImagesModal"
+                data-bs-toggle="modal">
+                Subir Imagenes
+              </button> -->
+          </div>
+          <button type="submit" class="btn btn-primary" id="createUserOBF"
+            onclick="handleSaveChanges(event)">Guardar</button>
+          <button class="btn btn-primary d-none btnLoading" id="loadingButton" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Guardando...</span>
+        </div>
       </div>
     </div>
   </div>
