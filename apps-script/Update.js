@@ -60,7 +60,7 @@ function updateRiskEval(info) {
 
     const date = currentDate()
 
-    sheetsRiskData.getRange(fila, 2, 1, 11).setValues([[
+    sheetsRiskData.getRange(fila, 2, 1, 10).setValues([[
       info.userCod,
       info.userPhone,
       info.userStatusOboarding,
