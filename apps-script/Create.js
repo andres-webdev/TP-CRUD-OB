@@ -19,6 +19,40 @@ function createId(sheets) {
   return maxId + 1
 }
 
+// Crear eval de riesgo
+function createRiskEval(form) {
+
+  const id = createId(sheetsRiskData)
+
+  sheetsRiskData.appendRow([
+    id,
+    form.userCod,
+    form.userPhone,
+    form.userStatusOboarding,
+    form.userStatusRisk,
+    currentDate(),
+    currentHour(),
+    form.agent,
+    form.userEval,
+    form.userSentinel,
+    form.userBusiness,
+    form.userTestCredit,
+    form.comments,
+  ])
+
+  const fila = searchRow(form.userId, sheetsObFallidos);
+
+  sheetsObFallidos.getRange(fila, 13, 1, 3).setValues([
+    [
+      form.userStatusRisk,
+      form.departmentAssigned,
+      form.userStatusOboarding
+    ]
+  ]);
+
+  return "Status de riesgo actualizado"
+}
+
 // Carga los registros nuevos
 function uploadDataClient() {
   const isNotEmpty = sheetsUserData.getRange(1, 1)

@@ -60,8 +60,10 @@
     userInputs.userDepartmentAssigned.value = departmentAssignedName;
     clientMainModal.labelDepartmentAssigned.textContent = departmentAssignedName
 
+    clientMainModal.inputFieldEvalCredit.classList.add("d-none")
+    clientMainModal.inputFieldMoreInfo.classList.add("d-none")
+    clientMainModal.comentsOfEvalOfCreditContainer.classList.add("d-none")
 
-    handleInputsClient(statusOboarding, statusRisk)
 
     if (departmentAssignedName === "Call-Center") {
       clientMainModal.labelDepartmentAssigned.style = "top: 55px; background-color: #E9F5FF; color: black; font-weight: normal;"
@@ -93,14 +95,96 @@
 
     sentRequestToCreditsForm.reset()
 
+    handleStatusOfRiskByClient(phone, statusOboarding, statusRisk)
     handleTotalRequestHistory(phone)
     getDataComentCalls(phone)
 
 
   }
 
+  // Funcion que guarda la evaluacion de riesgo
+  function handleSaveChangesOfRisk(event) {
+    event.preventDefault()
+    clientMainModal.loadingSaveRiskResultBtn.classList.toggle("d-none")
+    clientMainModal.saveRiskResult.classList.toggle("d-none")
+
+    let statusRiskUpdated = ""
+    if (userInputs.userStatusRiskCulminado.value === "NULL") {
+      statusRiskUpdated = userInputs.userStatusRiskFallido.value
+    } else if (userInputs.userStatusRiskFallido.value === "NULL") {
+      statusRiskUpdated = userInputs.userStatusRiskCulminado.value
+    }
+
+    const formValuesRisk = {
+      userId: userInputs.userId.value,
+      departmentAssigned: clientMainModal.labelDepartmentAssigned.textContent,
+      userCod: userInputs.userCod.value,
+      userPhone: userInputs.userPhone.value,
+      userStatusOboarding: userInputs.userStatusOboarding.value,
+      userStatusRisk: statusRiskUpdated,
+      agent: localStorage.getItem("name"),
+      userEval: userInputs.userDocsForEvaluation.value,
+      userSentinel: userInputs.userSentinelEval.value,
+      userBusiness: userInputs.userSectorOfBusiness.value,
+      userTestCredit: userInputs.userTestCredit.value,
+      comments: userInputs.comentsOfEval.value,
+    }
+
+    google.script.run
+      .withSuccessHandler(() => {
+        clientMainModal.loadingSaveRiskResultBtn.classList.toggle("d-none")
+        clientMainModal.saveRiskResult.classList.toggle("d-none")
+      })
+      .createRiskEval(formValuesRisk)
+  }
+
+  // Funcion que busca el estatus del cliente por telefono
+  function handleStatusOfRiskByClient(phone, statusOboarding, statusRisk) {
+    clientMainModal.loadingRiskEval.classList.toggle("d-none")
+
+    if (statusOboarding === "Ob. Culminado") {
+      userInputs.userStatusRiskCulminado.classList.remove("d-none")
+      userInputs.userStatusRiskCulminado.value = statusRisk
+      clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
+
+    } else if (statusOboarding === "Ob. Fallido") {
+      userInputs.userStatusRiskFallido.classList.remove("d-none")
+      userInputs.userStatusRiskFallido.value = statusRisk
+      clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
+    }
+
+    google.script.run
+      .withSuccessHandler(result => {
+
+        if (result.length > 0) {
+
+          userInputs.userSentinelEval.value = result[9]
+          userInputs.userSectorOfBusiness.value = result[10]
+          userInputs.userTestCredit.value = result[11]
+          userInputs.userDocsForEvaluation.value = result[8]
+          userInputs.comentsOfEval.value = result[12]
+
+        } else {
+          userInputs.userSentinelEval.value = "NULL"
+          userInputs.userSectorOfBusiness.value = ""
+          userInputs.userTestCredit.value = ""
+          userInputs.userDocsForEvaluation.value = "NULL"
+          userInputs.comentsOfEval.value = ""
+        }
+
+        handleInputsClient(statusOboarding, statusRisk)
+
+
+        clientMainModal.loadingRiskEval.classList.toggle("d-none")
+
+      })
+      .getLastStatusRiskByClient(phone)
+  }
+
   // Funcion que maneje los cambios de los eventos de los inputs
   function handleInputsClient(statusOboarding, statusRisk) {
+
+    clientMainModal.comentsOfEvalOfCreditContainer.classList.remove("d-none")
 
     userInputs.userPhone.addEventListener("keyup", (event) => {
       if (validatePhoneNumber(event.target.value)) {
@@ -118,6 +202,7 @@
       userInputs.userStatusRiskFallido.value = "NULL"
       clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
       clientMainModal.inputFieldEvalCredit.classList.remove("d-none")
+      clientMainModal.inputFieldMoreInfo.classList.remove("d-none")
       clientMainModal.userStatusOboardingContainer.classList.remove("d-none")
 
     } else if (statusOboarding === "Ob. Fallido") {
@@ -126,6 +211,7 @@
       userInputs.userStatusRiskCulminado.value = "NULL"
       clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
       clientMainModal.inputFieldEvalCredit.classList.add("d-none")
+      clientMainModal.inputFieldMoreInfo.classList.add("d-none")
       clientMainModal.userStatusOboardingContainer.classList.add("d-none")
     }
 
@@ -138,6 +224,7 @@
         clientMainModal.labelUserStatusRiskCulminado.classList.remove("d-none")
 
         clientMainModal.inputFieldEvalCredit.classList.remove("d-none")
+        clientMainModal.inputFieldMoreInfo.classList.remove("d-none")
         clientMainModal.userStatusOboardingContainer.classList.remove("d-none")
 
       } else if (event.target.value === "Ob. Fallido") {
@@ -148,7 +235,18 @@
         clientMainModal.labelUserStatusRiskFallido.classList.remove("d-none")
 
         clientMainModal.inputFieldEvalCredit.classList.add("d-none")
+        clientMainModal.inputFieldMoreInfo.classList.add("d-none")
         clientMainModal.userStatusOboardingContainer.classList.add("d-none")
+        userInputs.userSentinelEval.value = "NULL"
+        userInputs.userSectorOfBusiness.value = ""
+        userInputs.userTestCredit.value = ""
+        userInputs.userDocsForEvaluation.value = "NULL"
+        userInputs.comentsOfEval.value = ""
+
+        if (userInputs.userStatusRiskFallido.value === "NULL") {
+          userInputs.userStatusRiskCulminado.value = "NULL"
+          userInputs.userStatusRiskFallido.value = "NULL"
+        }
 
       }
     })
@@ -291,7 +389,7 @@
       userInputs.userPhone.classList = "form-control invalid-input"
       clientMainModal.phoneMsgValidation.classList = "invalid-message"
     }
-    
+
     let statusRiskUpdated = ""
     if (userInputs.userStatusRiskCulminado.value === "NULL") {
       statusRiskUpdated = userInputs.userStatusRiskFallido.value

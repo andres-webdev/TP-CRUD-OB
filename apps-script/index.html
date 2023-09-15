@@ -380,120 +380,137 @@
             <div class="card border-warning mb-3" style="max-width: 100%;">
               <div class="card-header border-warning bg-warning fw-bolder opacity-75">Creditos</div>
               <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col">
-                    <label for="userStatusOboarding"
-                      style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
-                      Onboarding</label>
-                    <select class="form-select" aria-label="Default select example" id="userStatusOboarding"
-                      name="userStatusOboarding">
-                      <option selected disabled value="NULL">Oboarding</option>
-                      <option value="Ob. Fallido">Ob. Fallido</option>
-                      <option value="Ob. Culminado">Ob. Culminado</option>
-                    </select>
-                  </div>
-                  <div class="col" style="margin-left: 10px;">
-                    <label for="userStatusRiskFallido" id="labelUserStatusRiskFallido"
-                      style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Estatus
-                      Riesgo</label>
-                    <select class="form-select" aria-label="Default select example" id="userStatusRiskFallido"
-                      name="userStatusRiskFallido">
-                      <option selected disabled value="NULL">Estatus Riego</option>
-                      <option value="Por terminar OBWeb">Por terminar OBWeb</option>
-                      <option value="OB_web_cul">OB_web_cul</option>
-                      <option value="No califica">No califica</option>
-                      <option value="DNI + Docs">DNI + Docs</option>
-                      <option value="Cliente afiliado">Cliente afiliado</option>
-                      <option value="No existe DNI">No existe DNI</option>
-                      <option value="Cliente Prueba">Cliente Prueba</option>
-                      <option value="CURP inválido">CURP inválido</option>
-                    </select>
+                <form>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="userStatusOboarding"
+                        style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
+                        Onboarding</label>
+                      <select class="form-select" aria-label="Default select example" id="userStatusOboarding"
+                        name="userStatusOboarding">
+                        <option selected disabled value="NULL">Oboarding</option>
+                        <option value="Ob. Fallido">Ob. Fallido</option>
+                        <option value="Ob. Culminado">Ob. Culminado</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="userStatusRiskFallido" id="labelUserStatusRiskFallido"
+                        style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Estatus
+                        Riesgo</label>
+                      <select class="form-select" aria-label="Default select example" id="userStatusRiskFallido"
+                        name="userStatusRiskFallido">
+                        <option selected disabled value="NULL">Estatus Riego</option>
+                        <option value="Por terminar OBWeb">Por terminar OBWeb</option>
+                        <option value="OB_web_cul">OB_web_cul</option>
+                        <option value="No califica">No califica</option>
+                        <option value="DNI + Docs">DNI + Docs</option>
+                        <option value="Cliente afiliado">Cliente afiliado</option>
+                        <option value="No existe DNI">No existe DNI</option>
+                        <option value="Cliente Prueba">Cliente Prueba</option>
+                        <option value="CURP inválido">CURP inválido</option>
+                      </select>
 
-                    <label for="userStatusRiskCulminado" id="labelUserStatusRiskCulminado"
-                      style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus Riesgo</label>
-                    <select class="form-select" aria-label="Default select example" id="userStatusRiskCulminado"
-                      name="userStatusRiskCulminado">
-                      <option selected disabled value="NULL">Estatus Riego</option>
-                      <!-- OB Culminado -->
-                      <option value="No califica Por Análisis de Crédito">No califica Por Análisis
-                        de Crédito</option>
-                      <option value="Por activar">Por activar</option>
-                      <option value="No se puede verificar la pertenencia del negocio">No se puede
-                        verificar la pertenencia del negocio</option>
-                      <option value="Negocio no aplica">Negocio no aplica</option>
-                      <option value="Tickets bajos">Tickets bajos</option>
-                      <option value="Ticket no válido">Ticket no válido</option>
-                      <option value="Repetido/No Califica">Repetido/No Califica</option>
-                      <option value="No tiene Negocio">No tiene Negocio</option>
-                      <option value="Registro repetido/No Califica">Registro repetido/No Califica
-                      </option>
-                      <option value="Cliente prueba">Cliente prueba</option>
-                      <option value="Registro repetido / Por activar">Registro repetido / Por
-                        activar</option>
-                      <option value="DNI invalido">DNI invalido</option>
-                      <option value="No cuenta con información para asignar línea">No cuenta con
-                        información para asignar línea</option>
-                      <option value="Coincidencia en Listas Negras">Coincidencia en Listas Negras
-                      </option>
-                      <option value="Selfie no corresponde al titular">Selfie no corresponde al
-                        titular</option>
-                    </select>
-                  </div>
-                  <div class="col d-none" id="userStatusOboardingContainer">
-                    <label for="userDocsForEvaluation"
-                      style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Doc para
-                      verificar la
-                      pertenencia</label>
-                    <select class="form-select" aria-label="Default select example" id="userDocsForEvaluation"
-                      name="userDocsForEvaluation">
-                      <option selected disabled value="NULL">Seleccionar</option>
-                      <option value="Boletas/Tickets">Boletas/Tickets</option>
-                      <option value="Licencia de funcionamiento">Licencia de funcionamiento</option>
-                      <option value="Permiso de venta">Permiso de venta</option>
-                      <option value="Ninguno">Ninguno</option>
-                      <option value="Doc no valido">Doc no valido</option>
-                      <option value="Contrato de suministro">Contrato de suministro</option>
-                      <option value="Constitucion de Razon Social">Constitucion de Razon Social</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row mb-3 d-none" id="inputFieldEvalCredit">
-                  <div class="col" style="margin-block-start: -4px;">
-                    <label for="userSentinelEval"
-                      style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Sentinel</label>
-                    <select class="form-select" aria-label="Default select example" id="userSentinelEval"
-                      name="userSentinelEval">
-                      <option selected disabled value="NULL">Seleccionar</option>
-                      <option value="Califica">Califica</option>
-                      <option value="No califica">No califica</option>
-                      <option value="No aplica">No aplica</option>
-                    </select>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="userSectorOfBusiness" name="userSectorOfBusiness"
-                        placeholder="Tipo de negocio" />
-                      <label for="userSectorOfBusiness">Tipo de negocio</label>
+                      <label for="userStatusRiskCulminado" id="labelUserStatusRiskCulminado"
+                        style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px;">Estatus
+                        Riesgo</label>
+                      <select class="form-select" aria-label="Default select example" id="userStatusRiskCulminado"
+                        name="userStatusRiskCulminado">
+                        <option selected disabled value="NULL">Estatus Riego</option>
+                        <!-- OB Culminado -->
+                        <option value="No califica Por Análisis de Crédito">No califica Por Análisis
+                          de Crédito</option>
+                        <option value="Por activar">Por activar</option>
+                        <option value="No se puede verificar la pertenencia del negocio">No se puede
+                          verificar la pertenencia del negocio</option>
+                        <option value="Negocio no aplica">Negocio no aplica</option>
+                        <option value="Tickets bajos">Tickets bajos</option>
+                        <option value="Ticket no válido">Ticket no válido</option>
+                        <option value="Repetido/No Califica">Repetido/No Califica</option>
+                        <option value="No tiene Negocio">No tiene Negocio</option>
+                        <option value="Registro repetido/No Califica">Registro repetido/No Califica
+                        </option>
+                        <option value="Cliente prueba">Cliente prueba</option>
+                        <option value="Registro repetido / Por activar">Registro repetido / Por
+                          activar</option>
+                        <option value="DNI invalido">DNI invalido</option>
+                        <option value="No cuenta con información para asignar línea">No cuenta con
+                          información para asignar línea</option>
+                        <option value="Coincidencia en Listas Negras">Coincidencia en Listas Negras
+                        </option>
+                        <option value="Selfie no corresponde al titular">Selfie no corresponde al
+                          titular</option>
+                      </select>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="userTestCredit" name="userTestCredit"
-                        placeholder="Prueba" />
-                      <label for="userTestCredit">Prueba</label>
+                  <div class="d-flex justify-content-center mt-5 mb-5 d-none" id="loadingRiskEval">
+                    <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Cargando creditos...</span>
                     </div>
                   </div>
-                </div>
-                <div id="comentsOfEvalOfCreditContainer">
-                  <div class="form-floating mt-2" id="comentsOfEvalOfCredit">
-                    <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
-                      id="comentsOfEval" style="height: 80px"></textarea>
-                    <label for="comentsOfEval" class="text-wrap">Cometarios de la evaluación</label>
-                    <!-- <div class="invalid-message d-none" id="error-message-comentsOfEvalOfCredit">
-                      Ingresar comentarios
-                    </div> -->
+                  <div class="row mb-3 d-none" id="inputFieldEvalCredit">
+                    <div class="col d-none" id="userStatusOboardingContainer" style="margin-block-start: -4px;">
+                      <label for="userDocsForEvaluation"
+                        style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Doc para
+                        verificar la
+                        pertenencia</label>
+                      <select class="form-select" aria-label="Default select example" id="userDocsForEvaluation"
+                        name="userDocsForEvaluation">
+                        <option selected disabled value="NULL">Seleccionar</option>
+                        <option value="Boletas/Tickets">Boletas/Tickets</option>
+                        <option value="Licencia de funcionamiento">Licencia de funcionamiento</option>
+                        <option value="Permiso de venta">Permiso de venta</option>
+                        <option value="Ninguno">Ninguno</option>
+                        <option value="Doc no valido">Doc no valido</option>
+                        <option value="Contrato de suministro">Contrato de suministro</option>
+                        <option value="Constitucion de Razon Social">Constitucion de Razon Social</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="userSentinelEval"
+                        style="font-size: 0.8rem; color: rgba(33,37,41, 0.65); padding-left: 5px; width: 100%;">Sentinel</label>
+                      <select class="form-select" aria-label="Default select example" id="userSentinelEval"
+                        name="userSentinelEval">
+                        <option selected disabled value="NULL">Seleccionar</option>
+                        <option value="Califica">Califica</option>
+                        <option value="No califica">No califica</option>
+                        <option value="No aplica">No aplica</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
+                  <div class="row mb-3 d-none" id="inputFieldMoreInfo">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" id="userSectorOfBusiness" name="userSectorOfBusiness"
+                          placeholder="Tipo de negocio" />
+                        <label for="userSectorOfBusiness">Tipo de negocio</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" id="userTestCredit" name="userTestCredit"
+                          placeholder="Prueba" />
+                        <label for="userTestCredit">Prueba</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="comentsOfEvalOfCreditContainer">
+                    <div class="form-floating mt-2" id="comentsOfEvalOfCredit">
+                      <textarea class="form-control text-wrap" placeholder="Cometarios de la solicitud a creditos"
+                        id="comentsOfEval" style="height: 80px"></textarea>
+                      <label for="comentsOfEval" class="text-wrap">Cometarios de la evaluación</label>
+                      <!-- <div class="invalid-message d-none" id="error-message-comentsOfEvalOfCredit">
+                        Ingresar comentarios
+                      </div> -->
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3" id="saveRiskResult"
+                    onclick="handleSaveChangesOfRisk(event)">Guardar</button>
+                  <button class="btn btn-primary d-none btnLoading mt-3" id="loadingSaveRiskResultBtn" type="button"
+                    disabled>
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Guardando...</span>
+                </form>
               </div>
             </div>
           </form>

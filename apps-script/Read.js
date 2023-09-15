@@ -76,6 +76,21 @@ function getAllRequestsByPhoneClient(phone) {
   return requestsAndResultsByPhone
 }
 
+// Obtener el ultimo status del cliente por telefono
+function getLastStatusRiskByClient(phone) {
+  const readAllRiskStatus = sheetsRiskData.getDataRange().getDisplayValues();
+
+  readAllRiskStatus.shift()
+
+  const filterReadAllRiskStatus = readAllRiskStatus.filter(elem => elem[2] === phone)
+
+  const sortReadAllRiskStatusByClient = filterReadAllRiskStatus
+    .sort((prev, last) => new Date(`${last[5]}, ${last[6]}`) - new Date(`${prev[5]}, ${prev[6]}`))
+
+  return sortReadAllRiskStatusByClient.length > 0 ? sortReadAllRiskStatusByClient[0] : []
+}
+
+
 /* // Buscamos los clientes que correspondan a la fecha de creacion
 function getAllClientsByDate(date){
   const userData = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, 13).getDisplayValues();
