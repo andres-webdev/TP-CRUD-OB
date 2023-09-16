@@ -24,20 +24,31 @@ function createRiskEval(form) {
 
   const id = createId(sheetsRiskData)
 
+  const userCod = returnNullValue(form.userCod)
+  const userPhone = returnNullValue(form.userPhone)
+  const userStatusOboarding = returnNullValue(form.userStatusOboarding)
+  const userStatusRisk = returnNullValue(form.userStatusRisk)
+  const agent = returnNullValue(form.agent)
+  const userEval = returnNullValue(form.userEval)
+  const userSentinel = returnNullValue(form.userSentinel)
+  const userBusiness = returnNullValue(form.userBusiness)
+  const userTestCredit = returnNullValue(form.userTestCredit)
+  const comments = returnNullValue(form.comments)
+
   sheetsRiskData.appendRow([
     id,
-    form.userCod,
-    form.userPhone,
-    form.userStatusOboarding,
-    form.userStatusRisk,
+    userCod,
+    userPhone,
+    userStatusOboarding,
+    userStatusRisk,
     currentDate(),
     currentHour(),
-    form.agent,
-    form.userEval,
-    form.userSentinel,
-    form.userBusiness,
-    form.userTestCredit,
-    form.comments,
+    agent,
+    userEval,
+    userSentinel,
+    userBusiness,
+    userTestCredit,
+    comments,
   ])
 
   const fila = searchRow(form.userId, sheetsObFallidos);

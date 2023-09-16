@@ -75,8 +75,14 @@
       dateOfRequest.textContent = user[5]
       timeOfRequest.textContent = user[6]
       agentOfTheCase.textContent = user[7]
-      comentsOfAgenteToCredits.textContent = user[8]
-      area.textContent = user[9]
+      if (user[9] === "Creditos" || user[9] === "Call-Center") {
+        comentsOfAgenteToCredits.textContent = user[8]
+        area.textContent = user[9]
+      } else {
+        comentsOfAgenteToCredits.textContent = user[12]
+        area.textContent = "Creditos"
+      }
+
 
       requestTableModal.requestSendedByClientTable.appendChild(tr);
     })

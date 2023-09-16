@@ -63,6 +63,7 @@
     clientMainModal.inputFieldEvalCredit.classList.add("d-none")
     clientMainModal.inputFieldMoreInfo.classList.add("d-none")
     clientMainModal.comentsOfEvalOfCreditContainer.classList.add("d-none")
+    clientMainModal.saveRiskResultContainer.classList.add("d-none")
 
 
     if (departmentAssignedName === "Call-Center") {
@@ -134,6 +135,8 @@
       .withSuccessHandler(() => {
         clientMainModal.loadingSaveRiskResultBtn.classList.toggle("d-none")
         clientMainModal.saveRiskResult.classList.toggle("d-none")
+        handleSaveAlert('Estatus de riesgo actualizado exitosamente!', 'success')
+        handleTotalRequestHistory(userInputs.userPhone.value)
       })
       .createRiskEval(formValuesRisk)
   }
@@ -174,6 +177,7 @@
 
         handleInputsClient(statusOboarding, statusRisk)
 
+        clientMainModal.saveRiskResultContainer.classList.remove("d-none")
 
         clientMainModal.loadingRiskEval.classList.toggle("d-none")
 
@@ -344,6 +348,7 @@
   function handleTotalRequestHistory(phoneClient) {
 
     clientMainModal.loadingRequestHistory.classList.toggle("d-none")
+    clientMainModal.generalRequestsToCreditList.innerHTML = ""
 
     google.script.run
       .withSuccessHandler(result => {
@@ -353,11 +358,13 @@
         result.forEach(elem => {
 
           if (elem[9] === "Creditos") {
-            item += `<li class="list-group-item" style="background-color: #FFF1E9;">${elem[5]} - <strong>${elem[7]}:</strong>
+            item += `<li class="list-group-item" style="background-color: #FFF1E9; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong>
               ${elem[8]}</li>`
           } else if (elem[9] === "Call-Center") {
-            item += `<li class="list-group-item" style="background-color: #E9F5FF;">${elem[5]} - <strong>${elem[7]}:</strong>
+            item += `<li class="list-group-item" style="background-color: #E9F5FF; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong>
               ${elem[8]}</li>`
+          } else {
+            item += `<li class="list-group-item" style="background-color: #FFF1E9; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong> (${elem[3]} - ${elem[8]}) /     Comentarios: ${elem[12]}</li>`
           }
 
         })

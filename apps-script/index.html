@@ -504,12 +504,14 @@
                       </div> -->
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary mt-3" id="saveRiskResult"
-                    onclick="handleSaveChangesOfRisk(event)">Guardar</button>
-                  <button class="btn btn-primary d-none btnLoading mt-3" id="loadingSaveRiskResultBtn" type="button"
-                    disabled>
-                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    <span role="status">Guardando...</span>
+                  <div class="d-flex w-100 justify-content-end d-none" id="saveRiskResultContainer">
+                    <button type="submit" class="btn btn-primary mt-3" id="saveRiskResult"
+                      onclick="handleSaveChangesOfRisk(event)">Guardar</button>
+                    <button class="btn btn-primary d-none btnLoading mt-3" id="loadingSaveRiskResultBtn" type="button"
+                      disabled>
+                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      <span role="status">Guardando...</span>
+                  </div>
                 </form>
               </div>
             </div>

@@ -64,13 +64,16 @@ function readRequestToCreditByClient(number) {
 function getAllRequestsByPhoneClient(phone) {
   const readRequest = sheetsSolicitudesCreditos.getDataRange().getDisplayValues();
   const readResult = sheetsRespuestaCreditos.getDataRange().getDisplayValues();
+  const readUserRiskStatus = sheetsRiskData.getDataRange().getDisplayValues();
   readRequest.shift();
   readResult.shift();
+  readUserRiskStatus.shift();
 
   const filterRequestsByPhone = readRequest.filter(elem => elem[4] === phone)
   const filterResultsByPhone = readResult.filter(elem => elem[4] === phone)
+  const filterUserRiskStatus = readUserRiskStatus.filter(elem => elem[2] === phone)
 
-  const requestsAndResultsByPhone = [...filterRequestsByPhone, ...filterResultsByPhone]
+  const requestsAndResultsByPhone = [...filterRequestsByPhone, ...filterResultsByPhone, ...filterUserRiskStatus]
     .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[5]}, ${nextComentCall[6]}`) - new Date(`${comentCall[5]}, ${comentCall[6]}`))
 
   return requestsAndResultsByPhone
