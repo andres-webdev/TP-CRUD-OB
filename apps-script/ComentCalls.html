@@ -29,12 +29,6 @@
           headerCallItem.dataset.bsTarget = `#panel-${index}`
           headerCallItem.setAttribute("aria-controls", `panel-${index}`)
 
-          /* if (index === 0) {
-            headerCallItem.classList = "accordion-button"
-            headerCallItem.setAttribute("aria-expanded", "true")
-            bodyCallItem.parentNode.classList = "accordion-collapse collapse show"
-          } */
-
           bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
 
 
@@ -86,7 +80,7 @@
         })
 
         generateOldComentsCall(templateItem, oldComentsCall, target)
-        
+
 
         // Aplicar estilos a las etiquelas para mayor informacion al usuario
         if (filterComentsCalls.length > 0) {
@@ -103,39 +97,71 @@
 
   // Funcion que muestra las tipificaciones creadas en el antiguio formulario y que se muestra como historial
   function generateOldComentsCall(templateItem, oldComentsCall, target) {
-    const comentCallItem = templateItem.cloneNode(true)
 
-    const headerCallItem = comentCallItem.querySelector(".accordion-button")
-    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+    const oldComentsCallObCulminado = oldComentsCall.obCulminado
+    const rowOldComentsCall = oldComentsCallObCulminado.find(telefono => telefono[5] === target)
 
-    headerCallItem.dataset.bsTarget = `#panel-old`
-    headerCallItem.setAttribute("aria-controls", `panel-old`)
+    const oldComentsCallObFallido = oldComentsCall.obFallido
+    const rowOldComentsCallFallido = oldComentsCallObFallido.find(telefono => telefono[5] === target)
 
-    bodyCallItem.parentNode.setAttribute("id", `panel-old`)
+    let sliceRowOldComentsCallCulminado = -1
+    let sliceRowOldComentsCallFallido = -1
 
-    headerCallItem.textContent = "Tipificaciones antiguas"
-
-    const rowOldComentsCall = oldComentsCall.find(telefono => telefono[4] === target)
-
-    let sliceRowOldComentsCall = -1
-
-
-    if(rowOldComentsCall){
-      sliceRowOldComentsCall = rowOldComentsCall.slice(13,26)
+    if (rowOldComentsCall) {
+      sliceRowOldComentsCallCulminado = rowOldComentsCall.slice(28,)
     }
 
-    if (sliceRowOldComentsCall.every(elem => elem === "") || sliceRowOldComentsCall === -1) {
+    if (rowOldComentsCallFallido) {
+      sliceRowOldComentsCallFallido = rowOldComentsCallFallido.slice(14,)
+    }
+
+    if (sliceRowOldComentsCallCulminado === -1 && sliceRowOldComentsCallFallido === -1) {
+      clientMainModal.comentsCallsContainer.classList.toggle("d-none")
+      clientMainModal.noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
+      clientMainModal.comentCallTitle.classList = "d-none"
+    } else if ((sliceRowOldComentsCallCulminado === -1 || sliceRowOldComentsCallCulminado.every(elem => elem === "")) && (sliceRowOldComentsCallFallido === -1 || sliceRowOldComentsCallFallido.every(elem => elem === ""))) {
+
       clientMainModal.comentsCallsContainer.classList.toggle("d-none")
       clientMainModal.noComentsCall.classList = "fs-5 fw-semibold text-primary-emphasis d-flex justify-content-center mt-5 mb-3"
       clientMainModal.comentCallTitle.classList = "d-none"
     } else {
       clientMainModal.comentsCallsContainer.classList = "accordion mt-0 mb-3"
-      let counterCalls = ""
-      sliceRowOldComentsCall.forEach((comentsCall, index) => {
 
-        if ((index + 1) % 3 === 0 && (index + 1) < 10) {
-          counterCalls +=
-            `
+      const commentsCulminado = sliceRowOldComentsCallCulminado !== -1 && !sliceRowOldComentsCallCulminado.every(elem => elem === "")
+      const commentsFallido = sliceRowOldComentsCallFallido !== -1 && !sliceRowOldComentsCallFallido.every(elem => elem === "")
+
+      if (commentsCulminado) {
+        handleShowObCulminadoComment(sliceRowOldComentsCallCulminado, templateItem)
+      }
+
+      if (commentsFallido) {
+        handleShowObFallidoComment(sliceRowOldComentsCallFallido, templateItem)
+      }
+    }
+  }
+
+  // Funcion que muestra las tipificaciones realizadas en Ob Culminado
+  function handleShowObCulminadoComment(sliceRowOldComentsCall, templateItem) {
+
+    const comentCallItem = templateItem.cloneNode(true)
+
+    const headerCallItem = comentCallItem.querySelector(".accordion-button")
+    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+    headerCallItem.dataset.bsTarget = `#panel-old-culminado`
+    headerCallItem.setAttribute("aria-controls", `panel-old-culminado`)
+
+    bodyCallItem.parentNode.setAttribute("id", `panel-old-culminado`)
+
+    headerCallItem.textContent = "Tipificaciones antiguas - Drive Ob. Culminado"
+
+    let counterCalls = ""
+
+    sliceRowOldComentsCall.forEach((comentsCall, index) => {
+
+      if ((index + 1) % 3 === 0 && (index + 1) < 10) {
+        counterCalls +=
+          `
             <div class="row my-0">
               <div class="col-5 bg-transparent border border-0">
                 <p><strong>${Math.ceil(index / 3)}° Llamada - Fecha:</strong> ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p>
@@ -148,36 +174,91 @@
               </div>
             </div>
             `
-        }
-      })
+      }
+    })
 
-      bodyCallItem.innerHTML =
-        `
+    bodyCallItem.innerHTML =
+      `
           <div class="d-flex flex-column px-3 mt-5 mb-2">
             ${counterCalls}
           </div>
           <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
-            <div class="d-flex gap-2 px-2">
-              <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
-            </div>
-            <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
-              <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[11] || "Sin registro"}</p>
-            </div>
             <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
-              <p class="fw-bolder text-wrap">Comentarios: </p>
+              <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
               <p class="fw-normal">${sliceRowOldComentsCall[9] || "Sin registro"}</p>
             </div>
             <div class="d-flex gap-2 mt-3 justify-content-center">
               <p class="fw-bolder text-wrap">Asesor: </p>
-              <p class="fw-normal">${sliceRowOldComentsCall[12] || "Sin registro"}</p>
+              <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
             </div>
           </div>
         `
+    clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
+  }
 
-      clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
-    }
+  // Funcion que muestra las tipificaciones realizadas en Ob Culminado
+  function handleShowObFallidoComment(sliceRowOldComentsCall, templateItem) {
+
+    const comentCallItem = templateItem.cloneNode(true)
+
+    const headerCallItem = comentCallItem.querySelector(".accordion-button")
+    const bodyCallItem = comentCallItem.querySelector(".accordion-body")
+
+    headerCallItem.dataset.bsTarget = `#panel-old-fallido`
+    headerCallItem.setAttribute("aria-controls", `panel-old-fallido`)
+
+    bodyCallItem.parentNode.setAttribute("id", `panel-old-fallido`)
+
+    headerCallItem.textContent = "Tipificaciones antiguas - Drive Ob. Fallido"
+
+    let counterCalls = ""
+
+    sliceRowOldComentsCall.forEach((comentsCall, index) => {
+
+      if ((index + 1) % 3 === 0 && (index + 1) < 10) {
+        counterCalls +=
+          `
+            <div class="row my-0">
+              <div class="col-5 bg-transparent border border-0">
+                <p><strong>${Math.ceil(index / 3)}° Llamada - Fecha:</strong> ${sliceRowOldComentsCall[index - 1] || "Sin registro"}</p>
+              </div>
+              <div class="col bg-transparent border border-0">
+                <p><strong>Medio:</strong> ${sliceRowOldComentsCall[index - 2] || "Sin registro"}</p>
+              </div>
+              <div class="col-4 bg-transparent border border-0">
+                <p><strong>Resultado:</strong> ${sliceRowOldComentsCall[index] || "Sin registro"}</p>
+              </div>
+            </div>
+            `
+      }
+    })
+
+    bodyCallItem.innerHTML =
+      `
+        <div class="d-flex flex-column px-3 mt-5 mb-2">
+          ${counterCalls}
+        </div>
+        <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+          <div class="d-flex gap-2 px-2">
+            <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+            <p class="fw-normal">${sliceRowOldComentsCall[10] || "Sin registro"}</p>
+          </div>
+          <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+            <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+            <p class="fw-normal">${sliceRowOldComentsCall[11] || "Sin registro"}</p>
+          </div>
+          <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+            <p class="fw-bolder text-wrap">Comentarios: </p>
+            <p class="fw-normal">${sliceRowOldComentsCall[9] || "Sin registro"}</p>
+          </div>
+          <div class="d-flex gap-2 mt-3 justify-content-center">
+            <p class="fw-bolder text-wrap">Asesor: </p>
+            <p class="fw-normal">${sliceRowOldComentsCall[12] || "Sin registro"}</p>
+          </div>
+        </div>
+      `
+
+    clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
   }
 
   // Funcion que maneja y controla cada elemento del formulario
@@ -317,7 +398,7 @@
 
     google.script.run
       .withSuccessHandler(result => {
-        
+
         loadingBtnOnOff("confirmRequestToEvalBtn", "loadingButtonSendRequest")
 
         google.script.run
@@ -356,22 +437,22 @@
     }
   }
 
-  function confirmSendRequestToCredit(){
+  function confirmSendRequestToCredit() {
     const info = {
-        clientName: userInputs.userName.value,
-        clientLastName: userInputs.userLastName.value,
-        clientDni: userInputs.userDni.value,
-        clientPhone: userInputs.userPhone.value,
-        callAgentName: requestFormModal.sentRequestAgentName.value,
-        commentsToEval: requestFormModal.sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
-        slackUserName: localStorage.getItem("slackUserName"),
-        clientCod: userInputs.userCod.value
-      }
+      clientName: userInputs.userName.value,
+      clientLastName: userInputs.userLastName.value,
+      clientDni: userInputs.userDni.value,
+      clientPhone: userInputs.userPhone.value,
+      callAgentName: requestFormModal.sentRequestAgentName.value,
+      commentsToEval: requestFormModal.sendRequestComents.value, // Comentarios de la evaluacion y las notas del asesor al area de creditos
+      slackUserName: localStorage.getItem("slackUserName"),
+      clientCod: userInputs.userCod.value
+    }
 
-      sendRequestToCreditDepartment(info)
+    sendRequestToCreditDepartment(info)
 
-      const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
-      confirmSendRequestModal.hide();
+    const confirmSendRequestModal = bootstrap.Modal.getOrCreateInstance('#confirmSendRequestModal');
+    confirmSendRequestModal.hide();
   }
 
   function handleSendRequestToEvaluation() {

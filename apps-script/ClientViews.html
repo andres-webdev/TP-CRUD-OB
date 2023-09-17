@@ -137,6 +137,11 @@
         clientMainModal.saveRiskResult.classList.toggle("d-none")
         handleSaveAlert('Estatus de riesgo actualizado exitosamente!', 'success')
         handleTotalRequestHistory(userInputs.userPhone.value)
+        if (homePage.target.value === "") {
+          searchData()
+        } else {
+          findClientByValue(homePage.target.value)
+        }
       })
       .createRiskEval(formValuesRisk)
   }
@@ -348,6 +353,7 @@
   function handleTotalRequestHistory(phoneClient) {
 
     clientMainModal.loadingRequestHistory.classList.toggle("d-none")
+    clientMainModal.noRequestsToCredit.classList.remove("d-none")
     clientMainModal.generalRequestsToCreditList.innerHTML = ""
 
     google.script.run
@@ -364,7 +370,7 @@
             item += `<li class="list-group-item" style="background-color: #E9F5FF; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong>
               ${elem[8]}</li>`
           } else {
-            item += `<li class="list-group-item" style="background-color: #FFF1E9; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong> (${elem[3]} - ${elem[8]}) /     Comentarios: ${elem[12]}</li>`
+            item += `<li class="list-group-item" style="background-color: #FFF1E9; font-size: 0.85rem;">${elem[5]} - <strong>${elem[7]}:</strong> (${elem[3]} - ${elem[8]}) / ${elem[4]} /     Comentarios: ${elem[12]}</li>`
           }
 
         })
@@ -375,9 +381,11 @@
         } else {
           clientMainModal.generalRequestsToCreditList.innerHTML = `${item}`
           clientMainModal.generalRequestsToCredit.classList.remove("d-none")
+          clientMainModal.noRequestsToCredit.classList.add("d-none")
         }
 
         clientMainModal.loadingRequestHistory.classList.toggle("d-none")
+
       })
       .getAllRequestsByPhoneClient(phoneClient)
   }
@@ -848,7 +856,7 @@
 
   function setDataTableForAClient() {
 
-    if (totalData[0].length > 0) {
+    if (totalData.length > 0) {
 
       let templateContent = homePage.template.content;
       const tr = templateContent.cloneNode(true)

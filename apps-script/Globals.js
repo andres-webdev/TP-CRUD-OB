@@ -20,6 +20,12 @@ const DB_RESPUESTAS_CREDITO_ID = '1Q6yNYnqvs07cVFZGpeN7lcOVDs26M23XZE9UoPsY5Ic'
 const SSRESPUESTAS = SpreadsheetApp.openById(DB_RESPUESTAS_CREDITO_ID)
 const sheetsRespuestaCreditos = SSRESPUESTAS.getSheetByName('Respuestas')
 
+/* Data TP */
+const DB_OB_CULMINADO_ID = '1JC6EkKzp-DXIOQNxTxvQ72xIAs6FXDLqigVNsvGzrEU'
+const SSALLDATA = SpreadsheetApp.openById(DB_OB_CULMINADO_ID)
+const sheetsObCulminadoTp = SSALLDATA.getSheetByName('OBWeb Cul - Welcome')
+const sheetsObFallidoTp = SSALLDATA.getSheetByName('OB Fallido')
+
 function validateCredentials(email, password) {
 
   const dataSheetAdmins = sheetAdmins.getDataRange().getDisplayValues()

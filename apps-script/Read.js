@@ -15,12 +15,13 @@ function readUsers() {
 // Obtenemos todas las tipificaciones tanto de las antiguas creadas en el drive como las nuevas generadas
 function readComentsCall() {
   const comentsCall = sheetsTipificaciones.getDataRange().getDisplayValues();
-  const oldComentsCall = sheetsObFallidos.getRange(2, 1, sheetsObFallidos.getLastRow() - 1, sheetsObFallidos.getLastColumn()).getDisplayValues()
+  const oldComentsCallOfObCulminado = sheetsObCulminadoTp.getRange(2, 1, sheetsObCulminadoTp.getLastRow() - 1, sheetsObCulminadoTp.getLastColumn()).getDisplayValues()
+  const oldComentsCallOfObFallido = sheetsObFallidoTp.getRange(2, 1, sheetsObFallidoTp.getLastRow() - 1, sheetsObFallidoTp.getLastColumn()).getDisplayValues()
   comentsCall.shift();
   if (comentsCall.length === 0) {
     return "No hay registros para mostrar"
   }
-  return { newComentsCall: comentsCall, oldComentsCall: oldComentsCall }
+  return { newComentsCall: comentsCall, oldComentsCall: { obCulminado: oldComentsCallOfObCulminado, obFallido: oldComentsCallOfObFallido } }
 }
 
 // Buscar la fila donde se encuentra el cliente en base a un dato, que puede ser Telefono, DNI, Codigo de cliente, Apellido y Nombre, respectivamente.
