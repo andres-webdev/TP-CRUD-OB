@@ -3,22 +3,13 @@ const SS = SpreadsheetApp.openById(DB_ID)
 const sheetsObFallidos = SS.getSheetByName('TP_WEB')
 const sheetsUserData = SS.getSheetByName('Ingresar_Data')
 const sheetsRiskData = SS.getSheetByName('Riesgo')
+const sheetsTipificaciones = SS.getSheetByName('Tipificaciones')
+const sheetsSolicitudesCreditos = SS.getSheetByName('Solicitudes_Evaluacion')
+const sheetsRespuestaCreditos = SS.getSheetByName('Respuestas_Credito')
 
 const DB_LOGIN_ID = '1t87Zgidm6s4fE5yvO7P77sXoTw8QBLtU9ouCnux_YTM'
 const SSLOGIN = SpreadsheetApp.openById(DB_LOGIN_ID)
 const sheetAdmins = SSLOGIN.getSheetByName('Administradores')
-
-const DB_TIPIFICACIONES_ID = '1opjZDaBgqHjcuV1ZSX6iCu1GswVA2nw5-6n6ErlQJUE'
-const SSTIPIFICACIONES = SpreadsheetApp.openById(DB_TIPIFICACIONES_ID)
-const sheetsTipificaciones = SSTIPIFICACIONES.getSheetByName('Tipificaciones')
-
-const DB_SOLICITUDES_CREDITO_ID = '1eOTj9U_v2rpn1GwobpVi7X4WQE_pIRsAt-q3SxwLwEQ'
-const SSSOLICITUDES = SpreadsheetApp.openById(DB_SOLICITUDES_CREDITO_ID)
-const sheetsSolicitudesCreditos = SSSOLICITUDES.getSheetByName('Solicitudes')
-
-const DB_RESPUESTAS_CREDITO_ID = '1Q6yNYnqvs07cVFZGpeN7lcOVDs26M23XZE9UoPsY5Ic'
-const SSRESPUESTAS = SpreadsheetApp.openById(DB_RESPUESTAS_CREDITO_ID)
-const sheetsRespuestaCreditos = SSRESPUESTAS.getSheetByName('Respuestas')
 
 /* Data TP */
 const DB_OB_CULMINADO_ID = '1JC6EkKzp-DXIOQNxTxvQ72xIAs6FXDLqigVNsvGzrEU'

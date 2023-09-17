@@ -9,11 +9,17 @@
     comentsByCredit: ''
   }
 
+  if (localStorage.getItem("role") === "agent") {
+    homePage.uploadData.setAttribute("disabled", "")
+    homePage.uploadData.classList.add("d-none")
+  }
+
   //Logging
 
   window.addEventListener('load', () => {
     searchData()
     userLogin.userNameLogin.innerHTML = `Hola, <strong>${localStorage.getItem("name")}</strong> 👋`
+
     if (localStorage.getItem("role") === "agent") {
       userInputs.userId.setAttribute("disabled", "")
       userInputs.userName.setAttribute("disabled", "")
@@ -23,9 +29,19 @@
       userInputs.userCod.setAttribute("disabled", "")
       userInputs.userReferent.setAttribute("disabled", "")
       userInputs.userStatusWeb.setAttribute("disabled", "")
-      userInputs.userStatusRisk.setAttribute("disabled", "")
+      userInputs.userStatusRiskFallido.setAttribute("disabled", "")
+      userInputs.userStatusRiskCulminado.setAttribute("disabled", "")
       userInputs.userDateOfFirstContact.setAttribute("disabled", "")
-      clientMainModal.createUserOBF.classList.add("d-none")
+      userInputs.userStatusOboarding.setAttribute("disabled", "")
+      userInputs.userSentinelEval.setAttribute("disabled", "")
+      userInputs.userSectorOfBusiness.setAttribute("disabled", "")
+      userInputs.userTestCredit.setAttribute("disabled", "")
+      userInputs.userDocsForEvaluation.setAttribute("disabled", "")
+      userInputs.comentsOfEval.setAttribute("disabled", "")
+      clientMainModal.saveRiskResult.setAttribute("disabled", "")
+      clientMainModal.saveRiskResult.classList = "d-none"
+      clientMainModal.createUserOBF.setAttribute("disabled", "")
+      clientMainModal.createUserOBF.classList = "d-none"
     }
   })
 
@@ -190,7 +206,9 @@
 
     homePage.tableBody.innerHTML = ''
     homePage.searchloader.classList.remove("d-none")
+
     homePage.uploadData.setAttribute("disabled", "")
+
     homePage.navPagesContgainer.classList = "d-none"
 
     google.script.run

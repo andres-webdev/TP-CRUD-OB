@@ -104,11 +104,27 @@ function uploadDataClient() {
 
     const delteSameClientFromObFallidoSheet = (arr) => {
 
+      const ObCulminadoTp = sheetsObCulminadoTp.getRange(2, 1, sheetsObCulminadoTp.getLastRow() - 1, 17).getDisplayValues()
+      const ObFallidoTp = sheetsObFallidoTp.getRange(2, 1, sheetsObFallidoTp.getLastRow() - 1, 14).getDisplayValues()
+
       for (let i = 0; i < arr.length; i++) {
 
         const elemento = arr[i];
 
         const findCliente = getClientObFallido.find(elem => elem[4] === arr[i][3])
+
+        const findOldStatusCulminado = ObCulminadoTp.find(elem => elem[5] === arr[i][3])
+        const findOldStatusFallido = ObFallidoTp.find(elem => elem[5] === arr[i][3])
+
+        let statusForClient
+
+        if (findOldStatusCulminado !== undefined && findOldStatusCulminado[16]) {
+          statusForClient = findOldStatusCulminado[16]
+        } else if (findOldStatusFallido !== undefined && findOldStatusFallido[13]) {
+          statusForClient = findOldStatusFallido[13]
+        } else {
+          statusForClient = "NULL"
+        }
 
         if (findCliente === undefined) {
           const getClientObFallidoIndex = getClientObFallido.length + 1
@@ -116,10 +132,10 @@ function uploadDataClient() {
           let statusOboarding = (elemento[5] == "NULL" || elemento[5] == "") ? "Ob. Fallido" : "Ob. Culminado"
 
           getClientObFallido.push(
-            [getClientObFallidoIndex, ...elemento, "NULL", "Call-Center", statusOboarding]);
+            [getClientObFallidoIndex, ...elemento, statusForClient, "Call-Center", statusOboarding]);
 
           sheetsObFallidos.appendRow(
-            [getClientObFallidoIndex, ...elemento, "NULL", "Call-Center", statusOboarding])
+            [getClientObFallidoIndex, ...elemento, statusForClient, "Call-Center", statusOboarding])
         }
       }
 
@@ -262,7 +278,7 @@ function saveResponseOfCredit(infoResquest) {
 
 // Enviar mensaje a Slack de solicitud de evaluacion
 
-const url = ""
+const url = "https://hooks.slack.com/services/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"
 
 async function sendSlackMessage(info) {
 
@@ -282,14 +298,14 @@ async function sendSlackMessage(info) {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
+            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI / CURP: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
           }
         },
         {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:page_with_curl: Asesor y Comentarios:*\n\t • ${info.callAgentName} / ${info.slackUserName} - ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
+            "text": `*:page_with_curl: Asesor y Comentarios:*\n\t • ${info.callAgentName} - ${info.commentsToEval === "" ? "Sin registro" : info.commentsToEval}`
           }
         }
       ]
@@ -321,14 +337,14 @@ async function sendSlackMessageOfResult(info) {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
+            "text": `*:identification_card: Cliente:*\n\t • ${info.clientName} ${info.clientLastName === "NULL" ? "" : info.clientLastName} • Telefono: ${info.clientPhone} • DNI / CURP: ${info.clientDni === "" ? "Sin registro" : info.clientDni} • Codigo: ${info.clientCod === "" ? "Sin registro" : info.clientCod}`
           }
         },
         {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*:classical_building: Resultado:* Evaluador y Comentarios:*\n\t • ${info.creditos} - ${info.slackUserNameCredit} - ${info.commentsCredits === "" ? "Sin registro" : info.commentsCredits}`
+            "text": `*:classical_building: Resultado:* Evaluador y Comentarios:*\n\t • ${info.creditos} - ${info.commentsCredits === "" ? "Sin registro" : info.commentsCredits}`
           }
         }
       ]
