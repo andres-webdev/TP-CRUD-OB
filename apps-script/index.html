@@ -80,9 +80,15 @@
                 </p>
                 <div class="collapse mb-4" id="sortByStatusRiskField">
                   <div class="d-flex flex-column justify-content-center">
-                    <select class="form-select" aria-label="Sort by Country" id="inputSortByStatusRiskField"
-                      name="inputSortByStatusRiskField">
-                      <option selected value="">Estatus Riesgo</option>
+                    <select class="form-select mb-2" aria-label="Default select example" id="userStatusOnboardingFilter"
+                      name="userStatusOnboardingFilter">
+                      <option selected value="">Oboarding</option>
+                      <option value="Ob. Fallido">Ob. Fallido</option>
+                      <option value="Ob. Culminado">Ob. Culminado</option>
+                    </select>
+                    <select class="form-select d-none" aria-label="Sort by Country"
+                      id="inputSortByStatusRiskFieldFilter" name="inputSortByStatusRiskFieldFilter">
+                      <option selected value="NULL">Estatus Riesgo</option>
                       <option value="DNI y Docs">DNI y Docs</option>
                       <option value="Califica">Califica</option>
                       <option value="No califica">No califica</option>
@@ -91,6 +97,33 @@
                       <option value="Cliente Prueba">Cliente Prueba</option>
                       <option value="CURP Inválido">CURP Inválido</option>
                       <option value="OB_web_cul">OB_web_cul</option>
+                    </select>
+                    <select class="form-select d-none" aria-label="Default select example"
+                      id="userStatusRiskCulminadoFilter" name="userStatusRiskCulminadoFilter">
+                      <option selected value="NULL">Estatus Riego</option>
+                      <!-- OB Culminado -->
+                      <option value="No califica Por Análisis de Crédito">No califica Por Análisis
+                        de Crédito</option>
+                      <option value="Por activar">Por activar</option>
+                      <option value="No se puede verificar la pertenencia del negocio">No se puede
+                        verificar la pertenencia del negocio</option>
+                      <option value="Negocio no aplica">Negocio no aplica</option>
+                      <option value="Tickets bajos">Tickets bajos</option>
+                      <option value="Ticket no válido">Ticket no válido</option>
+                      <option value="Repetido/No Califica">Repetido/No Califica</option>
+                      <option value="No tiene Negocio">No tiene Negocio</option>
+                      <option value="Registro repetido/No Califica">Registro repetido/No Califica
+                      </option>
+                      <option value="Cliente prueba">Cliente prueba</option>
+                      <option value="Registro repetido / Por activar">Registro repetido / Por
+                        activar</option>
+                      <option value="DNI invalido">DNI invalido</option>
+                      <option value="No cuenta con información para asignar línea">No cuenta con
+                        información para asignar línea</option>
+                      <option value="Coincidencia en Listas Negras">Coincidencia en Listas Negras
+                      </option>
+                      <option value="Selfie no corresponde al titular">Selfie no corresponde al
+                        titular</option>
                     </select>
                   </div>
                 </div>
@@ -108,9 +141,9 @@
                       name="inputSortByProductField">
                       <option selected value="">Producto</option>
                       <option value="P7">P7</option>
-                      <option value="Prestamo Personal">Prestamo Personal</option>
-                      <option value="Servicios Digitales-MX">Servicios Digitales-MX</option>
-                      <option value="Servicios Digitales-PE">Servicios Digitales-PE</option>
+                      <option value="PrestamosPersonales">PrestamosPersonales</option>
+                      <option value="ServiciosDigitales-MX">ServiciosDigitales-MX</option>
+                      <option value="ServiciosDigitales-PE">ServiciosDigitales-PE</option>
                     </select>
                   </div>
                 </div>

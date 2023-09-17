@@ -723,7 +723,7 @@
 
     let pagesLimitDown = pagesLimitUp - pagesVisible <= 0 ? 0 : pagesLimitUp - pagesVisible
 
-    for (let i = 1; i < pagesVisible; i++) {
+    for (let i = 1; i <= pagesVisible; i++) {
       if ((pagesLimitDown + i) <= pagesLimitUp) {
         pagesArray.push(pagesLimitDown + i)
       }
@@ -768,7 +768,7 @@
       }
     })
     nextPageBtn.addEventListener("click", () => {
-      if (currentPage + 1 < totalPages) {
+      if (currentPage + 1 <= totalPages) {
         setCurrentPage(currentPage + 1)
       }
     })
@@ -784,7 +784,7 @@
       prevPageBtn.classList.remove("disabled")
     }
 
-    if (currentPage + 1 === totalPages) {
+    if (currentPage >= totalPages) {
       nextPageBtn.classList.add("disabled")
     } else {
       nextPageBtn.classList.remove("disabled")
@@ -916,7 +916,7 @@
     if (
       filterElements.inputDateForSearching.value === "" &&
       filterElements.inputSortByCountryField.value === "" &&
-      filterElements.inputSortByStatusRiskField.value === "" &&
+      filterElements.userStatusOnboardingFilter.value === "" &&
       filterElements.inputSortByProductField.value === "" &&
       filterElements.inputSortByGestionField.value === ""
     ) {
@@ -938,13 +938,6 @@
       }
     })
 
-    filterElements.inputSortByStatusRiskField.addEventListener("change", () => {
-      if (filterElements.inputSortByStatusRiskField.value !== "" || filterElements.inputSortByStatusRiskField.value !== "NULL") {
-        filterElements.inputFiltersBtn.removeAttribute("disabled")
-        filterElements.resetFiltersBtn.removeAttribute("disabled")
-      }
-    })
-
     filterElements.inputSortByProductField.addEventListener("change", () => {
       if (filterElements.inputSortByProductField.value !== "" || filterElements.inputSortByProductField.value !== "NULL") {
         filterElements.inputFiltersBtn.removeAttribute("disabled")
@@ -959,6 +952,23 @@
       }
     })
 
+    filterElements.userStatusOnboardingFilter.addEventListener("change", () => {
+      if (filterElements.userStatusOnboardingFilter.value === "Ob. Culminado") {
+        filterElements.userStatusRiskCulminadoFilter.classList.remove("d-none")
+        filterElements.userStatusRiskFallidoFilter.classList.add("d-none")
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      } else if (filterElements.userStatusOnboardingFilter.value === "Ob. Fallido") {
+        filterElements.userStatusRiskCulminadoFilter.classList.add("d-none")
+        filterElements.userStatusRiskFallidoFilter.classList.remove("d-none")
+        filterElements.inputFiltersBtn.removeAttribute("disabled")
+        filterElements.resetFiltersBtn.removeAttribute("disabled")
+      } else {
+        filterElements.userStatusRiskCulminadoFilter.classList.add("d-none")
+        filterElements.userStatusRiskFallidoFilter.classList.add("d-none")
+      }
+    })
+
   }
 
   // Filtros por fecha, pais, producto, estatus de riesgo y gestion
@@ -966,15 +976,16 @@
 
     const dateFilter = filterElements.inputDateForSearching.value
     const countryFilter = filterElements.inputSortByCountryField.value
-    const statusRiskFilter = filterElements.inputSortByStatusRiskField.value
     const productFilter = filterElements.inputSortByProductField.value
     const gestionFilter = filterElements.inputSortByGestionField.value
-
+    const onboardingFilter = filterElements.userStatusOnboardingFilter.value
+    const userStatusRiskFallidoFilter = filterElements.userStatusRiskFallidoFilter.value
+    const userStatusRiskCulminadoFilter = filterElements.userStatusRiskCulminadoFilter.value
 
     if (
       dateFilter !== "" ||
       countryFilter !== "" ||
-      statusRiskFilter !== "" ||
+      onboardingFilter !== "" ||
       productFilter !== "" ||
       gestionFilter !== ""
     ) {
@@ -1019,30 +1030,53 @@
             }
           }
 
-          if (statusRiskFilter.length > 0 && statusRiskFilter !== "NULL") {
+          // Filtro por estatus de riesgo
+
+          if (onboardingFilter.length > 0 && onboardingFilter !== "NULL") {
+
             if (filtertUsersData.length === 0 && filterFlag === false) {
-              filtertUsersData = usersData.filter(client => client[11] === statusRiskFilter)
+              filtertUsersData = usersData.filter(client => client[14] === onboardingFilter)
               filterFlag = true
+
+              if (filtertUsersData.length > 0) {
+                // Validamos si hay algun status de riego en base al tipo de OB
+                if (onboardingFilter === "Ob. Culminado" && userStatusRiskCulminadoFilter !== "NULL") {
+                  filtertUsersData = filtertUsersData.filter(client => client[12] === userStatusRiskCulminadoFilter)
+
+                } else if (onboardingFilter === "Ob. Fallido" && userStatusRiskFallidoFilter !== "NULL") {
+                  filtertUsersData = filtertUsersData.filter(client => client[12] === userStatusRiskFallidoFilter)
+                }
+              }
             } else {
-              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[11] === statusRiskFilter)
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[14] === onboardingFilter)
+
+              if (filtertUsersData.length > 0) {
+                // Validamos si hay algun status de riego en base al tipo de OB
+                if (onboardingFilter === "Ob. Culminado" && userStatusRiskCulminadoFilter !== "NULL") {
+                  filtertUsersData = filtertUsersData.filter(client => client[12] === userStatusRiskCulminadoFilter)
+
+                } else if (onboardingFilter === "Ob. Fallido" && userStatusRiskFallidoFilter !== "NULL") {
+                  filtertUsersData = filtertUsersData.filter(client => client[12] === userStatusRiskFallidoFilter)
+                }
+              }
             }
           }
 
           if (productFilter.length > 0 && productFilter !== "NULL") {
             if (filtertUsersData.length === 0 && filterFlag === false) {
-              filtertUsersData = usersData.filter(client => client[10] === productFilter)
+              filtertUsersData = usersData.filter(client => client[11] === productFilter)
               filterFlag = true
             } else {
-              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[10] === productFilter)
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[11] === productFilter)
             }
           }
 
           if (gestionFilter.length > 0 && gestionFilter !== "NULL") {
             if (filtertUsersData.length === 0 && filterFlag === false) {
-              filtertUsersData = usersData.filter(client => client[12] === gestionFilter)
+              filtertUsersData = usersData.filter(client => client[13] === gestionFilter)
               filterFlag = true
             } else {
-              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[12] === gestionFilter)
+              filtertUsersData = filtertUsersData.length === 0 ? [] : filtertUsersData.filter(client => client[13] === gestionFilter)
             }
           }
 
@@ -1068,9 +1102,11 @@
   function handleResetFilters() {
     filterElements.inputDateForSearching.value = ""
     filterElements.inputSortByCountryField.value = ""
-    filterElements.inputSortByStatusRiskField.value = ""
     filterElements.inputSortByProductField.value = ""
     filterElements.inputSortByGestionField.value = ""
+    filterElements.userStatusOnboardingFilter.value = ""
+    filterElements.userStatusRiskFallidoFilter.value = "NULL"
+    filterElements.userStatusRiskCulminadoFilter.value = "NULL"
 
     filterElements.resetFiltersBtn.classList.remove("show")
     filterElements.filtersModal.classList.remove("show")
