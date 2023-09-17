@@ -278,7 +278,7 @@ function saveResponseOfCredit(infoResquest) {
 
 // Enviar mensaje a Slack de solicitud de evaluacion
 
-const url = "https://hooks.slack.com/services/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"
+const url = ""
 
 async function sendSlackMessage(info) {
 
