@@ -13,82 +13,86 @@
         clientMainModal.loadingComenstCall.classList.toggle("d-none")
         clientMainModal.comentCallTitle.classList.remove("d-none")
 
-        let filterComentsCalls = newComentsCall
-          .filter(comentCall => comentCall[2] === target)
-          .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
+        let filterComentsCalls
 
         const templateItem = clientMainModal.comentsCallTemplate.content;
 
-        filterComentsCalls.forEach((call, index) => {
-          const comentCallItem = templateItem.cloneNode(true)
-
-          const headerCallItem = comentCallItem.querySelector(".accordion-button")
-          const bodyCallItem = comentCallItem.querySelector(".accordion-body")
-
-          // Configuracion del acodion donde se muestran los comentarios de la llamada
-          headerCallItem.dataset.bsTarget = `#panel-${index}`
-          headerCallItem.setAttribute("aria-controls", `panel-${index}`)
-
-          bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
+        if (newComentsCall.length > 0) {
+          filterComentsCalls = newComentsCall
+            .filter(comentCall => comentCall[2] === target)
+            .sort((comentCall, nextComentCall) => new Date(`${nextComentCall[3]}, ${nextComentCall[4]}`) - new Date(`${comentCall[3]}, ${comentCall[4]}`))
 
 
-          // Contenedor del comentario de la llamada
-          headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
+          filterComentsCalls.forEach((call, index) => {
+            const comentCallItem = templateItem.cloneNode(true)
 
-          // Informacion adicional de la llamada
-          bodyCallItem.innerHTML =
-            `<div class="d-flex flex-column gap-2">
-              <div class="bg-transparent d-flex justify-content-between p-3" id="comentsCallDetailsCointainer">
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Medio de contacto: </p>
-                  <p class="fw-normal">${call[1] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Fecha: </p>
-                  <p class="fw-normal">${call[3]}</p>
-                </div>
-                <div class="d-flex gap-2">
-                  <p class="fw-bolder">Hora: </p>
-                  <p class="fw-normal">${call[4]}</p>
-                </div>
-              </div>
-              <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
-                <div class="d-flex gap-2 px-2">
-                  <p class="fw-bolder">Resultado:</p>
-                  <p class="fw-normal">${call[5] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 px-2">
-                  <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
-                  <p class="fw-normal">${call[7] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
-                  <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
-                  <p class="fw-normal">${call[8] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
-                  <p class="fw-bolder text-wrap">Comentarios: </p>
-                  <p class="fw-normal">${call[6] || "NULL"}</p>
-                </div>
-                <div class="d-flex gap-2 mt-3 justify-content-center">
-                  <p class="fw-bolder text-wrap">Asesor: </p>
-                  <p class="fw-normal">${call[9] || "NULL"}</p>
-                </div>
-              </div>
-            </div>`
+            const headerCallItem = comentCallItem.querySelector(".accordion-button")
+            const bodyCallItem = comentCallItem.querySelector(".accordion-body")
 
-          clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
-        })
+            // Configuracion del acodion donde se muestran los comentarios de la llamada
+            headerCallItem.dataset.bsTarget = `#panel-${index}`
+            headerCallItem.setAttribute("aria-controls", `panel-${index}`)
+
+            bodyCallItem.parentNode.setAttribute("id", `panel-${index}`)
+
+
+            // Contenedor del comentario de la llamada
+            headerCallItem.textContent = `Llamada: ${call[3]} - ${call[4]} - ${call[9]}`
+
+            // Informacion adicional de la llamada
+            bodyCallItem.innerHTML =
+              `<div class="d-flex flex-column gap-2">
+                <div class="bg-transparent d-flex justify-content-between p-3" id="comentsCallDetailsCointainer">
+                  <div class="d-flex gap-2">
+                    <p class="fw-bolder">Medio de contacto: </p>
+                    <p class="fw-normal">${call[1] || "NULL"}</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <p class="fw-bolder">Fecha: </p>
+                    <p class="fw-normal">${call[3]}</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <p class="fw-bolder">Hora: </p>
+                    <p class="fw-normal">${call[4]}</p>
+                  </div>
+                </div>
+                <div class="bg-info bg-opacity-10 px-2 py-3 rounded d-flex flex-column justify-content-between">
+                  <div class="d-flex gap-2 px-2">
+                    <p class="fw-bolder">Resultado:</p>
+                    <p class="fw-normal">${call[5] || "NULL"}</p>
+                  </div>
+                  <div class="d-flex gap-2 px-2">
+                    <p class="fw-bolder text-wrap">Estatus de la gestión: </p>
+                    <p class="fw-normal">${call[7] || "NULL"}</p>
+                  </div>
+                  <div class="d-flex gap-2 bg-danger rounded p-2 bg-opacity-25">
+                    <p class="fw-bolder text-wrap">Motivo de no afiliación: </p>
+                    <p class="fw-normal">${call[8] || "NULL"}</p>
+                  </div>
+                  <div class="d-flex gap-2 mt-3 bg-success p-2 text-dark bg-opacity-25 rounded">
+                    <p class="fw-bolder text-wrap">Comentarios: </p>
+                    <p class="fw-normal">${call[6] || "NULL"}</p>
+                  </div>
+                  <div class="d-flex gap-2 mt-3 justify-content-center">
+                    <p class="fw-bolder text-wrap">Asesor: </p>
+                    <p class="fw-normal">${call[9] || "NULL"}</p>
+                  </div>
+                </div>
+              </div>`
+
+            clientMainModal.comentsCallsContainer.appendChild(comentCallItem)
+          })
+
+          clientMainModal.comentsCallsContainer.classList = "accordion mt-0 mb-3"
+          clientMainModal.noComentsCall.classList = "d-none"
+          clientMainModal.comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
+
+        }
 
         generateOldComentsCall(templateItem, oldComentsCall, target)
 
 
         // Aplicar estilos a las etiquelas para mayor informacion al usuario
-        if (filterComentsCalls.length > 0) {
-          clientMainModal.comentsCallsContainer.classList = "accordion mt-0 mb-3"
-          clientMainModal.noComentsCall.classList = "d-none"
-          clientMainModal.comentCallTitle.classList = "fs-5 fw-semibold text-primary-emphasis inline-block justify-content-center mt-5 text-center"
-        }
-
         clientMainModal.comentsCallsContainer.style.display = "block"
 
       })
